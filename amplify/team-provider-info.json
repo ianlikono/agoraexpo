@@ -1,0 +1,14 @@
+{
+    "dev": {
+        "awscloudformation": {
+            "AuthRoleName": "agoraexpo-20190326112524-authRole",
+            "UnauthRoleArn": "arn:aws:iam::414706045613:role/agoraexpo-20190326112524-unauthRole",
+            "AuthRoleArn": "arn:aws:iam::414706045613:role/agoraexpo-20190326112524-authRole",
+            "Region": "us-east-1",
+            "DeploymentBucketName": "agoraexpo-20190326112524-deployment",
+            "UnauthRoleName": "agoraexpo-20190326112524-unauthRole",
+            "StackName": "agoraexpo-20190326112524",
+            "StackId": "arn:aws:cloudformation:us-east-1:414706045613:stack/agoraexpo-20190326112524/c2e32f70-4fe3-11e9-aed5-123ad236a92a"
+        }
+    }
+}

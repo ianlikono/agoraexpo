@@ -1,0 +1,30 @@
+type User @model {
+  id: ID!
+  name: String!
+  email: String!
+  shops: [ShopOwner] @connection(name: "UserOwners")
+}
+
+type ShopOwner @model(queries: null) {
+  id: ID!
+  shop: Shop! @connection(name: "ShopOwners")
+  owner: User! @connection(name: "UserOwners")
+}
+
+type Shop @model {
+  id: ID!
+  name: String!
+  location: String
+  owners: [ShopOwner] @connection(name: "ShopOwners")
+  products: [Product] @connection(name: "shopProducts")
+}
+
+type Product @model {
+  id: ID!
+  title: String!
+  description: String!
+  image: String!
+  largeImage: String!
+  price: Int!
+  shop: Shop! @connection(name: "shopProducts")
+}

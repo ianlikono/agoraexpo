@@ -1,0 +1,16 @@
+projects:
+  agoraexpo:
+    schemaPath: src/graphql/schema.json
+    includes:
+      - src/graphql/**/*.js
+    excludes:
+      - ./amplify/**
+    extensions:
+      amplify:
+        codeGenTarget: javascript
+        generatedFileName: ''
+        docsFilePath: src/graphql
+        graphQLApiId: wkoafvezkffy7fy25cvbs6l5li
+      endpoints:
+        prod: >-
+          https://qjy5xj5m2fcdbcexchsarl7yli.appsync-api.us-east-1.amazonaws.com/graphql
