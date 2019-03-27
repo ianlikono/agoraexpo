@@ -49,7 +49,8 @@ export const createShopOwner = `mutation CreateShopOwner($input: CreateShopOwner
     shop {
       id
       name
-      location
+      category
+      description
       owners {
         nextToken
       }
@@ -74,7 +75,8 @@ export const updateShopOwner = `mutation UpdateShopOwner($input: UpdateShopOwner
     shop {
       id
       name
-      location
+      category
+      description
       owners {
         nextToken
       }
@@ -99,7 +101,8 @@ export const deleteShopOwner = `mutation DeleteShopOwner($input: DeleteShopOwner
     shop {
       id
       name
-      location
+      category
+      description
       owners {
         nextToken
       }
@@ -122,7 +125,8 @@ export const createShop = `mutation CreateShop($input: CreateShopInput!) {
   createShop(input: $input) {
     id
     name
-    location
+    category
+    description
     owners {
       items {
         id
@@ -147,7 +151,8 @@ export const updateShop = `mutation UpdateShop($input: UpdateShopInput!) {
   updateShop(input: $input) {
     id
     name
-    location
+    category
+    description
     owners {
       items {
         id
@@ -172,7 +177,8 @@ export const deleteShop = `mutation DeleteShop($input: DeleteShopInput!) {
   deleteShop(input: $input) {
     id
     name
-    location
+    category
+    description
     owners {
       items {
         id
@@ -204,7 +210,8 @@ export const createProduct = `mutation CreateProduct($input: CreateProductInput!
     shop {
       id
       name
-      location
+      category
+      description
       owners {
         nextToken
       }
@@ -226,7 +233,8 @@ export const updateProduct = `mutation UpdateProduct($input: UpdateProductInput!
     shop {
       id
       name
-      location
+      category
+      description
       owners {
         nextToken
       }
@@ -248,7 +256,8 @@ export const deleteProduct = `mutation DeleteProduct($input: DeleteProductInput!
     shop {
       id
       name
-      location
+      category
+      description
       owners {
         nextToken
       }

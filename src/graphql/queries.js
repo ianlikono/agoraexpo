@@ -37,7 +37,8 @@ export const getShop = `query GetShop($id: ID!) {
   getShop(id: $id) {
     id
     name
-    location
+    category
+    description
     owners {
       items {
         id
@@ -67,7 +68,8 @@ export const listShops = `query ListShops(
     items {
       id
       name
-      location
+      category
+      description
       owners {
         nextToken
       }
@@ -90,7 +92,8 @@ export const getProduct = `query GetProduct($id: ID!) {
     shop {
       id
       name
-      location
+      category
+      description
       owners {
         nextToken
       }
@@ -117,7 +120,8 @@ export const listProducts = `query ListProducts(
       shop {
         id
         name
-        location
+        category
+        description
       }
     }
     nextToken

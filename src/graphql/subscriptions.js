@@ -49,7 +49,8 @@ export const onCreateShopOwner = `subscription OnCreateShopOwner {
     shop {
       id
       name
-      location
+      category
+      description
       owners {
         nextToken
       }
@@ -74,7 +75,8 @@ export const onUpdateShopOwner = `subscription OnUpdateShopOwner {
     shop {
       id
       name
-      location
+      category
+      description
       owners {
         nextToken
       }
@@ -99,7 +101,8 @@ export const onDeleteShopOwner = `subscription OnDeleteShopOwner {
     shop {
       id
       name
-      location
+      category
+      description
       owners {
         nextToken
       }
@@ -122,7 +125,8 @@ export const onCreateShop = `subscription OnCreateShop {
   onCreateShop {
     id
     name
-    location
+    category
+    description
     owners {
       items {
         id
@@ -147,7 +151,8 @@ export const onUpdateShop = `subscription OnUpdateShop {
   onUpdateShop {
     id
     name
-    location
+    category
+    description
     owners {
       items {
         id
@@ -172,7 +177,8 @@ export const onDeleteShop = `subscription OnDeleteShop {
   onDeleteShop {
     id
     name
-    location
+    category
+    description
     owners {
       items {
         id
@@ -204,7 +210,8 @@ export const onCreateProduct = `subscription OnCreateProduct {
     shop {
       id
       name
-      location
+      category
+      description
       owners {
         nextToken
       }
@@ -226,7 +233,8 @@ export const onUpdateProduct = `subscription OnUpdateProduct {
     shop {
       id
       name
-      location
+      category
+      description
       owners {
         nextToken
       }
@@ -248,7 +256,8 @@ export const onDeleteProduct = `subscription OnDeleteProduct {
     shop {
       id
       name
-      location
+      category
+      description
       owners {
         nextToken
       }
