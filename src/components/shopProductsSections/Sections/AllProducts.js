@@ -1,12 +1,32 @@
-import React from 'react';
 import Typography from '@material-ui/core/Typography';
+import React from 'react';
 import PlusIcon from '../../PlusIcon/PlusIcon';
 import ProductCard from '../../ProductCard/ProductCard';
+import AddProductDialog from '../../AddProductsDialog/AddProductsDialog';
+
 
 class AllProducts extends React.PureComponent {
-  state = {};
+
+  state = {
+    modalOpen: true,
+  };
+
+  onPlusIconClick = () => {
+    this .setState({
+      modalOpen: true
+    })
+  }
+
+  onModalClose = () => {
+    console.log('closed clicked')
+    this .setState({
+      modalOpen: false
+    })
+  }
 
   render() {
+    const { modalOpen } = this.state;
+    console.log(modalOpen);
     return (
         <>
           <section>
@@ -24,9 +44,10 @@ class AllProducts extends React.PureComponent {
                     All Products{' '}
                 </Typography>
                 </div>
-                <div>
+                <div onClick={this.onPlusIconClick}>
                 <PlusIcon toolTipTitle="Add Products" fabSize="small" />
                 </div>
+                <AddProductDialog open={modalOpen} close={this.onModalClose}/>
             </div>
         </section>
         <section>
