@@ -1,25 +1,22 @@
-import React from 'react';
-import PropTypes from 'prop-types';
 import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
-import IconButton from '@material-ui/core/IconButton';
-import Typography from '@material-ui/core/Typography';
-import InputBase from '@material-ui/core/InputBase';
 import Badge from '@material-ui/core/Badge';
-import MenuItem from '@material-ui/core/MenuItem';
+import IconButton from '@material-ui/core/IconButton';
+import InputBase from '@material-ui/core/InputBase';
 import Menu from '@material-ui/core/Menu';
-import { fade } from '@material-ui/core/styles/colorManipulator';
+import MenuItem from '@material-ui/core/MenuItem';
 import { withStyles } from '@material-ui/core/styles';
-import MenuIcon from '@material-ui/icons/Menu';
-import SearchIcon from '@material-ui/icons/Search';
+import { fade } from '@material-ui/core/styles/colorManipulator';
+import Toolbar from '@material-ui/core/Toolbar';
+import Typography from '@material-ui/core/Typography';
 import AccountCircle from '@material-ui/icons/AccountCircle';
 import AddIcon from '@material-ui/icons/Add';
-import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
+import MenuIcon from '@material-ui/icons/Menu';
 import MoreIcon from '@material-ui/icons/MoreVert';
-import Tooltip from '@material-ui/core/Tooltip';
-import Fab from '@material-ui/core/Fab';
+import SearchIcon from '@material-ui/icons/Search';
+import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
 import Link from 'next/link';
-
+import React from 'react';
+import PlusIcon from '../PlusIcon/PlusIcon';
 
 const styles = theme => ({
   root: {
@@ -113,9 +110,9 @@ class Header extends React.Component {
     this.setState({ mobileMoreAnchorEl: event.currentTarget });
   };
 
-  handleMobileMenuClose = (type) => {
+  handleMobileMenuClose = type => {
     this.setState({ mobileMoreAnchorEl: null });
-    console.log('clicked', type)
+    console.log('clicked', type);
   };
 
   render() {
@@ -145,13 +142,13 @@ class Header extends React.Component {
         open={isMobileMenuOpen}
         onClose={this.handleMenuClose}
       >
-        <MenuItem onClick={() => this.handleMobileMenuClose("create")}>
-          <IconButton  color="inherit">
-              <AddIcon />
+        <MenuItem onClick={() => this.handleMobileMenuClose('create')}>
+          <IconButton color="inherit">
+            <AddIcon />
           </IconButton>
           <p>Create Shop</p>
         </MenuItem>
-        <MenuItem onClick={() => this.handleMobileMenuClose("cart")}>
+        <MenuItem onClick={() => this.handleMobileMenuClose('cart')}>
           <IconButton color="inherit">
             <Badge badgeContent={11} color="secondary">
               <ShoppingCartIcon />
@@ -176,11 +173,11 @@ class Header extends React.Component {
               <MenuIcon />
             </IconButton>
             <Link href="/">
-            <a>
-            <Typography className={classes.title} variant="h6" color="inherit" noWrap>
-              AgoraExpo
-            </Typography>
-            </a>
+              <a>
+                <Typography className={classes.title} variant="h6" color="inherit" noWrap>
+                  AgoraExpo
+                </Typography>
+              </a>
             </Link>
             <div className={classes.search}>
               <div className={classes.searchIcon}>
@@ -196,17 +193,11 @@ class Header extends React.Component {
             </div>
             <div className={classes.grow} />
             <div className={classes.sectionDesktop}>
-            <Tooltip title="Add shop" aria-label="Add">
-            <Link href="/new-shop">
-            <a>
-              <IconButton color="inherit">
-              <Fab size="small" color="primary" className={classes.fab}>
-                <AddIcon />
-              </Fab>
-              </IconButton>
-              </a>
+              <Link href="/new-shop">
+                <a>
+                  <PlusIcon toolTipTitle="Create Shop" fabSize="small" />
+                </a>
               </Link>
-              </Tooltip>
               <IconButton color="inherit">
                 <Badge badgeContent={17} color="secondary">
                   <ShoppingCartIcon />

@@ -2,6 +2,7 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import { MuiThemeProvider } from '@material-ui/core/styles';
 import App, { Container } from 'next/app';
 import Head from 'next/head';
+import 'react-responsive-carousel/lib/styles/carousel.min.css';
 import React from 'react';
 import JssProvider from 'react-jss/lib/JssProvider';
 import { ApolloProvider } from 'react-apollo'
