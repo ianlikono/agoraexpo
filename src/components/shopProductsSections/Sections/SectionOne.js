@@ -18,14 +18,6 @@ const Product = {
 class SectionOne extends React.PureComponent {
   state = {};
 
-  renderSectionCards = () => {
-    return (
-      <>
-        <div>Section cards</div>
-      </>
-    );
-  };
-
   render() {
     return (
       <>

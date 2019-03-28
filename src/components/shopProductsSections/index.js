@@ -1,14 +1,12 @@
 import React from 'react';
 import SectionOne from './Sections/SectionOne';
-import SectionThree from './Sections/SectionThree';
-import SectionTwo from './Sections/SectionTwo';
+import AllProducts from './Sections/AllProducts';
 
 const Sections = () => {
   return (
     <>
       <SectionOne />
-      <SectionTwo />
-      <SectionThree />
+      <AllProducts />
     </>
   );
 };
