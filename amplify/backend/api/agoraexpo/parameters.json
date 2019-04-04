@@ -1,4 +1,0 @@
-{
-    "AppSyncApiName": "agoraexpo",
-    "DynamoDBBillingMode": "PAY_PER_REQUEST"
-}
