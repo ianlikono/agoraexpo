@@ -15,13 +15,9 @@ export const Login = gql`
 `;
 
 export const createDraft = gql`
-  mutation createShopDraft($name: String!, $description: String!, $live: Boolean, $ownersIds: [ID!]) {
-    createShopDraft(name: $name, description: $description, live:$live, ownersIds: $ownersIds){
-      name
-      description
-      owners {
-        name
-      }
+  mutation createShopDraft($name: String!, $category: String!, $description: String!, $live: Boolean, $ownersIds: [ID!]) {
+    createShopDraft(name: $name,  category: $category, description: $description, live:$live, ownersIds: $ownersIds){
+      id
     }
   }
 `

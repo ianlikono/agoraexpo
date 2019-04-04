@@ -23,6 +23,7 @@
     "jss": "^9.8.7",
     "lodash": "^4.17.11",
     "material-ui-chip-input": "^1.0.0-beta.15",
+    "material-ui-dropzone": "^2.3.4",
     "next": "^8.0.3",
     "next-with-apollo": "^3.4.0",
     "nprogress": "^0.2.0",

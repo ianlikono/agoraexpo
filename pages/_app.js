@@ -49,7 +49,7 @@ class MyApp extends App {
             {/* Pass pageContext to the _document though the renderPage enhancer
                 to render collected styles on server-side. */}
               <Page>
-            <Component pageContext={this.pageContext} {...pageProps} />
+                <Component pageContext={this.pageContext} {...pageProps} />
             </Page>
           </MuiThemeProvider>
         </JssProvider>

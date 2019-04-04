@@ -1,3 +1,5 @@
+/* eslint-disable prefer-destructuring */
+/* eslint-disable no-unused-vars */
 /* eslint-disable no-return-assign */
 /* eslint-disable react/no-access-state-in-setstate */
 /* eslint-disable react/destructuring-assignment */
@@ -13,15 +15,28 @@ import gql from 'graphql-tag';
 import debounce from 'lodash/debounce';
 import { TweenOneGroup } from 'rc-tween-one';
 import React, { Component } from 'react';
+import Router from 'next/router';
 import { ApolloConsumer, Mutation } from 'react-apollo';
 import { createDraft } from '../src/graphql/mutations';
 
+
 const { TextArea } = Input;
+const Option = AutoComplete.Option;
 
 const filterCategories = gql`
   query filterCategories($searchString: String) {
     filterCategories(searchString: $searchString) {
       name
+    }
+  }
+`;
+
+const filterUsers = gql`
+  query filterUsers($searchString: String) {
+    filterUsers(searchString: $searchString) {
+      id
+      name
+      username
     }
   }
 `;
@@ -40,9 +55,12 @@ class CreateShopPage extends Component {
     activeButton: false,
     categorySuggestions: [],
     ownersIds: [],
-    ownerNames: ['Tag 1', 'Tag 2', 'Tag 3'],
+    ownerNames: [],
+    fetchedUsers: [],
+    selectedUser: '',
     inputVisible: false,
     inputValue: '',
+    'noUserMsg': false,
   };
 
   handleCategoryChange = debounce(async (client, value) => {
@@ -67,11 +85,96 @@ class CreateShopPage extends Component {
         activeButton: false,
       });
     }
-  }, 100);
+  }, 10);
 
-  handleClose = (removedName) => {
+  handleUserInputChange = debounce(async (client, value) => {
+    this.setState({
+      noUserMsg: false,
+    })
+    const res = await client.query({
+      query: filterUsers,
+      variables: { searchString: value },
+    });
+
+    const owners = res.data.filterUsers.map(owner => ({
+      name: owner.name,
+      username: owner.username,
+      userId: owner.id,
+    }));
+
+    const ownersNames = res.data.filterUsers.map(owner => ({
+      name: owner.name,
+      username: owner.username,
+      userId: owner.id,
+    }));
+    this.setState({
+      fetchedUsers: owners,
+    });
+    this.setState({
+      selectedUser: value,
+    });
+    if(!this.state.fetchedUsers.length) {
+      this.setState({
+        noUserMsg: true,
+      })
+    }
+  }, 10);
+
+  handleUserSelect = val => {
+    this.setState({
+      selectedUser: val,
+    });
+  };
+
+  handleInputConfirm = () => {
+    let { ownerNames, fetchedUsers, selectedUser, ownersIds } = this.state;
+    this.setState({
+      noUserMsg: false,
+    })
+    if(fetchedUsers.length) {
+      const Owner = fetchedUsers.filter((user) => {
+        return selectedUser === user.userId
+      })
+
+      if(Owner.length) {
+        if (Owner[0].userId && ownersIds.indexOf(Owner[0].userId) === -1) {
+          ownersIds = [...ownersIds, Owner[0].userId];
+        }
+
+        if (Owner[0].username && ownerNames.indexOf(Owner[0].username) === -1) {
+          ownerNames = [...ownerNames, Owner[0].username];
+        }
+        this.setState({
+          ownerNames,
+          ownersIds,
+          inputVisible: false,
+          selectedUser: '',
+        });
+    } else {
+      this.setState({
+        noUserMsg: true,
+      })
+    }
+    }else {
+      this.setState({
+        inputVisible: false,
+      })
+    }
+  };
+
+  renderUserOptions = user => {
+    return (
+      <Option key={user.userId} text={user.name}>
+        <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+          <span>@{user.username}</span>
+          <span className="global-search-item-count">{user.name}</span>
+        </div>
+      </Option>
+    );
+  };
+
+  handleClose = removedName => {
     const ownerNames = this.state.ownerNames.filter(name => name !== removedName);
-    console.log(ownerNames);
     this.setState({ ownerNames });
   };
 
@@ -79,31 +182,18 @@ class CreateShopPage extends Component {
     this.setState({ inputVisible: true }, () => this.input.focus());
   };
 
-  handleOwnersInputChange = (e) => {
+  handleOwnersInputChange = e => {
     this.setState({ inputValue: e.target.value });
-  }
-
-  handleInputConfirm = () => {
-    const { inputValue } = this.state;
-    let { ownerNames } = this.state;
-    if (inputValue && ownerNames.indexOf(inputValue) === -1) {
-      ownerNames = [...ownerNames, inputValue];
-    }
-    console.log(ownerNames);
-    this.setState({
-      ownerNames,
-      inputVisible: false,
-      inputValue: '',
-    });
   };
 
-  saveInputRef = input => this.input = input
+  saveInputRef = input => (this.input = input);
 
-  forMap = (tag) => {
+  forMap = tag => {
     const tagElem = (
       <Tag
+        color="#4caf50"
         closable
-        onClose={(e) => {
+        onClose={e => {
           e.preventDefault();
           this.handleClose(tag);
         }}
@@ -116,15 +206,17 @@ class CreateShopPage extends Component {
         {tagElem}
       </span>
     );
-  }
+  };
 
+  formSubmit = async (createShopDraft, error) => {
 
-  formSubmit = async (createShopFunction, createShopOwnerFunction, error, error2) => {
-    this.setState({ successSnackBar: true });
-    // Router.push({
-    //   pathname: '/shop',
-    //   query: { id: finalResponse.data.createShopOwner.shop.id },
-    // });
+    const {name, category, description,ownersIds } = this.state;
+
+    const response = await createShopDraft({ variables: { name, category, description, ownersIds } });
+    Router.push({
+      pathname: '/shop',
+      query: { id: response.data.createShopDraft.id },
+    });
   };
 
   handleInputChange = e => {
@@ -142,101 +234,135 @@ class CreateShopPage extends Component {
     }
   };
 
+  addMeToState = (user) => {
+    this.setState(prevState => ({
+      ownersIds: [...prevState.ownersIds, user.id],
+      ownerNames: [...prevState.ownerNames, user.username],
+    }));
+  }
+
   render() {
-    const { name, description, activeButton, categorySuggestions, inputVisible, inputValue, ownerNames } = this.state;
+    const {
+      name,
+      description,
+      activeButton,
+      categorySuggestions,
+      inputVisible,
+      inputValue,
+      ownerNames,
+      fetchedUsers,
+      selectedUser,
+      ownersIds,
+      noUserMsg,
+    } = this.state;
     const { classes, className, message, onClose, variant, ...other } = this.props;
     const tagChild = ownerNames.map(this.forMap);
     return (
-      <Mutation mutation={createDraft}>
-        {(createShopDraft, { loading, error }) => (
-          <div style={{ maxWidth: '600px', margin: '0 auto' }}>
-            <h1 style={{ textAlign: 'center' }}>Create Shop</h1>
-            <Paper elevation={1} className={classes.paper}>
-              <Input
-                name="name"
-                value={name}
-                onChange={this.handleInputChange}
-                size="large"
-                placeholder="Shop Name"
-              />
-              <ApolloConsumer>
-                {client => (
-                  <AutoComplete
-                    backfill
-                    onChange={value => this.handleCategoryChange(client, value)}
-                    size="large"
-                    style={{ width: '100%' }}
-                    dataSource={categorySuggestions}
-                    filterOption={(inputValue, option) =>
-                      option.props.children.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1
-                    }
+        <Mutation mutation={createDraft}>
+          {(createShopDraft, { loading, error }) => (
+            <div style={{ maxWidth: '600px', margin: '0 auto' }}>
+              <h1 style={{ textAlign: 'center' }}>Create Shop</h1>
+              <Paper elevation={1} className={classes.paper}>
+                <Input
+                  name="name"
+                  value={name}
+                  onChange={this.handleInputChange}
+                  size="large"
+                  placeholder="Shop Name"
+                />
+                <ApolloConsumer>
+                  {client => (
+                    <AutoComplete
+                      backfill
+                      onChange={value => this.handleCategoryChange(client, value)}
+                      size="large"
+                      style={{ width: '100%' }}
+                      dataSource={categorySuggestions}
+                      filterOption={(inputValue, option) =>
+                        option.props.children.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1
+                      }
+                    >
+                      <Input size="large" placeholder="Category" />
+                    </AutoComplete>
+                  )}
+                </ApolloConsumer>
+                <TextArea
+                  onChange={this.handleInputChange}
+                  name="description"
+                  value={description}
+                  rows={4}
+                  placeholder="Shop Description"
+                />
+                <div style={{ marginTop: '20px' }}>
+                  <h3 style={{ textAlign: 'center' }}> Add Owners</h3>
+                  <div style={{ display: 'flex', justifyContent: 'center' }}>
+                    <div>
+                      <div style={{ marginBottom: 16 }}>
+                        <TweenOneGroup
+                          enter={{
+                            scale: 0.8,
+                            opacity: 0,
+                            type: 'from',
+                            duration: 100,
+                            onComplete: e => {
+                              e.target.style = '';
+                            },
+                          }}
+                          leave={{ opacity: 0, width: 0, scale: 0, duration: 200 }}
+                          appear={false}
+                        >
+                          {tagChild}
+                        </TweenOneGroup>
+                      </div>
+                      {inputVisible && (
+                        <ApolloConsumer>
+                          {client => (
+                            <div style={{display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
+                              <AutoComplete
+                                backfill
+                                ref={this.saveInputRef}
+                                size="medium"
+                                style={{ width: 300 }}
+                                dataSource={fetchedUsers.map(this.renderUserOptions)}
+                                onSelect={val => this.handleUserSelect(val)}
+                                onSearch={value => this.handleUserInputChange(client, value)}
+                                placeholder="Search User"
+                                optionLabelProp="text"
+                                value={selectedUser}
+                                onBlur={this.handleInputConfirm}
+                              />
+                              {noUserMsg && (<span style={{color: 'red'}}>No User Found</span>)}
+                            </div>
+                          )}
+                        </ApolloConsumer>
+                      )}
+                      {!inputVisible && (
+                        <Tag
+                          onClick={this.showInput}
+                          style={{ background: '#f44336', borderStyle: 'dashed' }}
+                        >
+                          <Icon type="plus" /> <span style={{ color: '#fff' }}>Add Owner</span>
+                        </Tag>
+                      )}
+                    </div>
+                  </div>
+                </div>
+                <div style={{ marginTop: '100px' }}>
+                  <Button
+                    onClick={() => this.formSubmit(createShopDraft, error)}
+                    type="submit"
+                    fullWidth
+                    variant="raised"
+                    color="primary"
+                    disabled={!activeButton || loading}
                   >
-                    <Input size="large" placeholder="Category" />
-                  </AutoComplete>
-                )}
-              </ApolloConsumer>
-              <TextArea
-                onChange={this.handleInputChange}
-                name="description"
-                value={description}
-                rows={4}
-                placeholder="Shop Description"
-              />
-              <div style={{ marginTop: '20px' }}>
-                <h3 style={{ textAlign: 'center' }}> Add Owners</h3>
-                <div>
-        <div style={{ marginBottom: 16 }}>
-          <TweenOneGroup
-            enter={{
-              scale: 0.8, opacity: 0, type: 'from', duration: 100,
-              onComplete: (e) => {
-                e.target.style = '';
-              },
-            }}
-            leave={{ opacity: 0, width: 0, scale: 0, duration: 200 }}
-            appear={false}
-          >
-            {tagChild}
-          </TweenOneGroup>
-        </div>
-        {inputVisible && (
-          <Input
-            ref={this.saveInputRef}
-            type="text"
-            size="small"
-            style={{ width: 78 }}
-            value={inputValue}
-            onChange={this.handleOwnersInputChange}
-            onBlur={this.handleInputConfirm}
-            onPressEnter={this.handleInputConfirm}
-          />
-        )}
-        {!inputVisible && (
-          <Tag
-            onClick={this.showInput}
-            style={{ background: '#fff', borderStyle: 'dashed' }}
-          >
-            <Icon type="plus" /> New Tag
-          </Tag>
-        )}
-      </div>
-              </div>
-              <div style={{ marginTop: '100px' }}>
-                <Button
-                  onClick={() => this.formSubmit(createShopDraft, error)}
-                  type="submit"
-                  fullWidth
-                  variant="raised"
-                  color="primary"
-                  disabled={!activeButton || loading}
-                >
-                  Create
-                </Button>
-              </div>
-            </Paper>
-          </div>
-        )}
-      </Mutation>
+                    Create
+                  </Button>
+                </div>
+              </Paper>
+            </div>
+          )}
+        </Mutation>
     );
   }
 }

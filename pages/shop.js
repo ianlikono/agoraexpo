@@ -6,7 +6,7 @@ import { Query } from 'react-apollo';
 import { Carousel } from 'react-responsive-carousel';
 import PlusIcon from '../src/components/PlusIcon/PlusIcon';
 import Sections from '../src/components/shopProductsSections';
-import { getShop } from '../src/graphql/queries';
+import { GetShop } from '../src/graphql/queries';
 
 const styles = theme => ({
   fab: {
@@ -24,7 +24,7 @@ class Shop extends React.PureComponent {
   render() {
     const id = this.props.query.id.toString();
     return (
-      <Query query={gql(getShop)} variables={{ id }}>
+      <Query query={GetShop} variables={{ id }}>
         {({ loading, error, data }) => {
           if (loading) return 'Loading...';
           if (error) return `Error! ${error.message}`;
