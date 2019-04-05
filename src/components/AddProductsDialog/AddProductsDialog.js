@@ -14,11 +14,26 @@ import TextField from '@material-ui/core/TextField';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import CloseIcon from '@material-ui/icons/Close';
+import SaveIcon from '@material-ui/icons/Save';
+import 'antd/dist/antd.css';
+import Select from 'antd/lib/select';
 import classNames from 'classnames';
 import ChipInput from 'material-ui-chip-input';
 import { DropzoneArea } from 'material-ui-dropzone';
 import React from 'react';
+import Snackbar from '@material-ui/core/Snackbar';
 import NumberFormat from 'react-number-format';
+import Input from 'antd/lib/input';
+import { filterCategories } from '../../graphql/queries';
+import { createProduct } from '../../graphql/mutations';
+import { Mutation } from 'react-apollo';
+import Router from 'next/router';
+
+
+const { TextArea } = Input;
+
+
+const { Option } = Select;
 
 const styles = theme => ({
   root: {
@@ -37,24 +52,11 @@ const styles = theme => ({
   flex: {
     flex: 1,
   },
-  categoriesChip: {
-    background:
-      'linear-gradient(124deg, #f44336, #f44336, #f44336, #f44336, #f44336, #f44336, #f44336, #f44336, #f44336)',
-    backgroundSize: '1800% 1800%',
-    animation: 'rainbow 18s ease infinite',
-  },
-  tagsChip: {
-    background:
-      'linear-gradient(124deg, #ff2400, #e81d1d, #e8b71d, #e3e81d, #1de840, #1ddde8, #2b1de8, #dd00f3, #dd00f3)',
-    backgroundSize: '1800% 1800%',
-    animation: 'rainbow 18s ease infinite',
-  },
-  '@keyframes rainbow': {
-    '0%': { backgroundPosition: '0% 82%' },
-    '50%': { backgroundPosition: '100% 19%' },
-    '100%': { backgroundPosition: '0% 82%' },
+  close: {
+    padding: theme.spacing.unit / 2,
   },
 });
+
 function Transition(props) {
   return <Slide direction="up" {...props} />;
 }
@@ -63,91 +65,25 @@ class AddProductsDialog extends React.PureComponent {
   state = {
     name: '',
     description: '',
-    price: '22222',
+    price: '',
     categories: [],
-    categoriesLimit: false,
     tags: [],
-    brand: [],
+    brand: "",
     brandLimit: false,
-    file: [],
+    images: [],
+    categoriesSuggestion: [],
+    tagsSuggestion: [],
+    disabledSave: false,
+    snackOpen: false,
   };
 
   handleInputChange = e => {
     const { name, value } = e.target;
     this.setState({ [name]: value });
-  };
-
-  handleAddCategory = chip => {
-    const { categories } = this.state;
-    if (categories.length >= 4) {
-      this.setState({
-        categoriesLimit: true,
-      });
-    } else {
-      this.setState(prevState => ({
-        categories: [...prevState.categories, chip],
-        categoriesLimit: false,
-      }));
-    }
-  };
-
-  handleAddTag = chip => {
-    const { tags } = this.state;
-    this.setState(prevState => ({
-      tags: [...prevState.tags, chip],
-    }));
-  };
-
-  handleDeleteCategory = (chip, index) => {
-    const { categories } = this.state;
     this.setState({
-      categories: this.state.categories.filter(function(category) {
-        return category !== chip;
-      }),
-    });
-    this.setState({
-      categoriesLimit: false,
-    });
-  };
-
-  handleDeleteTag = (chip, index) => {
-    const { categories } = this.state;
-    this.setState({
-      tags: this.state.tags.filter(function(tag) {
-        return tag !== chip;
-      }),
-    });
-  };
-
-  handleAddBrandChip = (chip, index) => {
-    const { brand } = this.state;
-    if (brand.length >= 1) {
-      this.setState({
-        brandLimit: true,
-      });
-    } else {
-      this.setState(prevState => ({
-        brand: [...prevState.brand, chip],
-      }));
-    }
-  };
-
-  handleDeleteBrandChip = (chip, index) => {
-    const { brand } = this.state;
-    this.setState({
-      brand: this.state.brand.filter(function(brand) {
-        return brand !== chip;
-      }),
-    });
-    this.setState({
-      brandLimit: false,
-    });
-  };
-
-  handleFilesChange = files => {
-    this.setState({
-      files,
-    });
+      snackOpen: false,
+      disabledSave: false,
+    })
   };
 
   PriceFormatCustom = props => {
@@ -171,26 +107,124 @@ class AddProductsDialog extends React.PureComponent {
   handlePriceChange = name => event => {
     this.setState({
       [name]: event.target.value,
+      snackOpen: false,
+      disabledSave: false,
     });
-    console.log(this.state);
   };
+
+  renderCategorySuggestions = () => {
+    const { categoriesSuggestion } = this.state;
+
+    categoriesSuggestion.map(cat => {
+      return <Option key={cat}>{cat}</Option>;
+    });
+  };
+
+  handleCategoryChange = value => {
+    this.setState({
+      categories: value,
+      snackOpen: false,
+      disabledSave: false,
+    })
+  };
+
+  renderTagsSuggestions = () => {
+    const { tagsSuggestion } = this.state;
+
+    tagsSuggestion.map(cat => {
+      return <Option key={cat}>{cat}</Option>;
+    });
+  };
+
+  handletagsChange = value => {
+    this.setState({
+      tags: value,
+      snackOpen: false,
+      disabledSave: false,
+    })
+  };
+
+  onFilesDropped = async file => {
+    const data = new FormData();
+    data.append('file', file);
+    data.append('upload_preset', 'agoraexpo');
+
+    const res = await fetch('https://api.cloudinary.com/v1_1/doelo01na/image/upload', {
+      method: 'POST',
+      body: data,
+    });
+    const uploadedFile = await res.json();
+    this.setState(prevState => ({
+      images: [...prevState.images, uploadedFile.secure_url],
+    }));
+  }
+
+  handleCloseSnackClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    this.setState({ snackOpen: false });
+  }
+
+  onProductSave = async (productCreate, error) => {
+    const { name, description, price, categories, tags, brand, images} = this.state;
+    if(name.length < 1 && description.length < 1 && price.length < 1 && categories.length < 1 && tags.length < 1 && brand.length < 1 && images.length < 1) {
+      this.setState({
+        snackOpen: true,
+        disabledSave: true,
+      })
+    } else {
+      const response = await productCreate({
+        variables: { id: this.props.shopId, title: name, description, price, categories, tags, brand, images },
+      });
+      const shopName = response.data.createProduct.shop.name
+      Router.push({
+        pathname: `/product/`,
+        query: { name: shopName, id: response.data.createProduct.id },
+      });
+    }
+
+  }
 
   render() {
     const { classes, open, close, theme } = this.props;
     const {
       name,
-      categories,
-      categoriesLimit,
       tags,
       brand,
       brandLimit,
       description,
       price,
+      images,
+      disabledSave,
+      snackOpen
     } = this.state;
     return (
       <>
-        <div>
+        <Mutation mutation={createProduct}>
+        {(productCreate, { loading, error }) => (
           <Dialog fullScreen open={open} onClose={close} TransitionComponent={Transition}>
+          <Snackbar
+            anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
+            open={snackOpen}
+            autoHideDuration={6000}
+            onClose={this.handleClose}
+            ContentProps={{
+              'aria-describedby': 'message-id',
+            }}
+            message={<span id="message-id">Please Ensure All FIelds Are Filled</span>}
+            action={[
+              <IconButton
+                key="close"
+                aria-label="Close"
+                color="inherit"
+                className={classes.close}
+                onClick={this.handleCloseSnackClose}
+              >
+                <CloseIcon />
+              </IconButton>,
+            ]}
+          />
             <AppBar className={classes.appBar}>
               <Toolbar>
                 <div onClick={close} role="button">
@@ -202,12 +236,17 @@ class AddProductsDialog extends React.PureComponent {
                   Add Product
                 </Typography>
                 {/* //TODO: save prducts */}
-                <Button color="inherit" onClick={close}>
-                  save
-                </Button>
+                <div onClick={() => this.onProductSave(productCreate, error)} role="button">
+                <IconButton  disabled={disabledSave || loading} color="inherit" aria-label="Close">
+                   <div style={{display: 'flex', alignItems: 'center'}}>
+                    <SaveIcon />
+                    save
+                    </div>
+                  </IconButton>
+                  </div>
               </Toolbar>
             </AppBar>
-            <div style={{ backgroundColor: '#F2F3F3', width: '100%', height: '100%' }}>
+            <div style={{ width: '100%', height: '100%' }}>
               <div className="wrapper">
                 <div style={{ marginTop: '50px' }}>
                   <Typography variant="h4" align="center">
@@ -221,47 +260,29 @@ class AddProductsDialog extends React.PureComponent {
                     >
                       <div className="col-1">
                         <div className="field-size">
-                          <TextField
-                            onChange={this.handleInputChange}
-                            id="name"
-                            name="name"
-                            label="Product Name"
-                            fullWidth
-                            value={name}
-                          />
+                        <Input  id="name" name="name" value={name} style={{width: '100%'}} placeholder="Product Name" onChange={this.handleInputChange} />
                         </div>
                         <div className="sepearator" />
                         <div className="field-size">
-                          <ChipInput
-                            value={categories}
-                            onAdd={chip => this.handleAddCategory(chip)}
-                            onDelete={(chip, index) => this.handleDeleteCategory(chip, index)}
-                            placeholder="Categories"
-                            alwaysShowPlaceholder
-                            fullWidth
-                            classes={{
-                              root: classes.chipInputRoot,
-                              input: classes.chipInputInput,
-                              chip: classes.categoriesChip,
-                            }}
-                          />
-                          {categoriesLimit && <span className="limit-error">Max</span>}
+                        <Select
+                            mode="tags"
+                            style={{ width: '100%' }}
+                            placeholder="Product Categories"
+                            onChange={this.handleCategoryChange}
+                          >
+                            {this.renderCategorySuggestions()}
+                          </Select>
                         </div>
                         <div className="sepearator" />
                         <div className="field-size">
-                          <ChipInput
-                            value={tags}
-                            onAdd={chip => this.handleAddTag(chip)}
-                            onDelete={(chip, index) => this.handleDeleteTag(chip, index)}
-                            placeholder="Tags"
-                            alwaysShowPlaceholder
-                            fullWidth
-                            classes={{
-                              root: classes.chipInputRoot,
-                              input: classes.chipInputInput,
-                              chip: classes.tagsChip,
-                            }}
-                          />
+                        <Select
+                            mode="tags"
+                            style={{ width: '100%' }}
+                            placeholder="Product Tags"
+                            onChange={this.handletagsChange}
+                          >
+                            {this.renderCategorySuggestions()}
+                          </Select>
                         </div>
                         <div className="sepearator" />
                         <Typography variant="h5">Upload Images</Typography>
@@ -269,39 +290,18 @@ class AddProductsDialog extends React.PureComponent {
                           <DropzoneArea
                             acceptedFiles={['image/*']}
                             filesLimit={10}
-                            onChange={this.handleFilesChange}
+                            onDrop={this.onFilesDropped}
+                            dropzoneText="Drag and drop an image file here or click"
                           />
                         </div>
                       </div>
                       <div className="col-2">
                         <div className="field-size">
-                          <ChipInput
-                            value={brand}
-                            onAdd={chip => this.handleAddBrandChip(chip)}
-                            onDelete={(chip, index) => this.handleDeleteBrandChip(chip, index)}
-                            placeholder="Brand"
-                            alwaysShowPlaceholder
-                            fullWidth
-                            classes={{
-                              root: classes.chipInputRoot,
-                              input: classes.chipInputInput,
-                              chip: classes.tagsChip,
-                            }}
-                          />
-                          {brandLimit && <span className="limit-error">Max</span>}
+                        <Input onChange={this.handleInputChange} id="brand" name="brand" value={brand} style={{width: '100%'}} placeholder="Product Brand" />
                         </div>
                         <div className="sepearator" />
                         <div className="field-size">
-                          <TextField
-                            onChange={this.handleInputChange}
-                            id="description"
-                            name="description"
-                            label="Description"
-                            fullWidth
-                            rows={5}
-                            multiline
-                            value={description}
-                          />
+                        <TextArea id="description" name="description" value={description} onChange={this.handleInputChange} rows={4} placeholder="Add Product Description"/>
                           <div className="sepearator" />
                           <div className="field-size">
                             <div>
@@ -332,7 +332,8 @@ class AddProductsDialog extends React.PureComponent {
               </div>
             </div>
           </Dialog>
-        </div>
+          )}
+        </Mutation>
         <style jsx>{`
           .form-wrapper {
             display: flex;

@@ -21,3 +21,29 @@ export const createDraft = gql`
     }
   }
 `
+
+export const createProduct = gql`
+  mutation createProduct($id: ID!, $title: String!, $description: String!, $price: String!, $brand: String!, $categories: [String!], $tags: [String!], $images: [String!]){
+  createProduct(id: $id, title: $title, description:$description, price: $price, brand: $brand, categories: $categories, tags: $tags, images: $images) {
+    title
+    id
+    brand {
+      name
+    }
+    description
+    id
+    categories {
+      name
+    }
+    tags {
+      name
+    }
+    images {
+      imageUrl
+    }
+    shop {
+          name
+    }
+  }
+}
+`;

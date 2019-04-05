@@ -2,11 +2,11 @@ import React from 'react';
 import SectionOne from './Sections/SectionOne';
 import AllProducts from './Sections/AllProducts';
 
-const Sections = () => {
+const Sections = (props) => {
   return (
     <>
-      <SectionOne />
-      <AllProducts />
+      <SectionOne shopId={props.shopId}/>
+      <AllProducts shopId={props.shopId}/>
     </>
   );
 };

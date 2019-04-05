@@ -47,7 +47,7 @@ class AllProducts extends React.PureComponent {
                 <div onClick={this.onPlusIconClick}>
                 <PlusIcon toolTipTitle="Add Products" fabSize="small" />
                 </div>
-                <AddProductDialog open={modalOpen} close={this.onModalClose}/>
+                <AddProductDialog shopId={this.props.shopId} open={modalOpen} close={this.onModalClose}/>
             </div>
         </section>
         <section>

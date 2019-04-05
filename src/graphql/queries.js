@@ -1,8 +1,9 @@
+/* eslint-disable import/prefer-default-export */
 import gql from 'graphql-tag';
 
 export const GetShop = gql`
   query shop($id: ID!) {
-    shop(id:$id) {
+    shop(id: $id) {
       id
       name
       description
@@ -32,6 +33,14 @@ export const GetShop = gql`
           imageUrl
         }
       }
+    }
+  }
+`;
+
+export const filterCategories = gql`
+  query filterCategories($searchString: String) {
+    filterCategories(searchString: $searchString) {
+      name
     }
   }
 `;

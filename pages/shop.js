@@ -60,7 +60,7 @@ class Shop extends React.PureComponent {
                   </div>
                 </div>
               </div>
-              <Sections />
+              <Sections shopId={id} />
             </>
           );
         }}
