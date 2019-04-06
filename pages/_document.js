@@ -6,8 +6,55 @@ import Document, { Head, Main, NextScript } from 'next/document';
 import PropTypes from 'prop-types';
 import React from 'react';
 import flush from 'styled-jsx/server';
+import { ServerStyleSheet } from 'styled-components';
 
 class MyDocument extends Document {
+  static async getInitialProps (ctx) {
+    let pageContext;
+    const page = ctx.renderPage(Component => {
+      const WrappedComponent = props => {
+        pageContext = props.pageContext;
+        return <Component {...props} />;
+      };
+
+      WrappedComponent.propTypes = {
+        pageContext: PropTypes.object.isRequired,
+      };
+
+      return WrappedComponent;
+    });
+
+    let css;
+    if (pageContext) {
+      css = pageContext.sheetsRegistry.toString();
+    }
+    const sheet = new ServerStyleSheet()
+    const originalRenderPage = ctx.renderPage
+    try {
+        ctx.renderPage = () => originalRenderPage({
+            enhanceApp: App => props => sheet.collectStyles(<App {...props} />)
+          })
+
+        const initialProps = await Document.getInitialProps(ctx)
+        return {
+          ...initialProps,
+          ...page,
+          pageContext,
+          styles: (
+            <React.Fragment>
+              <style
+                id="jss-server-side"
+                // eslint-disable-next-line react/no-danger
+                dangerouslySetInnerHTML={{ __html: css }}
+              />
+              {initialProps.styles}{sheet.getStyleElement()}{flush() || null}
+            </React.Fragment>
+          )
+        }
+      } finally {
+        sheet.seal()
+      }
+  }
   render() {
     const { pageContext } = this.props;
 
@@ -38,43 +85,5 @@ class MyDocument extends Document {
     );
   }
 }
-
-MyDocument.getInitialProps = ctx => {
-  let pageContext;
-  const page = ctx.renderPage(Component => {
-    const WrappedComponent = props => {
-      pageContext = props.pageContext;
-      return <Component {...props} />;
-    };
-
-    WrappedComponent.propTypes = {
-      pageContext: PropTypes.object.isRequired,
-    };
-
-    return WrappedComponent;
-  });
-
-  let css;
-  // It might be undefined, e.g. after an error.
-  if (pageContext) {
-    css = pageContext.sheetsRegistry.toString();
-  }
-
-  return {
-    ...page,
-    pageContext,
-    // Styles fragment is rendered after the app and page rendering finish.
-    styles: (
-      <React.Fragment>
-        <style
-          id="jss-server-side"
-          // eslint-disable-next-line react/no-danger
-          dangerouslySetInnerHTML={{ __html: css }}
-        />
-        {flush() || null}
-      </React.Fragment>
-    ),
-  };
-};
 
 export default MyDocument;
