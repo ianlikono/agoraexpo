@@ -30,8 +30,8 @@ app.prepare().then(() => {
     renderAndCache(req, res, '/shop', queryParams);
   });
 
-  server.get('/product/:id', (req: any, res: any) => {
-    const queryParams = { id: req.params.id };
+  server.get('/:shopName/:id', (req: any, res: any) => {
+    const queryParams = { id: req.params.id, shopName: req.params.shopName };
     renderAndCache(req, res, '/product', queryParams);
   });
 
@@ -54,7 +54,6 @@ function renderAndCache(req: any, res: any, pagePath: any, queryParams: any) {
 
   // If we have a page in the cache, let's serve it
   if (ssrCache.has(key)) {
-    console.log(`CACHE HIT: ${key}`);
     res.send(ssrCache.get(key));
     return;
   }
@@ -64,7 +63,6 @@ function renderAndCache(req: any, res: any, pagePath: any, queryParams: any) {
     .renderToHTML(req, res, pagePath, queryParams)
     .then(html => {
       // Let's cache this page
-      console.log(`CACHE MISS: ${key}`);
       ssrCache.set(key, html);
 
       res.send(html);
