@@ -1,6 +1,6 @@
 
 module.exports = {
-	extends: ['airbnb', 'prettier', 'prettier/react'],
+	extends: ['airbnb-typescript/base', 'airbnb', 'prettier', 'prettier/react'],
     parser: 'babel-eslint',
     "parserOptions": {
         "ecmaVersion": 9,
@@ -22,7 +22,7 @@ module.exports = {
 		'react/jsx-filename-extension': [
 			1,
 			{
-				extensions: ['.js', '.jsx']
+				extensions: ['.js', '.jsx', '.ts', '.tsx']
 			}
 		],
 		'prettier/prettier': [
