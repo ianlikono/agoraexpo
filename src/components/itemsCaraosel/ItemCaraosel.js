@@ -50,12 +50,10 @@ class ItemCaraosel extends Component {
   }
 
   backButtonClicked = () => {
-    console.log('back clicked')
     this.refs.scroller ? this.debounceButton(this.refs.scroller, -300, 1000) : null;
   };
 
   frontButtonClicked = () => {
-    console.log('front clicked')
     this.refs.scroller ? this.debounceButton(this.refs.scroller, 300, 1000) : null;
   };
 
