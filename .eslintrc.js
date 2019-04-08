@@ -18,7 +18,7 @@ module.exports = {
 	},
 	rules: {
     'no-use-before-define': 'off',
-    'jsx-a11y/anchor-is-valid': 0,
+		'jsx-a11y/anchor-is-valid': 0,
 		'react/jsx-filename-extension': [
 			1,
 			{

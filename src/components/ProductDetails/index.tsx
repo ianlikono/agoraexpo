@@ -1,6 +1,8 @@
+/* eslint-disable import/no-unresolved */
 import React from 'react';
+import ProductDetails from './Details/Details';
 import ImageGallery from './ImageGallery/ImageGallery';
-import { Wrapper, Gallery, Details} from './styles';
+import { Details, Gallery, Wrapper } from './styles';
 
 export interface ProDuctDetailsProps {
   shopName: String;
@@ -16,7 +18,7 @@ const ProDuctDetails: React.SFC<ProDuctDetailsProps> = props => {
           <ImageGallery />
         </Gallery>
         <Details>
-          This is the details section
+          <ProductDetails details="details" />
         </Details>
       </Wrapper>
     </>

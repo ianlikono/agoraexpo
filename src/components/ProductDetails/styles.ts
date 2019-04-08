@@ -18,7 +18,6 @@ export const Gallery = styled.div`
 `;
 
 export const Details = styled.div`
-  background: blue;
   display: flex;
   flex-direction: column;
   width: 50%;

@@ -825,6 +825,11 @@
   resolved "https://registry.yarnpkg.com/@emotion/utils/-/utils-0.8.2.tgz#576ff7fb1230185b619a75d258cbc98f0867a8dc"
   integrity sha512-rLu3wcBWH4P5q1CGoSSH/i9hrXs7SlbRLkoq9IGuoPYNGQvDJ3pt/wmOM+XgYjIDRMVIdkUWt0RsfzF50JfnCw==
 
+"@icons/material@^0.2.4":
+  version "0.2.4"
+  resolved "https://registry.yarnpkg.com/@icons/material/-/material-0.2.4.tgz#e90c9f71768b3736e76d7dd6783fc6c2afa88bc8"
+  integrity sha512-QPcGmICAPbGLGb6F/yNf/KzKqvFx8z5qx3D1yFqVAjoFmXK35EgyW+cJ57Te3CNsmzblwtzakLGFqHPqrfb4Tw==
+
 "@material-ui/core@^3.9.2":
   version "3.9.2"
   resolved "https://registry.yarnpkg.com/@material-ui/core/-/core-3.9.2.tgz#41ed1a470e981d199829eb5d9317a671c66a6f7d"
@@ -992,6 +997,13 @@
   version "1.2.3"
   resolved "https://registry.yarnpkg.com/@types/range-parser/-/range-parser-1.2.3.tgz#7ee330ba7caafb98090bece86a5ee44115904c2c"
   integrity sha512-ewFXqrQHlFsgc09MK5jP5iR7vumV/BYayNC6PgJO2LPe8vrnNFyjQjSppfEngITi0qvfKtzFvgKymGheFM9UOA==
+
+"@types/react-color@^3.0.0":
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/@types/react-color/-/react-color-3.0.0.tgz#626ae0f3da34338ccae37279de32d1d9828424e4"
+  integrity sha512-vmEFBimsqXc9N3pBNNM2KXtLxgjSGCxrrSiJ8IBeQG4R1u+HMnw+BdxOPEI4EG7ClI+TmL9Yc0aL6S3mdA/RlA==
+  dependencies:
+    "@types/react" "*"
 
 "@types/react-loadable@*":
   version "5.5.1"
@@ -4895,7 +4907,7 @@ lodash.unescape@4.0.1:
   resolved "https://registry.yarnpkg.com/lodash.unescape/-/lodash.unescape-4.0.1.tgz#bf2249886ce514cda112fae9218cdc065211fc9c"
   integrity sha1-vyJJiGzlFM2hEvrpIYzcBlIR/Jw=
 
-lodash@^4.16.5, lodash@^4.17.10, lodash@^4.17.11, lodash@^4.17.4, lodash@^4.17.5:
+lodash@>4.17.4, lodash@^4.0.1, lodash@^4.16.5, lodash@^4.17.10, lodash@^4.17.11, lodash@^4.17.4, lodash@^4.17.5:
   version "4.17.11"
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.11.tgz#b39ea6229ef607ecd89e2c8df12536891cac9b8d"
   integrity sha512-cQKh8igo5QUhZ7lg38DYWAxMvjSAKG0A8wGSVimP07SIUEK2UO+arSRKbRZWtelMtN5V0Hkwh5ryOto/SshYIg==
@@ -4996,6 +5008,11 @@ matchmediaquery@^0.3.0:
   dependencies:
     css-mediaquery "^0.1.2"
 
+material-colors@^1.2.1:
+  version "1.2.6"
+  resolved "https://registry.yarnpkg.com/material-colors/-/material-colors-1.2.6.tgz#6d1958871126992ceecc72f4bcc4d8f010865f46"
+  integrity sha512-6qE4B9deFBIa9YSpOc9O0Sgc43zTeVYbgDT5veRKSlB2+ZuHNoVVxA1L/ckMUayV9Ay9y7Z/SZCLcGteW9i7bg==
+
 material-ui-chip-input@^1.0.0-beta.15:
   version "1.0.0-beta.15"
   resolved "https://registry.yarnpkg.com/material-ui-chip-input/-/material-ui-chip-input-1.0.0-beta.15.tgz#79757524a931832fb6014912d624cf16860073e8"
@@ -5011,6 +5028,13 @@ material-ui-dropzone@^2.3.4:
   dependencies:
     "@material-ui/icons" "^3.0.2"
     react-dropzone "^7.0.1"
+
+material-ui-rating@^3.1.0:
+  version "3.1.0"
+  resolved "https://registry.yarnpkg.com/material-ui-rating/-/material-ui-rating-3.1.0.tgz#8bc82bfd92c1b97c33ae8db700d72f5e06556280"
+  integrity sha512-An/NS/VIjBq6Z+zDTg1pgJw7NoumpBu/yB7e6t7DPOIUBFoqDxtSptf1Oyj2xUzIZ237q4IPEedI2rk1/1l9/g==
+  dependencies:
+    prop-types "^15.5.8"
 
 maximatch@^0.1.0:
   version "0.1.0"
@@ -6715,6 +6739,18 @@ react-apollo@^2.5.3:
     ts-invariant "^0.3.2"
     tslib "^1.9.3"
 
+react-color@^2.17.0:
+  version "2.17.0"
+  resolved "https://registry.yarnpkg.com/react-color/-/react-color-2.17.0.tgz#e14b8a11f4e89163f65a34c8b43faf93f7f02aaa"
+  integrity sha512-kJfE5tSaFe6GzalXOHksVjqwCPAsTl+nzS9/BWfP7j3EXbQ4IiLAF9sZGNzk3uq7HfofGYgjmcUgh0JP7xAQ0w==
+  dependencies:
+    "@icons/material" "^0.2.4"
+    lodash ">4.17.4"
+    material-colors "^1.2.1"
+    prop-types "^15.5.10"
+    reactcss "^1.2.0"
+    tinycolor2 "^1.4.1"
+
 react-display-name@^0.2.4:
   version "0.2.4"
   resolved "https://registry.yarnpkg.com/react-display-name/-/react-display-name-0.2.4.tgz#e2a670b81d79a2204335510c01246f4c92ff12cf"
@@ -6771,6 +6807,11 @@ react-form-validator-core@0.6.2:
   dependencies:
     promise-polyfill "8.1.0"
     react-lifecycles-compat "^3.0.2"
+
+react-icons@^3.5.0:
+  version "3.5.0"
+  resolved "https://registry.yarnpkg.com/react-icons/-/react-icons-3.5.0.tgz#a6135480e3bcbc63f5dd045193ef2a814263d8d1"
+  integrity sha512-LuKUcavgPWjPrRkIdNbsGw8LqcnhfNN0AGCtU4Td1UkOenJSIWbYppSJrD6zi/TDZOHtTs9opu6ZKB/NFWk21g==
 
 react-input-autosize@^2.2.1:
   version "2.2.1"
@@ -6903,6 +6944,13 @@ react@^16.3.2, react@^16.8.5:
     object-assign "^4.1.1"
     prop-types "^15.6.2"
     scheduler "^0.13.5"
+
+reactcss@^1.2.0:
+  version "1.2.3"
+  resolved "https://registry.yarnpkg.com/reactcss/-/reactcss-1.2.3.tgz#c00013875e557b1cf0dfd9a368a1c3dab3b548dd"
+  integrity sha512-KiwVUcFu1RErkI97ywr8nvx8dNOpT03rbnma0SSalTYjkrPYaEajR4a/MRt6DZ46K6arDRbWMNHF+xH7G7n/8A==
+  dependencies:
+    lodash "^4.0.1"
 
 read-pkg-up@^1.0.1:
   version "1.0.1"
@@ -8286,6 +8334,11 @@ url@0.11.0, url@^0.11.0:
   dependencies:
     punycode "1.3.2"
     querystring "0.2.0"
+
+use-debounce@^1.1.1:
+  version "1.1.1"
+  resolved "https://registry.yarnpkg.com/use-debounce/-/use-debounce-1.1.1.tgz#86d8e4bbda1a718683be5c21c752b4f6eaa5ae64"
+  integrity sha512-wDA5sZaQj9TRd/yYeFmDateUfTRPfOILY7AZFNVsTbwYpcpBIxh6yx8/XS1UNNf9DIFJJAxazxbWWEOy+BG9vA==
 
 use@^3.1.0:
   version "3.1.1"
