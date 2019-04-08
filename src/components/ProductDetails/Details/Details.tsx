@@ -3,15 +3,26 @@ import { IoLogoFacebook, IoLogoTwitter, IoLogoInstagram, IoLogoLinkedin } from '
 import { IconContext } from "react-icons";
 import styled from 'styled-components';
 import Typography from '@material-ui/core/Typography';
-import  Rating  from 'material-ui-rating'
-import { Wrapper, ShareIconsWrapper, ShareIcon, HeaderTitle, DescriptionWrapper, RatingsWrapper, VariantWrapper } from './styles';
+import  Rating  from 'material-ui-rating';
+import { withStyles } from '@material-ui/core/styles';
+import Fab from '@material-ui/core/Fab';
+import { Wrapper, ShareIconsWrapper, ShareIcon, HeaderTitle, DescriptionWrapper, RatingsWrapper, VariantWrapper, ButtonsWrapper } from './styles';
 import Variants from './Variants/Variants';
+
+const styles = theme => ({
+  margin: {
+    margin: theme.spacing.unit,
+    color: '#fff',
+  },
+});
+
 
 export interface ProductDetailsProps {
   details: any;
 }
 
-const ProductDetails: React.SFC<ProductDetailsProps> = () => {
+const ProductDetails: React.SFC<ProductDetailsProps> = (props) => {
+  const { classes } = props;
   return (
     <Wrapper>
       <ShareIconsWrapper>
@@ -57,8 +68,15 @@ const ProductDetails: React.SFC<ProductDetailsProps> = () => {
       <VariantWrapper>
         <Variants />
       </VariantWrapper>
+      <ButtonsWrapper>
+        <Fab variant="extended" color="primary" aria-label="Add" className={classes.margin}>         Add To Cart
+        </Fab>
+      <Fab variant="extended" color="secondary" aria-label="Add" className={classes.margin}>         Add To Wishlist
+        </Fab>
+      </ButtonsWrapper>
     </Wrapper>
    );
 };
 
-export default ProductDetails;
+export default withStyles(styles)(ProductDetails);
+

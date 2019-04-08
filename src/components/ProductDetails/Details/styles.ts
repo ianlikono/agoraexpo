@@ -42,3 +42,10 @@ export const VariantWrapper = styled.div`
   align-self: end;
   width: 100%;
 `;
+
+export const ButtonsWrapper = styled.div`
+  width: 100%;
+  display: flex;
+  margin-top: 20px;
+
+`;
