@@ -27,3 +27,16 @@ export const Cover = styled.div`
     bottom: '0px',
     left: '0px',
 `;
+
+export const ColorWrapper = styled.div`
+  margin:0 5px 0 5px;
+  position: relative;
+`;
+
+export const DeleteColor = styled.div`
+  position: absolute;
+  right: -8px;
+  top: -8px;
+  color: red;
+  cursor: pointer;
+`;

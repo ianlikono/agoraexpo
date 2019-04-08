@@ -8,7 +8,6 @@ import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
 import ExpansionPanelActions from '@material-ui/core/ExpansionPanelActions';
 import Typography from '@material-ui/core/Typography';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import Chip from '@material-ui/core/Chip';
 import Button from '@material-ui/core/Button';
 import { CirclePicker, SketchPicker, ChromePicker } from 'react-color';
 import Fab from '@material-ui/core/Fab';
@@ -16,7 +15,9 @@ import IconButton from '@material-ui/core/IconButton';
 import AddIcon from '@material-ui/icons/Add';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Dialog from '@material-ui/core/Dialog';
-import { SelectedColor, Popover, Cover } from './styles';
+import { IoMdRemoveCircle } from 'react-icons/io';
+import { IconContext } from "react-icons";
+import { SelectedColor, Popover, Cover, ColorWrapper, DeleteColor } from './styles';
 
 const styles = theme => ({
     root: {
@@ -72,10 +73,23 @@ const styles = theme => ({
 
     const renderColors = (colors) => {
         return colors.map((color) => {
+            const onColorDelete = (color) => {
+                const filteredColors = colors.filter((out) => {
+                    return out != color
+                })
+                setColors(filteredColors);
+            }
             return (
-                <div style={{margin:'0 5px 0 5px'}} role="button">
+                <ColorWrapper>
+                     <DeleteColor onClick={() => onColorDelete(color)}>
+                        <IconContext.Provider value={{ style: {color: 'inherit', fontSize: '20px'} }}>
+                        <div>
+                            <IoMdRemoveCircle />
+                        </div>
+                        </IconContext.Provider>
+                     </DeleteColor>
                     <SelectedColor onClick={() => onColorClicked(color)} SelectedColor={color} />
-                </div>
+                </ColorWrapper>
            )
         })
     }
@@ -95,7 +109,7 @@ const styles = theme => ({
                 <ExpansionPanelDetails className={classes.details}>
                     <div>
                         <div style={{display: 'flex', justifyContent: 'space-evenly', flexWrap: 'wrap' }}>
-                            {renderColors(colors)}
+                            {colors.length ? renderColors(colors) : null}
                         </div>
                         <div onClick={() => colorPickerDisplay(activeColor)}>
                             <IconButton color="inherit">
