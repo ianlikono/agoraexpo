@@ -56,21 +56,17 @@ const Color: React.SFC<ColorProps> = props => {
   const [selectedColor, setSelectedColor] = useState('');
 
   useEffect(() => {
-    console.log('variant', variant);
     setColors(variant[0].values);
   }, []);
 
   const colorPickerDisplay = async (color, updateVariantMutaion) => {
     setDisplayColorPicker(!displayColorPicker);
     if (color.length > 0) {
-      console.log('before', colors)
       setActiveColor('');
-      console.log('after',colors);
       const response = await updateVariantMutaion({
         variables: {values: [...colors, color], variantId }
       });
       await setColors(response.data.updateVariant.values);
-      console.log('response2', response);
     }
   };
 
@@ -79,7 +75,6 @@ const Color: React.SFC<ColorProps> = props => {
   };
 
   const onColorClicked = color => {
-    console.log('color', color);
     setSelectedColor(color);
   };
 

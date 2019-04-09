@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
 import { withStyles } from '@material-ui/core/styles';
-import { Wrapper } from './styles';
+import React from 'react';
 import Color from './Color';
 import Size from './Size';
+import { Wrapper } from './styles';
 
 export interface ColorProps {
     Panels: any;
