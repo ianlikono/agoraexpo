@@ -44,3 +44,31 @@ export const filterCategories = gql`
     }
   }
 `;
+
+export const productQuery = gql`
+    query product($id: ID!){
+      product(id: $id) {
+        id
+        title
+        description
+        price
+        categories {
+          name
+        }
+        brand {
+          name
+        }
+        tags {
+          name
+        }
+        images {
+          imageUrl
+        }
+        variants {
+          id
+          name
+          values
+        }
+      }
+  }
+`;

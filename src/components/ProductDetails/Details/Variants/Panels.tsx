@@ -22,12 +22,17 @@ export interface ColorProps {
   });
 
   const Panels: React.SFC<PanelsProps> = props => {
-    const { classes } = props;
-
+    const { classes, variants } = props;
+    const colorVariant = variants.filter((variant) => {
+      return variant.name == "Color"
+    })
+    const SizeVariant = variants.filter((variant) => {
+      return variant.name == "Size"
+    })
     return (
         <Wrapper className={classes.root}>
-            <Color />
-            <Size />
+            <Color variant={colorVariant} />
+            <Size variant={SizeVariant} />
         </Wrapper>
     )
 

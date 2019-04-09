@@ -2,11 +2,13 @@
 import { NextContext } from 'next';
 import React from 'react';
 // eslint-disable-next-line import/no-unresolved
+import { Query } from "react-apollo";
 import ProductDetails from '../src/components/ProductDetails/index';
+import { productQuery } from '../src/graphql/queries';
+
 
 export interface queryProps {
   id: String;
-  shopName: String;
 }
 
 class Product extends React.Component<queryProps> {
@@ -15,11 +17,17 @@ class Product extends React.Component<queryProps> {
   }
 
   render() {
-    const { id, shopName } = this.props;
+    const { id } = this.props;
     return (
-      <div>
-        <ProductDetails shopName={shopName} productId={id} />
-      </div>
+      <Query query={productQuery} variables={{ id }}>
+        {({ loading, error, data }) => {
+        if (loading) return "Loading...";
+        if (error) return `Error! ${error.message}`;
+          return (
+            <ProductDetails product={data.product} />
+        )
+      }}
+        </Query>
     );
   }
 }

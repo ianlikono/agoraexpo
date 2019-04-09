@@ -30,8 +30,8 @@ app.prepare().then(() => {
     renderAndCache(req, res, '/shop', queryParams);
   });
 
-  server.get('/:shopName/:id', (req: any, res: any) => {
-    const queryParams = { id: req.params.id, shopName: req.params.shopName };
+  server.get('/product/:id', (req: any, res: any) => {
+    const queryParams = { id: req.params.id };
     renderAndCache(req, res, '/product', queryParams);
   });
 

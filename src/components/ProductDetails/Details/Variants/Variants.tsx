@@ -15,10 +15,10 @@ export interface VariantsProps {
 
 
   const Variants: React.SFC<VariantsProps> = props => {
-    const { classes } = props;
+    const { classes, variants } = props;
     return (
         <Wrapper className={classes.root}>
-            <Panels />
+            <Panels variants={variants} />
         </Wrapper>
     )
 

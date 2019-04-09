@@ -2,25 +2,25 @@
 import React from 'react';
 import ProductDetails from './Details/Details';
 import ImageGallery from './ImageGallery/ImageGallery';
-import { Details, Gallery, Wrapper } from './styles';
-import SimilarProducts from './SimilarProducts/SimilarProducts';
 import Reviews from './Reveiws/Reviews';
+import SimilarProducts from './SimilarProducts/SimilarProducts';
+import { Details, Gallery, Wrapper } from './styles';
 
 export interface ProDuctDetailsProps {
-  shopName: String;
-  productId: String;
+  product: any;
 }
 
 const ProDuctDetails: React.SFC<ProDuctDetailsProps> = props => {
-  // const { shopName, productId } = props;
+  const { product } = props;
+  console.log(product);
   return (
     <>
       <Wrapper>
         <Gallery>
-          <ImageGallery />
+          <ImageGallery images={product.images}/>
         </Gallery>
         <Details>
-          <ProductDetails details="details" />
+          <ProductDetails product={product} />
         </Details>
       </Wrapper>
       <SimilarProducts />

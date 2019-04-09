@@ -18,11 +18,11 @@ const styles = theme => ({
 
 
 export interface ProductDetailsProps {
-  details: any;
+  product: any;
 }
 
 const ProductDetails: React.SFC<ProductDetailsProps> = (props) => {
-  const { classes } = props;
+  const { classes, product } = props;
   return (
     <Wrapper>
       <ShareIconsWrapper>
@@ -49,7 +49,7 @@ const ProductDetails: React.SFC<ProductDetailsProps> = (props) => {
       </ShareIconsWrapper>
       <HeaderTitle>
         <Typography variant="h5">
-        New Sonic Bomb Sonic Bomb Alarm Clock Turbo charged loud Built-in alert lights Adjustable volume
+        {product.title}
         </Typography>
       </HeaderTitle>
       <RatingsWrapper>
@@ -62,14 +62,14 @@ const ProductDetails: React.SFC<ProductDetailsProps> = (props) => {
       </RatingsWrapper>
       <DescriptionWrapper>
         <Typography component="p">
-        2560*1600 IPS Screen 11.6\ Inch Ten Core 6G+16G/32G/64G Arge Android 7.1 WiFi Tablet PC Dual SIM Dual Camera Rear 13.0MP IPS Bluetooth MTK6797 4G WiFi Call Phone Tablet Gifts Tablet-PC
+        {product.description}
         </Typography>
       </DescriptionWrapper>
       <VariantWrapper>
-        <Variants />
+        <Variants variants={product.variants} />
       </VariantWrapper>
         <h2 style={{alignSelf: 'end'}}>
-            $500
+            ${product.price}
         </h2>
       <ButtonsWrapper>
         <Fab variant="extended" color="primary" aria-label="Add" className={classes.margin}>         Add To Cart

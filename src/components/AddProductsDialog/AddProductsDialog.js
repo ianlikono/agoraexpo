@@ -3,12 +3,12 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable jsx-a11y/interactive-supports-focus */
 import AppBar from '@material-ui/core/AppBar';
-import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import IconButton from '@material-ui/core/IconButton';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import Paper from '@material-ui/core/Paper';
 import Slide from '@material-ui/core/Slide';
+import Snackbar from '@material-ui/core/Snackbar';
 import { withStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -16,18 +16,15 @@ import Typography from '@material-ui/core/Typography';
 import CloseIcon from '@material-ui/icons/Close';
 import SaveIcon from '@material-ui/icons/Save';
 import 'antd/dist/antd.css';
+import Input from 'antd/lib/input';
 import Select from 'antd/lib/select';
 import classNames from 'classnames';
-import ChipInput from 'material-ui-chip-input';
 import { DropzoneArea } from 'material-ui-dropzone';
-import React from 'react';
-import Snackbar from '@material-ui/core/Snackbar';
-import NumberFormat from 'react-number-format';
-import Input from 'antd/lib/input';
-import { filterCategories } from '../../graphql/queries';
-import { createProduct } from '../../graphql/mutations';
-import { Mutation } from 'react-apollo';
 import Router from 'next/router';
+import React from 'react';
+import { Mutation } from 'react-apollo';
+import NumberFormat from 'react-number-format';
+import { createProduct, createVariant } from '../../graphql/mutations';
 
 
 const { TextArea } = Input;
@@ -166,9 +163,9 @@ class AddProductsDialog extends React.PureComponent {
     this.setState({ snackOpen: false });
   }
 
-  onProductSave = async (productCreate, error) => {
-    const { name, description, price, categories, tags, brand, images} = this.state;
-    if(name.length < 1 && description.length < 1 && price.length < 1 && categories.length < 1 && tags.length < 1 && brand.length < 1 && images.length < 1) {
+  onProductSave = async (productCreate,variantCreate, error, error2) => {
+    const { name, description, price, categories, tags, brand, images } = this.state;
+    if (name.length < 1 && description.length < 1 && price.length < 1 && categories.length < 1 && tags.length < 1 && brand.length < 1 && images.length < 1) {
       this.setState({
         snackOpen: true,
         disabledSave: true,
@@ -177,10 +174,24 @@ class AddProductsDialog extends React.PureComponent {
       const response = await productCreate({
         variables: { id: this.props.shopId, title: name, description, price, categories, tags, brand, images },
       });
-      const shopName = response.data.createProduct.shop.name
+      const productId = response.data.createProduct.id;
+
+      const firstVariantResponse = await variantCreate({
+        variables: {
+           productId: productId,
+           name: "Color",
+           values: ["#fff", "#000"]
+        }
+      })
+      const secondVariantResponse = await variantCreate({
+        variables: {
+           productId: productId,
+           name: "Size",
+           values: ["Large", "Medium", "Small"]
+        }
+      })
       Router.push({
-        pathname: `/product/`,
-        query: { name: shopName, id: response.data.createProduct.id },
+        pathname: `/product/${productId}`,
       });
     }
 
@@ -192,7 +203,6 @@ class AddProductsDialog extends React.PureComponent {
       name,
       tags,
       brand,
-      brandLimit,
       description,
       price,
       images,
@@ -202,136 +212,142 @@ class AddProductsDialog extends React.PureComponent {
     return (
       <>
         <Mutation mutation={createProduct}>
-        {(productCreate, { loading, error }) => (
-          <Dialog fullScreen open={open} onClose={close} TransitionComponent={Transition}>
-          <Snackbar
-            anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
-            open={snackOpen}
-            autoHideDuration={6000}
-            onClose={this.handleClose}
-            ContentProps={{
-              'aria-describedby': 'message-id',
-            }}
-            message={<span id="message-id">Please Ensure All FIelds Are Filled</span>}
-            action={[
-              <IconButton
-                key="close"
-                aria-label="Close"
-                color="inherit"
-                className={classes.close}
-                onClick={this.handleCloseSnackClose}
-              >
-                <CloseIcon />
-              </IconButton>,
-            ]}
-          />
-            <AppBar className={classes.appBar}>
-              <Toolbar>
-                <div onClick={close} role="button">
-                  <IconButton color="inherit" aria-label="Close">
+          {(productCreate, { loading, error }) => (
+            <Dialog fullScreen open={open} onClose={close} TransitionComponent={Transition}>
+            <Mutation mutation={createVariant}>
+            {(variantCreate, { loading2, error2 }) => (
+              <>
+              <Snackbar
+                anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
+                open={snackOpen}
+                autoHideDuration={6000}
+                onClose={this.handleClose}
+                ContentProps={{
+                  'aria-describedby': 'message-id',
+                }}
+                message={<span id="message-id">Please Ensure All FIelds Are Filled</span>}
+                action={[
+                  <IconButton
+                    key="close"
+                    aria-label="Close"
+                    color="inherit"
+                    className={classes.close}
+                    onClick={this.handleCloseSnackClose}
+                  >
                     <CloseIcon />
-                  </IconButton>
-                </div>
-                <Typography variant="h6" color="inherit" className={classes.flex}>
-                  Add Product
-                </Typography>
-                {/* //TODO: save prducts */}
-                <div onClick={() => this.onProductSave(productCreate, error)} role="button">
-                <IconButton  disabled={disabledSave || loading} color="inherit" aria-label="Close">
-                   <div style={{display: 'flex', alignItems: 'center'}}>
-                    <SaveIcon />
-                    save
-                    </div>
-                  </IconButton>
+                  </IconButton>,
+                ]}
+              />
+              <AppBar className={classes.appBar}>
+                <Toolbar>
+                  <div onClick={close} role="button">
+                    <IconButton color="inherit" aria-label="Close">
+                      <CloseIcon />
+                    </IconButton>
                   </div>
-              </Toolbar>
-            </AppBar>
-            <div style={{ width: '100%', height: '100%' }}>
-              <div className="wrapper">
-                <div style={{ marginTop: '50px' }}>
-                  <Typography variant="h4" align="center">
-                    Create Product
+                  <Typography variant="h6" color="inherit" className={classes.flex}>
+                    Add Product
+                </Typography>
+                  {/* //TODO: save prducts */}
+                  <div onClick={() => this.onProductSave(productCreate,variantCreate, error, error2)} role="button">
+                    <IconButton disabled={disabledSave || loading || loading2} color="inherit" aria-label="Close">
+                      <div style={{ display: 'flex', alignItems: 'center' }}>
+                        <SaveIcon />
+                        save
+                    </div>
+                    </IconButton>
+                  </div>
+                </Toolbar>
+              </AppBar>
+              <div style={{ width: '100%', height: '100%' }}>
+                <div className="wrapper">
+                  <div style={{ marginTop: '50px' }}>
+                    <Typography variant="h4" align="center">
+                      Create Product
                   </Typography>
-                </div>
-                <div className="form-wrapper">
-                  <Paper className={classes.root} elevation={1}>
-                    <div
-                      style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-evenly' }}
-                    >
-                      <div className="col-1">
-                        <div className="field-size">
-                        <Input  id="name" name="name" value={name} style={{width: '100%'}} placeholder="Product Name" onChange={this.handleInputChange} />
-                        </div>
-                        <div className="sepearator" />
-                        <div className="field-size">
-                        <Select
-                            mode="tags"
-                            style={{ width: '100%' }}
-                            placeholder="Product Categories"
-                            onChange={this.handleCategoryChange}
-                          >
-                            {this.renderCategorySuggestions()}
-                          </Select>
-                        </div>
-                        <div className="sepearator" />
-                        <div className="field-size">
-                        <Select
-                            mode="tags"
-                            style={{ width: '100%' }}
-                            placeholder="Product Tags"
-                            onChange={this.handletagsChange}
-                          >
-                            {this.renderCategorySuggestions()}
-                          </Select>
-                        </div>
-                        <div className="sepearator" />
-                        <Typography variant="h5">Upload Images</Typography>
-                        <div className="field-size">
-                          <DropzoneArea
-                            acceptedFiles={['image/*']}
-                            filesLimit={10}
-                            onDrop={this.onFilesDropped}
-                            dropzoneText="Drag and drop an image file here or click"
-                          />
-                        </div>
-                      </div>
-                      <div className="col-2">
-                        <div className="field-size">
-                        <Input onChange={this.handleInputChange} id="brand" name="brand" value={brand} style={{width: '100%'}} placeholder="Product Brand" />
-                        </div>
-                        <div className="sepearator" />
-                        <div className="field-size">
-                        <TextArea id="description" name="description" value={description} onChange={this.handleInputChange} rows={4} placeholder="Add Product Description"/>
+                  </div>
+                  <div className="form-wrapper">
+                    <Paper className={classes.root} elevation={1}>
+                      <div
+                        style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-evenly' }}
+                      >
+                        <div className="col-1">
+                          <div className="field-size">
+                            <Input id="name" name="name" value={name} style={{ width: '100%' }} placeholder="Product Name" onChange={this.handleInputChange} />
+                          </div>
                           <div className="sepearator" />
                           <div className="field-size">
-                            <div>
-                              <Typography variant="h5">Price</Typography>
-                              <div style={{ marginTop: '10px' }}>
-                                <TextField
-                                  name="price"
-                                  onChange={this.handlePriceChange('price')}
-                                  fullWidth
-                                  id="price"
-                                  value={price}
-                                  className={classNames(classes.margin, classes.textField)}
-                                  InputProps={{
-                                    startAdornment: (
-                                      <InputAdornment position="start">$</InputAdornment>
-                                    ),
-                                    inputComponent: this.PriceFormatCustom,
-                                  }}
-                                />
+                            <Select
+                              mode="tags"
+                              style={{ width: '100%' }}
+                              placeholder="Product Categories"
+                              onChange={this.handleCategoryChange}
+                            >
+                              {this.renderCategorySuggestions()}
+                            </Select>
+                          </div>
+                          <div className="sepearator" />
+                          <div className="field-size">
+                            <Select
+                              mode="tags"
+                              style={{ width: '100%' }}
+                              placeholder="Product Tags"
+                              onChange={this.handletagsChange}
+                            >
+                              {this.renderCategorySuggestions()}
+                            </Select>
+                          </div>
+                          <div className="sepearator" />
+                          <Typography variant="h5">Upload Images</Typography>
+                          <div className="field-size">
+                            <DropzoneArea
+                              acceptedFiles={['image/*']}
+                              filesLimit={10}
+                              onDrop={this.onFilesDropped}
+                              dropzoneText="Drag and drop an image file here or click"
+                            />
+                          </div>
+                        </div>
+                        <div className="col-2">
+                          <div className="field-size">
+                            <Input onChange={this.handleInputChange} id="brand" name="brand" value={brand} style={{ width: '100%' }} placeholder="Product Brand" />
+                          </div>
+                          <div className="sepearator" />
+                          <div className="field-size">
+                            <TextArea id="description" name="description" value={description} onChange={this.handleInputChange} rows={4} placeholder="Add Product Description" />
+                            <div className="sepearator" />
+                            <div className="field-size">
+                              <div>
+                                <Typography variant="h5">Price</Typography>
+                                <div style={{ marginTop: '10px' }}>
+                                  <TextField
+                                    name="price"
+                                    onChange={this.handlePriceChange('price')}
+                                    fullWidth
+                                    id="price"
+                                    value={price}
+                                    className={classNames(classes.margin, classes.textField)}
+                                    InputProps={{
+                                      startAdornment: (
+                                        <InputAdornment position="start">$</InputAdornment>
+                                      ),
+                                      inputComponent: this.PriceFormatCustom,
+                                    }}
+                                  />
+                                </div>
                               </div>
                             </div>
                           </div>
                         </div>
                       </div>
-                    </div>
-                  </Paper>
+                    </Paper>
+                  </div>
                 </div>
               </div>
-            </div>
-          </Dialog>
+              </>
+              )}
+              </Mutation>
+            </Dialog>
           )}
         </Mutation>
         <style jsx>{`
