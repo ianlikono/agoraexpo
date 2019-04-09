@@ -4,6 +4,7 @@ import ProductDetails from './Details/Details';
 import ImageGallery from './ImageGallery/ImageGallery';
 import { Details, Gallery, Wrapper } from './styles';
 import SimilarProducts from './SimilarProducts/SimilarProducts';
+import Reviews from './Reveiws/Reviews';
 
 export interface ProDuctDetailsProps {
   shopName: String;
@@ -23,6 +24,7 @@ const ProDuctDetails: React.SFC<ProDuctDetailsProps> = props => {
         </Details>
       </Wrapper>
       <SimilarProducts />
+      <Reviews />
     </>
   );
 };

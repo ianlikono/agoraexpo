@@ -68,6 +68,9 @@ const ProductDetails: React.SFC<ProductDetailsProps> = (props) => {
       <VariantWrapper>
         <Variants />
       </VariantWrapper>
+        <h2 style={{alignSelf: 'end'}}>
+            $500
+        </h2>
       <ButtonsWrapper>
         <Fab variant="extended" color="primary" aria-label="Add" className={classes.margin}>         Add To Cart
         </Fab>

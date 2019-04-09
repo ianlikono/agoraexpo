@@ -46,6 +46,5 @@ export const VariantWrapper = styled.div`
 export const ButtonsWrapper = styled.div`
   width: 100%;
   display: flex;
-  margin-top: 20px;
 
 `;
