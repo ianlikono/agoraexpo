@@ -46,29 +46,44 @@ export const filterCategories = gql`
 `;
 
 export const productQuery = gql`
-    query product($id: ID!){
-      product(id: $id) {
-        id
-        title
-        description
-        price
-        categories {
-          name
-        }
-        brand {
-          name
-        }
-        tags {
-          name
-        }
-        images {
-          imageUrl
-        }
-        variants {
-          id
-          name
-          values
-        }
+  query product($id: ID!) {
+    product(id: $id) {
+      id
+      title
+      description
+      price
+      categories {
+        name
       }
+      brand {
+        name
+      }
+      tags {
+        name
+      }
+      images {
+        imageUrl
+      }
+      variants {
+        id
+        name
+        values
+      }
+    }
+  }
+`;
+
+export const productReviews = gql`
+  query productReviews($productId: ID!) {
+    productReviews(productId: $productId) {
+      review
+      rating
+      user {
+        username
+        name
+        profilePic
+      }
+      createdAt
+    }
   }
 `;

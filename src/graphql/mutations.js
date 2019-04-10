@@ -104,3 +104,17 @@ export const updateVariant = gql`
     }
   }
 `;
+
+export const createProductReview = gql`
+  mutation createProductReview($productId:ID!, $rating: Int!, $review: String) {
+    createProductReview(productId: $productId, rating: $rating, review: $review) {
+      rating
+      review
+      review
+      user {
+        name
+        profilePic
+      }
+    }
+  }
+`;

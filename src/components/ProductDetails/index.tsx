@@ -8,11 +8,11 @@ import { Details, Gallery, Wrapper } from './styles';
 
 export interface ProDuctDetailsProps {
   product: any;
+  productId: any;
 }
 
 const ProDuctDetails: React.SFC<ProDuctDetailsProps> = props => {
-  const { product } = props;
-  console.log(product);
+  const { product, productId } = props;
   return (
     <>
       <Wrapper>
@@ -24,7 +24,7 @@ const ProDuctDetails: React.SFC<ProDuctDetailsProps> = props => {
         </Details>
       </Wrapper>
       <SimilarProducts />
-      <Reviews />
+      <Reviews productId={productId} />
     </>
   );
 };

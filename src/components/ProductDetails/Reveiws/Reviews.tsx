@@ -1,105 +1,151 @@
-import React from 'react';
-import Typography from '@material-ui/core/Typography';
-import  Rating  from 'material-ui-rating';
 import Avatar from '@material-ui/core/Avatar';
-import TextField from '@material-ui/core/TextField';
-import { withStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
-import { Wrapper, ReviewWrapper, ReviewDetails, ReviewContent, LeftWrapper } from './styles';
+import deepPurple from '@material-ui/core/colors/deepPurple';
+import { withStyles } from '@material-ui/core/styles';
+import TextField from '@material-ui/core/TextField';
+import Typography from '@material-ui/core/Typography';
+import Rating from 'material-ui-rating';
+import React, { useState } from 'react';
+import { Mutation, Query } from 'react-apollo';
+import Moment from 'react-moment';
+import { createProductReview } from '../../../graphql/mutations';
+import { productReviews } from '../../../graphql/queries';
+import { LeftWrapper, ReviewContent, ReviewDetails, ReviewWrapper, Wrapper } from './styles';
 
 const styles = theme => ({
-    avatar: {
-      width: 60,
-      height: 60,
-    },
-    input: {
-        width: '70%',
-    },
-    button: {
-        margin: theme.spacing.unit,
-    },
-})
+  avatar: {
+    width: 60,
+    height: 60,
+  },
+  input: {
+    width: '70%',
+  },
+  button: {
+    margin: theme.spacing.unit,
+  },
+  purpleAvatar: {
+    margin: 10,
+    color: '#fff',
+    backgroundColor: deepPurple[500],
+  },
+});
 
-
-export interface ProDuctDetailsProps {
-
+export interface ReviewsProps {
+  productId: any;
 }
 
-const reviews = [{
-    rating: 5,
-    createdAt: '5 minutes ago',
-    user: {
-        username: "likono",
-        url: "https://images.unsplash.com/photo-1487087850479-4792f4bdb5de?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60",
-    },
-    review: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.",
- },
- {
-    rating: 3,
-    createdAt: '2 months ago',
-    user: {
-        username: "amanda",
-        url: "https://images.unsplash.com/photo-1526921818655-f049068f1de9?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60",
-    },
-    review: "It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.",
- }
-]
+const ProDuctDetails: React.SFC<ReviewsProps> = props => {
+  const { classes, productId } = props;
 
-const ProDuctDetails: React.SFC<ProDuctDetailsProps> = props => {
-  const { classes } = props;
+  const [reviewInput, setReviewInput] = useState('');
+  const [enabledPostButton, setEnabledPostButton] = useState(true);
+  const [rating, setRating] = useState();
 
-  const renderReviews = (reviews) => {
-    return reviews.map((review) => {
-       return(
-       <ReviewWrapper>
-           <LeftWrapper>
-           <Avatar alt="Remy Sharp" src={review.user.url} className={classes.avatar} />
-                <ReviewDetails>
-                    <Rating
-                        value={review.rating}
-                        max={5}
-                        readOnly
-                    />
-                <Typography variant="caption" align="center">
-                {review.createdAt}
-                </Typography>
+  const onReviewInputChange = e => {
+    setReviewInput(e.target.value);
+    if (reviewInput.length > 0) {
+      setEnabledPostButton(false);
+    } else {
+      setEnabledPostButton(true);
+    }
+  };
 
-                <Typography component="p" align="center">
-                {review.user.username}
-                </Typography>
-                </ReviewDetails>
-            </LeftWrapper>
-            <ReviewContent>
-                <Typography component="p">
-                {review.review}
-                </Typography>
-            </ReviewContent>
-        </ReviewWrapper>
-        )
-    })
-  }
+  const onRatingsChange = value => {
+    setRating(value);
+  };
+
+  const onPostReview = async (createProductMutaion, error) => {
+    if (rating && reviewInput.length > 0) {
+      const response = await createProductMutaion({
+        variables: {
+          productId,
+          rating,
+          review: reviewInput,
+        },
+        refetchQueries: [
+          {
+            query: productReviews,
+            variables: { productId }
+          }
+        ]
+      });
+      setReviewInput('');
+      setRating();
+      console.log(response);
+    }
+  };
+
+  const renderReviews = reviews => {
+    return (
+      <Query query={productReviews} variables={{ productId }}>
+        {({ loading, error, data }) => {
+          if (loading) return 'Loading...';
+          if (error) return `Error! ${error.message}`;
+          return data.productReviews.map(review => {
+            return (
+              <ReviewWrapper>
+                <LeftWrapper>
+                  {review.user.profilePic ? (
+                    <Avatar alt="Remy Sharp" src={review.user.url} className={classes.avatar} />
+                  ) : (
+                    <Avatar className={classes.purpleAvatar}>
+                      {review.user.username.charAt(0)}
+                    </Avatar>
+                  )}
+                  <ReviewDetails>
+                    <Rating value={review.rating} max={5} readOnly />
+                    <Typography variant="caption" align="center">
+                      <Moment fromNow>{review.createdAt}</Moment>
+                    </Typography>
+
+                    <Typography component="p" align="center">
+                      {review.user.username}
+                    </Typography>
+                  </ReviewDetails>
+                </LeftWrapper>
+                <ReviewContent>
+                  <Typography component="p">{review.review}</Typography>
+                </ReviewContent>
+              </ReviewWrapper>
+            );
+          });
+        }}
+      </Query>
+    );
+  };
   return (
     <>
       <Typography variant="h4" align="center">
-            Reviews
-        </Typography>
-        <Wrapper>
-            {reviews.length > 0 ? renderReviews(reviews) : null}
-        </Wrapper>
-        <div style={{marginLeft: '10%'}}>
-            <Typography variant="h6">
-                Leave A Review
-            </Typography>
-            <TextField label="Your Review" multiline rowsMax="6" rows="5" placeholder="Write your review" className={classes.input}/>
-            <Rating
-                value={1}
-                max={5}
+        Reviews
+      </Typography>
+      <Wrapper>{renderReviews()}</Wrapper>
+      <Mutation mutation={createProductReview}>
+        {(createProductMutaion, { loading, error }) => (
+          <div style={{ marginLeft: '10%' }}>
+            <Typography variant="h6">Leave A Review</Typography>
+            <TextField
+              value={reviewInput}
+              onChange={onReviewInputChange}
+              label="Your Review"
+              multiline
+              rowsMax="6"
+              rows="5"
+              placeholder="Write your review"
+              className={classes.input}
             />
-            <Button variant="contained" color="primary" className={classes.button}>
-                Post
+            <Rating value={rating} max={5} onChange={val => onRatingsChange(val)} />
+            <Button
+              disabled={loading || enabledPostButton}
+              onClick={() => onPostReview(createProductMutaion, error)}
+              variant="contained"
+              color="primary"
+              className={classes.button}
+            >
+              Post
             </Button>
-        </div>
-
+          </div>
+        )}
+      </Mutation>
     </>
   );
 };
