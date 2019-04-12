@@ -5,6 +5,10 @@ import Panels from './Panels';
 
 export interface VariantsProps {
     variants: any;
+    color: any;
+    onColorClicked: any;
+    size: any;
+    onSizeSelect: any;
   }
 
   const styles = theme => ({
@@ -15,10 +19,10 @@ export interface VariantsProps {
 
 
   const Variants: React.SFC<VariantsProps> = props => {
-    const { classes, variants } = props;
+    const { classes, variants, color, onColorClicked, size, onSizeSelect } = props;
     return (
         <Wrapper className={classes.root}>
-            <Panels variants={variants} />
+            <Panels variants={variants} color={color} onColorClicked={onColorClicked} size={size} onSizeSelect={onSizeSelect}/>
         </Wrapper>
     )
 

@@ -6,6 +6,10 @@ import { Wrapper } from './styles';
 
 export interface ColorProps {
     Panels: any;
+    color: any;
+    onColorClicked: any;
+    size: any;
+    onSizeSelect: any;
   }
 
   const styles = theme => ({
@@ -22,7 +26,7 @@ export interface ColorProps {
   });
 
   const Panels: React.SFC<PanelsProps> = props => {
-    const { classes, variants } = props;
+    const { classes, variants, color, onColorClicked , size, onSizeSelect} = props;
     const colorVariant = variants.filter((variant) => {
       return variant.name == "Color"
     })
@@ -31,8 +35,8 @@ export interface ColorProps {
     })
     return (
         <Wrapper className={classes.root}>
-            <Color variant={colorVariant} />
-            <Size variant={SizeVariant} />
+            <Color variant={colorVariant} color={color} onColorClicked={onColorClicked}/>
+            <Size variant={SizeVariant} size={size} onSizeSelect={onSizeSelect}/>
         </Wrapper>
     )
 

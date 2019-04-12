@@ -87,3 +87,24 @@ export const productReviews = gql`
     }
   }
 `;
+
+export const getMeCart = gql`
+  query getMeCart {
+    getMeCart {
+      id
+      items {
+        id
+        product {
+          id
+          title
+          images {
+            imageUrl
+          }
+          price
+        }
+        quantity
+        variants
+      }
+    }
+  }
+`;

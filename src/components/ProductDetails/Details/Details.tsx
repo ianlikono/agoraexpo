@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import { IoLogoFacebook, IoLogoTwitter, IoLogoInstagram, IoLogoLinkedin } from 'react-icons/io';
 import { IconContext } from "react-icons";
 import styled from 'styled-components';
@@ -6,8 +6,12 @@ import Typography from '@material-ui/core/Typography';
 import  Rating  from 'material-ui-rating';
 import { withStyles } from '@material-ui/core/styles';
 import Fab from '@material-ui/core/Fab';
+import { Mutation } from 'react-apollo';
 import { Wrapper, ShareIconsWrapper, ShareIcon, HeaderTitle, DescriptionWrapper, RatingsWrapper, VariantWrapper, ButtonsWrapper } from './styles';
 import Variants from './Variants/Variants';
+import { addItemToCart } from '../../../graphql/mutations';
+import { getMeCart } from '../../../graphql/queries';
+
 
 const styles = theme => ({
   margin: {
@@ -22,6 +26,32 @@ export interface ProductDetailsProps {
 }
 
 const ProductDetails: React.SFC<ProductDetailsProps> = (props) => {
+  const [selectedColor, setSelectedColor] = useState('');
+  const [selectedSize, setSelectedSize] = useState('');
+
+
+  const onSizeSelect = size => {
+    setSelectedSize(size);
+  };
+
+  const onColorClicked = color => {
+    setSelectedColor(color);
+  };
+
+  const onAddToCartClick = async (product, addItem) => {
+    await addItem({
+      variables: {
+        productId: product.id,
+        quantity: 1,
+        variants: [selectedSize, selectedColor]
+      },
+      refetchQueries: [
+        {
+          query: getMeCart,
+        }
+      ]
+    })
+  }
   const { classes, product } = props;
   return (
     <Wrapper>
@@ -66,17 +96,21 @@ const ProductDetails: React.SFC<ProductDetailsProps> = (props) => {
         </Typography>
       </DescriptionWrapper>
       <VariantWrapper>
-        <Variants variants={product.variants} />
+        <Variants color={selectedColor} onColorClicked={onColorClicked} size={selectedSize} onSizeSelect={onSizeSelect} variants={product.variants} />
       </VariantWrapper>
         <h2 style={{alignSelf: 'end'}}>
             ${product.price}
         </h2>
-      <ButtonsWrapper>
-        <Fab variant="extended" color="primary" aria-label="Add" className={classes.margin}>         Add To Cart
-        </Fab>
-      <Fab variant="extended" color="secondary" aria-label="Add" className={classes.margin}>         Add To Wishlist
-        </Fab>
-      </ButtonsWrapper>
+        <Mutation mutation={addItemToCart}>
+          {(addItem, { data }) => (
+              <ButtonsWrapper>
+                <Fab onClick={() => onAddToCartClick(product, addItem)} variant="extended" color="primary" aria-label="Add" className={classes.margin}>         Add To Cart
+                </Fab>
+              <Fab variant="extended" color="secondary" aria-label="Add" className={classes.margin}>         Add To Wishlist
+                </Fab>
+              </ButtonsWrapper>
+            )}
+      </Mutation>
     </Wrapper>
    );
 };

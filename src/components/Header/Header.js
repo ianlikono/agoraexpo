@@ -16,6 +16,7 @@ import SearchIcon from '@material-ui/icons/Search';
 import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
 import Link from 'next/link';
 import React from 'react';
+import CartDrawer from '../CartDrawer/CartDrawer';
 import PlusIcon from '../PlusIcon/PlusIcon';
 
 const styles = theme => ({
@@ -82,6 +83,7 @@ const styles = theme => ({
     [theme.breakpoints.up('md')]: {
       display: 'flex',
     },
+    alignItems: 'center',
   },
   sectionMobile: {
     display: 'flex',
@@ -95,6 +97,7 @@ class Header extends React.Component {
   state = {
     anchorEl: null,
     mobileMoreAnchorEl: null,
+    cartOpen: false,
   };
 
   handleProfileMenuOpen = event => {
@@ -112,7 +115,20 @@ class Header extends React.Component {
 
   handleMobileMenuClose = type => {
     this.setState({ mobileMoreAnchorEl: null });
-    console.log('clicked', type);
+    const { cartOpen } = this.state;
+    if(type == 'cart') {
+      this.setState({
+        cartOpen: !cartOpen,
+      });
+    }
+  };
+
+  onCartClicked = () => {
+    const { cartOpen } = this.state;
+
+    this.setState({
+      cartOpen: !cartOpen,
+    });
   };
 
   render() {
@@ -135,34 +151,28 @@ class Header extends React.Component {
     );
 
     const renderMobileMenu = (
-      <Menu
-        anchorEl={mobileMoreAnchorEl}
-        anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
-        transformOrigin={{ vertical: 'top', horizontal: 'right' }}
-        open={isMobileMenuOpen}
-        onClose={this.handleMenuClose}
-      >
-        <MenuItem onClick={() => this.handleMobileMenuClose('create')}>
-          <IconButton color="inherit">
-            <AddIcon />
-          </IconButton>
-          <p>Create Shop</p>
-        </MenuItem>
-        <MenuItem onClick={() => this.handleMobileMenuClose('cart')}>
-          <IconButton color="inherit">
-            <Badge badgeContent={11} color="secondary">
-              <ShoppingCartIcon />
-            </Badge>
-          </IconButton>
-          <p>Notifications</p>
-        </MenuItem>
-        <MenuItem onClick={this.handleProfileMenuOpen}>
-          <IconButton color="inherit">
-            <AccountCircle />
-          </IconButton>
-          <p>Profile</p>
-        </MenuItem>
-      </Menu>
+      <div>
+        <Menu
+          anchorEl={mobileMoreAnchorEl}
+          anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+          transformOrigin={{ vertical: 'top', horizontal: 'right' }}
+          open={isMobileMenuOpen}
+          onClose={this.handleMenuClose}
+        >
+          <MenuItem onClick={() => this.handleMobileMenuClose('create')}>
+            <IconButton color="inherit">
+              <AddIcon />
+            </IconButton>
+            <p>Create Shop</p>
+          </MenuItem>
+          <MenuItem onClick={this.handleProfileMenuOpen}>
+            <IconButton color="inherit">
+              <AccountCircle />
+            </IconButton>
+            <p>Profile</p>
+          </MenuItem>
+        </Menu>
+      </div>
     );
 
     return (
@@ -198,11 +208,13 @@ class Header extends React.Component {
                   <PlusIcon toolTipTitle="Create Shop" fabSize="small" />
                 </a>
               </Link>
-              <IconButton color="inherit">
-                <Badge badgeContent={17} color="secondary">
-                  <ShoppingCartIcon />
-                </Badge>
-              </IconButton>
+              <div onClick={this.onCartClicked} role="button">
+                <IconButton color="inherit">
+                  <Badge badgeContent={17} color="secondary">
+                    <ShoppingCartIcon />
+                  </Badge>
+                </IconButton>
+              </div>
               <IconButton
                 aria-owns={isMenuOpen ? 'material-appbar' : undefined}
                 aria-haspopup="true"
@@ -213,12 +225,20 @@ class Header extends React.Component {
               </IconButton>
             </div>
             <div className={classes.sectionMobile}>
+              <div onClick={() => this.handleMobileMenuClose('cart')} role="button">
+                <IconButton color="inherit">
+                  <Badge badgeContent={11} color="secondary">
+                    <ShoppingCartIcon />
+                  </Badge>
+                </IconButton>
+              </div>
               <IconButton aria-haspopup="true" onClick={this.handleMobileMenuOpen} color="inherit">
                 <MoreIcon />
               </IconButton>
             </div>
           </Toolbar>
         </AppBar>
+        <CartDrawer open={this.state.cartOpen} manageDrawer={this.onCartClicked} />
         {renderMenu}
         {renderMobileMenu}
       </div>

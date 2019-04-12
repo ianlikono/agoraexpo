@@ -58,7 +58,7 @@ const DialogActions = withStyles(theme => ({
 }))(MuiDialogActions);
 
 const Size: React.SFC<SizeProps> = props => {
-  const { classes, variant } = props;
+  const { classes, variant, size, onSizeSelect } = props;
   const variantId = variant[0].id;
   const [selectedSize, setSelectedSize] = useState('');
   const [sizes, setSizes] = useState([]);
@@ -80,9 +80,6 @@ const Size: React.SFC<SizeProps> = props => {
           variables: {values: filteredSizes, variantId }
         });
         console.log(response);
-      };
-      const onSizeSelect = size => {
-        setSelectedSize(size);
       };
       return (
         <Mutation mutation={updateVariant}>
@@ -130,7 +127,7 @@ const Size: React.SFC<SizeProps> = props => {
             <Typography className={classes.heading}>Size</Typography>
           </div>
           <div className={classes.column}>
-            {!selectedSize.length ? 'select Size' : selectedSize}
+            {!size.length > 0 ? 'select Size' : size}
           </div>
         </ExpansionPanelSummary>
         <ExpansionPanelDetails className={classes.details}>

@@ -118,3 +118,33 @@ export const createProductReview = gql`
     }
   }
 `;
+
+export const addItemToCart = gql`
+  mutation addItemToCart($productId: ID!, $quantity: Int!, $variant: [String!]) {
+    addItemToCart(productId: $productId, quantity:$quantity, variants: $variant)
+    {
+      id
+      items {
+        product {
+          id
+          title
+          images {
+            imageUrl
+          }
+          price
+        }
+        quantity
+        variants
+      }
+    }
+  }
+`;
+
+
+export const deleteCartItem = gql`
+    mutation deleteCartItem($itemId: ID!) {
+    deleteCartItem(itemId: $itemId){
+      id
+    }
+  }
+`;

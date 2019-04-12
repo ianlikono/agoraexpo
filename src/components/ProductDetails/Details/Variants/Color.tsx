@@ -18,6 +18,11 @@ import { IoMdRemoveCircle } from 'react-icons/io';
 import { updateVariant } from '../../../../graphql/mutations';
 import { ColorWrapper, Cover, DeleteColor, Popover, SelectedColor } from './styles';
 
+export interface ColorProps {
+  color: any;
+  onColorClicked: any;
+}
+
 const styles = theme => ({
   root: {
     width: '100%',
@@ -48,7 +53,7 @@ const styles = theme => ({
 });
 
 const Color: React.SFC<ColorProps> = props => {
-  const { classes, variant } = props;
+  const { classes, variant, onColorClicked,  color} = props;
   const variantId = variant[0].id;
   const [displayColorPicker, setDisplayColorPicker] = useState(false);
   const [colors, setColors] = useState([]);
@@ -72,10 +77,6 @@ const Color: React.SFC<ColorProps> = props => {
 
   const handleColorPickerChange = color => {
     setActiveColor(color.hex);
-  };
-
-  const onColorClicked = color => {
-    setSelectedColor(color);
   };
 
   const renderColors = colors => {
@@ -117,10 +118,10 @@ const Color: React.SFC<ColorProps> = props => {
             <Typography className={classes.heading}>Color</Typography>
           </div>
           <div className={classes.column}>
-            {!selectedColor.length ? (
+            {!color.length ? (
               'select color'
             ) : (
-              <SelectedColor SelectedColor={selectedColor} />
+              <SelectedColor SelectedColor={color} />
             )}
           </div>
         </ExpansionPanelSummary>
