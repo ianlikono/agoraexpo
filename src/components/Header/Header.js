@@ -12,12 +12,18 @@ import AccountCircle from '@material-ui/icons/AccountCircle';
 import AddIcon from '@material-ui/icons/Add';
 import MenuIcon from '@material-ui/icons/Menu';
 import MoreIcon from '@material-ui/icons/MoreVert';
+import deepPurple from '@material-ui/core/colors/deepPurple';
+import Avatar from '@material-ui/core/Avatar';
 import SearchIcon from '@material-ui/icons/Search';
 import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
 import Link from 'next/link';
 import React from 'react';
+import Router from 'next/router';
+import Button from '@material-ui/core/Button';
+import { Query } from 'react-apollo';
 import CartDrawer from '../CartDrawer/CartDrawer';
 import PlusIcon from '../PlusIcon/PlusIcon';
+import { getMeQuery } from '../../graphql/queries';
 
 const styles = theme => ({
   root: {
@@ -25,6 +31,20 @@ const styles = theme => ({
   },
   grow: {
     flexGrow: 1,
+  },
+  avatar: {
+    margin: 10,
+    cursor: 'pointer',
+  },
+  purpleAvatar: {
+    margin: 10,
+    color: '#fff',
+    backgroundColor: deepPurple[500],
+    cursor: 'pointer',
+  },
+  button: {
+    margin: theme.spacing.unit,
+    color: 'white',
   },
   menuButton: {
     marginLeft: -12,
@@ -116,7 +136,7 @@ class Header extends React.Component {
   handleMobileMenuClose = type => {
     this.setState({ mobileMoreAnchorEl: null });
     const { cartOpen } = this.state;
-    if(type == 'cart') {
+    if (type == 'cart') {
       this.setState({
         cartOpen: !cartOpen,
       });
@@ -147,101 +167,147 @@ class Header extends React.Component {
       >
         <MenuItem onClick={this.handleMenuClose}>Profile</MenuItem>
         <MenuItem onClick={this.handleMenuClose}>My account</MenuItem>
+        <MenuItem onClick={this.handleMenuClose}>Logout</MenuItem>
       </Menu>
     );
 
-    const renderMobileMenu = (
-      <div>
-        <Menu
-          anchorEl={mobileMoreAnchorEl}
-          anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
-          transformOrigin={{ vertical: 'top', horizontal: 'right' }}
-          open={isMobileMenuOpen}
-          onClose={this.handleMenuClose}
+    const renderUserAvatar = data => {
+      if (data.me) {
+        return data.me.profilePic ? (
+          <div onClick={this.handleProfileMenuOpen} role="button">
+            <Avatar alt="Remy Sharp" src={data.me.profilePic} className={classes.avatar} />
+          </div>
+        ) : (
+          <div onClick={this.handleProfileMenuOpen} role="button">
+            <Avatar className={classes.purpleAvatar}>{data.me.username.charAt(0)}</Avatar>
+          </div>
+        );
+      }
+      return (
+        <Button
+          onClick={() => Router.push('/auth')}
+          variant="contained"
+          color="secondary"
+          className={classes.button}
         >
-          <MenuItem onClick={() => this.handleMobileMenuClose('create')}>
-            <IconButton color="inherit">
-              <AddIcon />
-            </IconButton>
-            <p>Create Shop</p>
-          </MenuItem>
-          <MenuItem onClick={this.handleProfileMenuOpen}>
-            <IconButton color="inherit">
-              <AccountCircle />
-            </IconButton>
-            <p>Profile</p>
-          </MenuItem>
-        </Menu>
-      </div>
-    );
+          Login
+        </Button>
+      );
+    };
+
+    const renderMobileMenu = data => {
+      return (
+        <div>
+          <Menu
+            anchorEl={mobileMoreAnchorEl}
+            anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+            transformOrigin={{ vertical: 'top', horizontal: 'right' }}
+            open={isMobileMenuOpen}
+            onClose={this.handleMenuClose}
+          >
+            {data.me ? (
+              <MenuItem onClick={() => this.handleMobileMenuClose('create')}>
+                <IconButton color="inherit">
+                  <AddIcon />
+                </IconButton>
+                <p>Create Shop</p>
+              </MenuItem>
+            ) : null}
+            <MenuItem>
+              {renderUserAvatar(data)}
+              {data.me ? (
+                <div onClick={this.handleProfileMenuOpen}>
+                  <p>Account</p>
+                </div>
+              ) : null}
+            </MenuItem>
+            {data.me ? (
+              <MenuItem onClick={() => this.handleMobileMenuClose('account')}>
+                <p style={{ textAlign: 'center' }}>Logout</p>
+              </MenuItem>
+            ) : null}
+          </Menu>
+        </div>
+      );
+    };
 
     return (
-      <div className={classes.root}>
-        <AppBar position="static">
-          <Toolbar>
-            <IconButton className={classes.menuButton} color="inherit" aria-label="Open drawer">
-              <MenuIcon />
-            </IconButton>
-            <Link href="/">
-              <a>
-                <Typography className={classes.title} variant="h6" color="inherit" noWrap>
-                  AgoraExpo
-                </Typography>
-              </a>
-            </Link>
-            <div className={classes.search}>
-              <div className={classes.searchIcon}>
-                <SearchIcon />
-              </div>
-              <InputBase
-                placeholder="Search…"
-                classes={{
-                  root: classes.inputRoot,
-                  input: classes.inputInput,
-                }}
-              />
+      <Query query={getMeQuery}>
+        {({ loading, error, data }) => {
+          if (loading) return 'Loading...';
+          if (error) return `Error! ${error.message}`;
+          console.log(data);
+          return (
+            <div className={classes.root}>
+              <AppBar position="static">
+                <Toolbar>
+                  <IconButton
+                    className={classes.menuButton}
+                    color="inherit"
+                    aria-label="Open drawer"
+                  >
+                    <MenuIcon />
+                  </IconButton>
+                  <Link href="/">
+                    <a>
+                      <Typography className={classes.title} variant="h6" color="inherit" noWrap>
+                        AgoraExpo
+                      </Typography>
+                    </a>
+                  </Link>
+                  <div className={classes.search}>
+                    <div className={classes.searchIcon}>
+                      <SearchIcon />
+                    </div>
+                    <InputBase
+                      placeholder="Search…"
+                      classes={{
+                        root: classes.inputRoot,
+                        input: classes.inputInput,
+                      }}
+                    />
+                  </div>
+                  <div className={classes.grow} />
+                  <div className={classes.sectionDesktop}>
+                    <Link href="/new-shop">
+                      <a>
+                        <PlusIcon toolTipTitle="Create Shop" fabSize="small" />
+                      </a>
+                    </Link>
+                    <div onClick={this.onCartClicked} role="button">
+                      <IconButton color="inherit">
+                        <Badge badgeContent={17} color="secondary">
+                          <ShoppingCartIcon />
+                        </Badge>
+                      </IconButton>
+                    </div>
+                    {renderUserAvatar(data)}
+                  </div>
+                  <div className={classes.sectionMobile}>
+                    <div onClick={() => this.handleMobileMenuClose('cart')} role="button">
+                      <IconButton color="inherit">
+                        <Badge badgeContent={11} color="secondary">
+                          <ShoppingCartIcon />
+                        </Badge>
+                      </IconButton>
+                    </div>
+                    <IconButton
+                      aria-haspopup="true"
+                      onClick={this.handleMobileMenuOpen}
+                      color="inherit"
+                    >
+                      <MoreIcon />
+                    </IconButton>
+                  </div>
+                </Toolbar>
+              </AppBar>
+              <CartDrawer open={this.state.cartOpen} manageDrawer={this.onCartClicked} />
+              {renderMenu}
+              {renderMobileMenu(data)}
             </div>
-            <div className={classes.grow} />
-            <div className={classes.sectionDesktop}>
-              <Link href="/new-shop">
-                <a>
-                  <PlusIcon toolTipTitle="Create Shop" fabSize="small" />
-                </a>
-              </Link>
-              <div onClick={this.onCartClicked} role="button">
-                <IconButton color="inherit">
-                  <Badge badgeContent={17} color="secondary">
-                    <ShoppingCartIcon />
-                  </Badge>
-                </IconButton>
-              </div>
-              <IconButton
-                aria-owns={isMenuOpen ? 'material-appbar' : undefined}
-                aria-haspopup="true"
-                onClick={this.handleProfileMenuOpen}
-                color="inherit"
-              >
-                <AccountCircle />
-              </IconButton>
-            </div>
-            <div className={classes.sectionMobile}>
-              <div onClick={() => this.handleMobileMenuClose('cart')} role="button">
-                <IconButton color="inherit">
-                  <Badge badgeContent={11} color="secondary">
-                    <ShoppingCartIcon />
-                  </Badge>
-                </IconButton>
-              </div>
-              <IconButton aria-haspopup="true" onClick={this.handleMobileMenuOpen} color="inherit">
-                <MoreIcon />
-              </IconButton>
-            </div>
-          </Toolbar>
-        </AppBar>
-        <CartDrawer open={this.state.cartOpen} manageDrawer={this.onCartClicked} />
-        {renderMenu}
-        {renderMobileMenu}
-      </div>
+          );
+        }}
+      </Query>
     );
   }
 }

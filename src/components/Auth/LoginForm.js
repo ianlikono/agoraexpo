@@ -8,12 +8,14 @@ import withStyles from '@material-ui/core/styles/withStyles';
 import Typography from '@material-ui/core/Typography';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import React from 'react';
+import Router from 'next/router';
 import firebase from 'firebase/app';
 import { Mutation } from 'react-apollo';
 import { TextValidator, ValidatorForm } from 'react-material-ui-form-validator';
 import Snackbar from '@material-ui/core/Snackbar';
 import { fire } from '../../../firebase';
 import { login } from '../../graphql/mutations';
+import { getMeQuery } from '../../graphql/queries';
 import SocialAuth from './SocialAuth';
 import AppSnackBar from '../Snack/AppSnackBar';
 
@@ -76,12 +78,17 @@ class LoginForm extends React.Component {
         .auth()
         .currentUser.getIdToken()
         .then(async idToken => {
-          const myRes = await signInUser({
+          await signInUser({
             variables: {
               idToken,
             },
+            refetchQueries: [
+              {
+                query: getMeQuery,
+              },
+            ],
           });
-          console.log(myRes);
+          Router.push('/');
         })
         .catch(function(error) {
           console.log('errior', error);

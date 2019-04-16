@@ -8,6 +8,7 @@ import JssProvider from 'react-jss/lib/JssProvider';
 import { ApolloProvider } from 'react-apollo';
 import firebase from 'firebase/app';
 import withApolloClient from '../lib/with-apollo-client';
+// import withApollo from '../lib/withApollo';
 import Page from '../src/shared/Page';
 import getPageContext from '../utils/getPageContext';
 import credentials from '../credentials/client';

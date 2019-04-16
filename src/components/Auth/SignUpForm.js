@@ -7,6 +7,7 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import withStyles from '@material-ui/core/styles/withStyles';
 import Typography from '@material-ui/core/Typography';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
+import Router from 'next/router';
 import React from 'react';
 import firebase from 'firebase/app';
 import { Mutation } from 'react-apollo';
@@ -14,6 +15,7 @@ import { TextValidator, ValidatorForm } from 'react-material-ui-form-validator';
 import { fire } from '../../../firebase';
 import SocialAuth from './SocialAuth';
 import { signUp } from '../../graphql/mutations';
+import { getMeQuery } from '../../graphql/queries';
 
 const styles = theme => ({
   main: {
@@ -84,7 +86,7 @@ class SignUpForm extends React.Component {
         .auth()
         .currentUser.getIdToken()
         .then(async idToken => {
-          const myRes = await signUpUser({
+          await signUpUser({
             variables: {
               name,
               email,
@@ -92,8 +94,13 @@ class SignUpForm extends React.Component {
               emailVerified,
               idToken,
             },
+            refetchQueries: [
+              {
+                query: getMeQuery,
+              },
+            ],
           });
-          console.log(myRes);
+          Router.push('/');
         })
         .catch(function(error) {
           console.log('errior', error);

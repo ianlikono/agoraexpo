@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import Button from '@material-ui/core/Button';
 import { Mutation } from 'react-apollo';
 import Snackbar from '@material-ui/core/Snackbar';
-import 'firebase/auth';
+import Router from 'next/router';
 // @ts-ignore
 import googleIcon from '../../../static/google-icon.svg';
 // @ts-ignore
@@ -11,6 +11,7 @@ import facebookIcon from '../../../static/facebook-icon.svg';
 import { ButtonChildren, IconSvg } from './styles';
 import { facebookProvider, fire, googleProvider } from '../../../firebase';
 import { signUp, login } from '../../graphql/mutations';
+import { getMeQuery } from '../../graphql/queries';
 import AppSnackBar from '../Snack/AppSnackBar';
 
 // @ts-ignore
@@ -40,7 +41,7 @@ const SocialAuth: React.SFC = props => {
           .auth()
           .currentUser.getIdToken()
           .then(async (idToken: any) => {
-            const myRes = await signUpUser({
+            await signUpUser({
               variables: {
                 name,
                 email,
@@ -49,8 +50,13 @@ const SocialAuth: React.SFC = props => {
                 emailVerified: verified_email,
                 idToken,
               },
+              refetchQueries: [
+                {
+                  query: getMeQuery,
+                },
+              ],
             });
-            console.log(myRes);
+            Router.push('/');
           })
           .catch(function(error: any) {
             console.log('errior', error);
@@ -60,12 +66,17 @@ const SocialAuth: React.SFC = props => {
           .auth()
           .currentUser.getIdToken()
           .then(async (idToken: any) => {
-            const myRes = await signInUser({
+            await signInUser({
               variables: {
                 idToken,
               },
+              refetchQueries: [
+                {
+                  query: getMeQuery,
+                },
+              ],
             });
-            console.log(myRes);
+            Router.push('/');
           })
           .catch(function(error: any) {
             console.log('errior', error);
@@ -88,7 +99,7 @@ const SocialAuth: React.SFC = props => {
           .auth()
           .currentUser.getIdToken()
           .then(async (idToken: any) => {
-            const myRes = await signUpUser({
+            await signUpUser({
               variables: {
                 name,
                 email,
@@ -97,8 +108,13 @@ const SocialAuth: React.SFC = props => {
                 emailVerified,
                 idToken,
               },
+              refetchQueries: [
+                {
+                  query: getMeQuery,
+                },
+              ],
             });
-            console.log(myRes);
+            Router.push('/');
           })
           .catch(function(error: any) {
             console.log('errior', error);
@@ -108,12 +124,17 @@ const SocialAuth: React.SFC = props => {
           .auth()
           .currentUser.getIdToken()
           .then(async (idToken: any) => {
-            const myRes = await signInUser({
+            await signInUser({
               variables: {
                 idToken,
               },
+              refetchQueries: [
+                {
+                  query: getMeQuery,
+                },
+              ],
             });
-            console.log(myRes);
+            Router.push('/');
           })
           .catch(function(error: any) {
             console.log('errior', error);

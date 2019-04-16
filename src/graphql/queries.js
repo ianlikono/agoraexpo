@@ -108,3 +108,14 @@ export const getMeCart = gql`
     }
   }
 `;
+
+export const getMeQuery = gql`
+  query me {
+    me {
+      id
+      username
+      name
+      profilePic
+    }
+  }
+`;
