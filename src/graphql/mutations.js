@@ -1,14 +1,49 @@
 /* eslint-disable import/prefer-default-export */
 import gql from 'graphql-tag';
 
-export const Login = gql`
-  mutation login($email: String!, $password: String!) {
-    login(email: $email, password: $password) {
-      token
+export const signUp = gql`
+  mutation signUp(
+    $name: String
+    $email: String
+    $profilePic: String
+    $isAnonymous: Boolean!
+    $emailVerified: Boolean
+    $idToken: String!
+  ) {
+    signUp(
+      name: $name
+      email: $email
+      profilePic: $profilePic
+      isAnonymous: $isAnonymous
+      emailVerified: $emailVerified
+      idToken: $idToken
+    ) {
       user {
         id
         name
+        email
         username
+        profilePic
+        firebaseId
+        isAnonymous
+        emailVerified
+      }
+    }
+  }
+`;
+
+export const login = gql`
+  mutation login($idToken: String!) {
+    login(idToken: $idToken) {
+      user {
+        id
+        name
+        email
+        username
+        profilePic
+        firebaseId
+        isAnonymous
+        emailVerified
       }
     }
   }
@@ -106,7 +141,7 @@ export const updateVariant = gql`
 `;
 
 export const createProductReview = gql`
-  mutation createProductReview($productId:ID!, $rating: Int!, $review: String) {
+  mutation createProductReview($productId: ID!, $rating: Int!, $review: String) {
     createProductReview(productId: $productId, rating: $rating, review: $review) {
       rating
       review
@@ -121,8 +156,7 @@ export const createProductReview = gql`
 
 export const addItemToCart = gql`
   mutation addItemToCart($productId: ID!, $quantity: Int!, $variant: [String!]) {
-    addItemToCart(productId: $productId, quantity:$quantity, variants: $variant)
-    {
+    addItemToCart(productId: $productId, quantity: $quantity, variants: $variant) {
       id
       items {
         product {
@@ -140,10 +174,9 @@ export const addItemToCart = gql`
   }
 `;
 
-
 export const deleteCartItem = gql`
-    mutation deleteCartItem($itemId: ID!) {
-    deleteCartItem(itemId: $itemId){
+  mutation deleteCartItem($itemId: ID!) {
+    deleteCartItem(itemId: $itemId) {
       id
     }
   }

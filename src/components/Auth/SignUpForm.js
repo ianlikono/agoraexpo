@@ -8,7 +8,12 @@ import withStyles from '@material-ui/core/styles/withStyles';
 import Typography from '@material-ui/core/Typography';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import React from 'react';
+import firebase from 'firebase/app';
+import { Mutation } from 'react-apollo';
 import { TextValidator, ValidatorForm } from 'react-material-ui-form-validator';
+import { fire } from '../../../firebase';
+import SocialAuth from './SocialAuth';
+import { signUp } from '../../graphql/mutations';
 
 const styles = theme => ({
   main: {
@@ -34,6 +39,9 @@ const styles = theme => ({
   submit: {
     marginTop: theme.spacing.unit * 3,
   },
+  title: {
+    marginTop: 20,
+  },
 });
 
 class SignUpForm extends React.Component {
@@ -41,6 +49,7 @@ class SignUpForm extends React.Component {
     email: '',
     password: '',
     name: '',
+    submitDisabled: true,
   };
 
   componentDidMount() {
@@ -55,85 +64,126 @@ class SignUpForm extends React.Component {
 
   handleInputChange = e => {
     const { name, value } = e.target;
+    const { email, password } = this.state;
+    if (email.length > 0 && password.length >= 5 && this.state.name.length > 0) {
+      this.setState({ submitDisabled: false });
+    } else {
+      this.setState({ submitDisabled: true });
+    }
     this.setState({ [name]: value });
   };
 
-  handleSignUpSubmit = () => {
-    // your submit logic
+  handleSignUpSubmit = async (signUpUser, error) => {
+    const { email, password, name } = this.state;
+    try {
+      const response = await fire
+        .auth()
+        .createUserWithEmailAndPassword(this.state.email, this.state.password);
+      const { email, isAnonymous, emailVerified } = response.user;
+      fire
+        .auth()
+        .currentUser.getIdToken()
+        .then(async idToken => {
+          const myRes = await signUpUser({
+            variables: {
+              name,
+              email,
+              isAnonymous,
+              emailVerified,
+              idToken,
+            },
+          });
+          console.log(myRes);
+        })
+        .catch(function(error) {
+          console.log('errior', error);
+        });
+    } catch (err) {
+      console.log('err', err);
+      error && console.log('mutation', error);
+    }
   };
 
   render() {
     const { props } = this;
 
     const { classes } = props;
-    const { email, password, name } = this.state;
+    const { email, password, name, submitDisabled } = this.state;
     return (
       <main className={classes.main}>
         <div>
-          <Avatar className={classes.avatar}>
-            <LockOutlinedIcon />
-          </Avatar>
-          <Typography component="h1" variant="h5">
-            Sign Up
-          </Typography>
-          <form className={classes.form}>
-            <ValidatorForm
-              ref="form"
-              onSubmit={this.handleSignUpSubmit}
-              onError={errors => console.log(errors)}
-            >
-              <FormControl margin="normal" required fullWidth>
-                <TextValidator
-                  id="name"
-                  label="Full Name"
-                  onChange={this.handleInputChange}
-                  name="name"
-                  value={name}
-                  validators={['required']}
-                  errorMessages={['this field is required']}
-                />
-              </FormControl>
-              <FormControl margin="normal" required fullWidth>
-                <TextValidator
-                  id="email"
-                  label="Email"
-                  onChange={this.handleInputChange}
-                  name="email"
-                  value={email}
-                  validators={['required', 'isEmail']}
-                  errorMessages={['this field is required', 'email is not valid']}
-                />
-              </FormControl>
-              <FormControl margin="normal" required fullWidth>
-                <TextValidator
-                  id="password"
-                  label="Password"
-                  onChange={this.handleInputChange}
-                  name="password"
-                  type="password"
-                  validators={['required', 'passwordLength']}
-                  errorMessages={[
-                    'this field is required',
-                    'password must be longer than six characters',
-                  ]}
-                  value={password}
-                />
-              </FormControl>
-              <FormControlLabel
-                control={<Checkbox value="remember" color="primary" />}
-                label="Remember me"
-              />
-              <Button
-                type="submit"
-                fullWidth
-                variant="contained"
-                color="primary"
-                className={classes.submit}
-              >
-                Sign Up
-              </Button>
-            </ValidatorForm>
-          </form>
+          <Mutation mutation={signUp}>
+            {(signUpUser, { loading, error }) => (
+              <>
+                <Avatar className={classes.avatar}>
+                  <LockOutlinedIcon />
+                </Avatar>
+                <SocialAuth />
+                <Typography className={classes.title} component="h1" variant="h5">
+                  Sign Up
+                </Typography>
+                <form className={classes.form}>
+                  <ValidatorForm
+                    ref="form"
+                    onSubmit={() => this.handleSignUpSubmit(signUpUser, error)}
+                    onError={errors => console.log(errors)}
+                  >
+                    <FormControl margin="normal" required fullWidth>
+                      <TextValidator
+                        id="name"
+                        label="Full Name"
+                        onChange={this.handleInputChange}
+                        name="name"
+                        value={name}
+                        validators={['required']}
+                        errorMessages={['this field is required']}
+                      />
+                    </FormControl>
+                    <FormControl margin="normal" required fullWidth>
+                      <TextValidator
+                        id="email"
+                        label="Email"
+                        onChange={this.handleInputChange}
+                        name="email"
+                        value={email}
+                        validators={['required', 'isEmail']}
+                        errorMessages={['this field is required', 'email is not valid']}
+                      />
+                    </FormControl>
+                    <FormControl margin="normal" required fullWidth>
+                      <TextValidator
+                        id="password"
+                        label="Password"
+                        onChange={this.handleInputChange}
+                        name="password"
+                        type="password"
+                        validators={['required', 'passwordLength']}
+                        errorMessages={[
+                          'this field is required',
+                          'password must be longer than six characters',
+                        ]}
+                        value={password}
+                      />
+                    </FormControl>
+                    <FormControlLabel
+                      control={<Checkbox value="remember" color="primary" />}
+                      label="Remember me"
+                    />
+                    <Button
+                      type="submit"
+                      fullWidth
+                      variant="contained"
+                      color="primary"
+                      className={classes.submit}
+                      disabled={loading || submitDisabled}
+                    >
+                      Sign Up
+                    </Button>
+                  </ValidatorForm>
+                </form>
+              </>
+            )}
+          </Mutation>
         </div>
       </main>
     );

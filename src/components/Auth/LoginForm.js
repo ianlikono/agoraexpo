@@ -8,9 +8,14 @@ import withStyles from '@material-ui/core/styles/withStyles';
 import Typography from '@material-ui/core/Typography';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import React from 'react';
+import firebase from 'firebase/app';
 import { Mutation } from 'react-apollo';
 import { TextValidator, ValidatorForm } from 'react-material-ui-form-validator';
-import { Login } from '../../graphql/mutations';
+import Snackbar from '@material-ui/core/Snackbar';
+import { fire } from '../../../firebase';
+import { login } from '../../graphql/mutations';
+import SocialAuth from './SocialAuth';
+import AppSnackBar from '../Snack/AppSnackBar';
 
 const styles = theme => ({
   main: {
@@ -36,6 +41,12 @@ const styles = theme => ({
   submit: {
     marginTop: theme.spacing.unit * 3,
   },
+  title: {
+    marginTop: 20,
+  },
+  margin: {
+    margin: theme.spacing.unit,
+  },
 });
 
 class LoginForm extends React.Component {
@@ -43,6 +54,7 @@ class LoginForm extends React.Component {
     email: '',
     password: '',
     buttonInActive: true,
+    loginError: false,
   };
 
   handleInputChange = e => {
@@ -56,38 +68,78 @@ class LoginForm extends React.Component {
     this.setState({ [name]: value });
   };
 
-  handleLoginSubmit = async login => {
+  handleLoginSubmit = async signInUser => {
     const { email, password } = this.state;
     try {
-      const response = await login({ variables: { email, password } });
-      const token = response.data.login.token
-      localStorage.setItem('token', token);
-    } catch (error) {
-      console.log(error);
+      const response = await fire.auth().signInWithEmailAndPassword(email, password);
+      fire
+        .auth()
+        .currentUser.getIdToken()
+        .then(async idToken => {
+          const myRes = await signInUser({
+            variables: {
+              idToken,
+            },
+          });
+          console.log(myRes);
+        })
+        .catch(function(error) {
+          console.log('errior', error);
+        });
+    } catch (err) {
+      setAuthError(true);
+      setErrorMessage(err.message);
+      error && setErrorMessage('Ooops Sorry! Something Went Wrong!');
+      this.setState({ loginError: true });
     }
+  };
+
+  handleSnackClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    this.setState({ loginError: false });
   };
 
   render() {
     const { props } = this;
 
     const { classes } = props;
-    const { email, password, buttonInActive } = this.state;
+    const { email, password, buttonInActive, loginError } = this.state;
 
     return (
       <main className={classes.main}>
-        <Mutation mutation={Login}>
-          {(login, { data }) => (
+        <Mutation mutation={login}>
+          {(signInUser, { data }) => (
             <>
               <Avatar className={classes.avatar}>
                 <LockOutlinedIcon />
               </Avatar>
-              <Typography component="h1" variant="h5">
+              <Snackbar
+                anchorOrigin={{
+                  vertical: 'top',
+                  horizontal: 'right',
+                }}
+                open={loginError}
+                autoHideDuration={10000}
+                onClose={this.handleSnackClose}
+              >
+                <AppSnackBar
+                  onClose={this.handleSnackClose}
+                  variant="error"
+                  className={classes.margin}
+                  message="Invalid Credentials Please Try Again!"
+                />
+              </Snackbar>
+              <SocialAuth />
+              <Typography className={classes.title} component="h1" variant="h5">
                 Sign in
               </Typography>
               <form className={classes.form}>
                 <ValidatorForm
                   ref="form"
-                  onSubmit={() => this.handleLoginSubmit(login)}
+                  onSubmit={() => this.handleLoginSubmit(signInUser)}
                   onError={() => this.setState({ buttonInActive: true })}
                 >
                   <FormControl margin="normal" required fullWidth>
