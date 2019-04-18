@@ -1,5 +1,8 @@
 import AppBar from '@material-ui/core/AppBar';
+import Avatar from '@material-ui/core/Avatar';
 import Badge from '@material-ui/core/Badge';
+import Button from '@material-ui/core/Button';
+import deepPurple from '@material-ui/core/colors/deepPurple';
 import IconButton from '@material-ui/core/IconButton';
 import InputBase from '@material-ui/core/InputBase';
 import Menu from '@material-ui/core/Menu';
@@ -8,22 +11,18 @@ import { withStyles } from '@material-ui/core/styles';
 import { fade } from '@material-ui/core/styles/colorManipulator';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
-import AccountCircle from '@material-ui/icons/AccountCircle';
 import AddIcon from '@material-ui/icons/Add';
 import MenuIcon from '@material-ui/icons/Menu';
 import MoreIcon from '@material-ui/icons/MoreVert';
-import deepPurple from '@material-ui/core/colors/deepPurple';
-import Avatar from '@material-ui/core/Avatar';
 import SearchIcon from '@material-ui/icons/Search';
 import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
 import Link from 'next/link';
-import React from 'react';
 import Router from 'next/router';
-import Button from '@material-ui/core/Button';
+import React from 'react';
 import { Query } from 'react-apollo';
+import { getMeQuery } from '../../graphql/queries';
 import CartDrawer from '../CartDrawer/CartDrawer';
 import PlusIcon from '../PlusIcon/PlusIcon';
-import { getMeQuery } from '../../graphql/queries';
 
 const styles = theme => ({
   root: {
@@ -235,7 +234,7 @@ class Header extends React.Component {
       <Query query={getMeQuery}>
         {({ loading, error, data }) => {
           if (loading) return 'Loading...';
-          if (error) return `Error! ${error.message}`;
+          if (error) return null;
           console.log(data);
           return (
             <div className={classes.root}>

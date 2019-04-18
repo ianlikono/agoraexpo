@@ -1,18 +1,18 @@
-import { withStyles } from '@material-ui/core/styles';
-import React, { useState } from 'react';
 import Button from '@material-ui/core/Button';
-import { Mutation } from 'react-apollo';
 import Snackbar from '@material-ui/core/Snackbar';
+import { withStyles } from '@material-ui/core/styles';
 import Router from 'next/router';
-// @ts-ignore
-import googleIcon from '../../../static/google-icon.svg';
+import React, { useState } from 'react';
+import { Mutation } from 'react-apollo';
+import { facebookProvider, fire, googleProvider } from '../../../firebase';
 // @ts-ignore
 import facebookIcon from '../../../static/facebook-icon.svg';
-import { ButtonChildren, IconSvg } from './styles';
-import { facebookProvider, fire, googleProvider } from '../../../firebase';
-import { signUp, login } from '../../graphql/mutations';
+// @ts-ignore
+import googleIcon from '../../../static/google-icon.svg';
+import { login, signUp } from '../../graphql/mutations';
 import { getMeQuery } from '../../graphql/queries';
 import AppSnackBar from '../Snack/AppSnackBar';
+import { ButtonChildren, IconSvg } from './styles';
 
 // @ts-ignore
 const styles = theme => ({

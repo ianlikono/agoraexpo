@@ -1,0 +1,12 @@
+import * as React from 'react';
+import Cover from './Cover';
+
+export interface HomeProps {}
+
+export default function Home(props: HomeProps) {
+  return (
+    <div>
+      <Cover />
+    </div>
+  );
+}
