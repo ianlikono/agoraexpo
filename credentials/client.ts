@@ -1,8 +1,8 @@
 export default {
-  apiKey: 'AIzaSyDvmDrnZAkO9xaW2x1V_mzAlORZCGIjgCY',
-  authDomain: 'agoraexpo-d0ae7.firebaseapp.com',
-  databaseURL: 'https://agoraexpo-d0ae7.firebaseio.com',
-  projectId: 'agoraexpo-d0ae7',
-  storageBucket: 'agoraexpo-d0ae7.appspot.com',
-  messagingSenderId: '933978546899',
+  apiKey: 'AIzaSyB_DHvdG-tj2Roh2q5OPKRw4Gvu5ftLXY8',
+  authDomain: 'agoraexpo-dev.firebaseapp.com',
+  databaseURL: 'https://agoraexpo-dev.firebaseio.com',
+  projectId: 'agoraexpo-dev',
+  storageBucket: 'agoraexpo-dev.appspot.com',
+  messagingSenderId: '616937133910',
 };

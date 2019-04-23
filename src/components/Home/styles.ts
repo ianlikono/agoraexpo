@@ -34,6 +34,7 @@ export const CoverH1 = styled.h1`
   font-weight: 600;
   margin: 1%;
   text-align: center;
+  color: #fff;
   @media (max-width: 1240px) {
     font-size: 38px;
   }
@@ -51,6 +52,7 @@ export const CoverH3 = styled.h3`
   line-height: 32px;
   font-weight: 300;
   text-align: center;
+  color: #fff;
   @media (max-width: 1240px) {
     font-size: 26px;
   }

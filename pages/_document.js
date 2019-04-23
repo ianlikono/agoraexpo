@@ -5,8 +5,8 @@
 import Document, { Head, Main, NextScript } from 'next/document';
 import PropTypes from 'prop-types';
 import React from 'react';
-import flush from 'styled-jsx/server';
 import { ServerStyleSheet } from 'styled-components';
+import flush from 'styled-jsx/server';
 
 class MyDocument extends Document {
   static async getInitialProps (ctx) {
@@ -72,10 +72,7 @@ class MyDocument extends Document {
             name="theme-color"
             content={pageContext ? pageContext.theme.palette.primary.main : null}
           />
-          <link
-            rel="stylesheet"
-            href="https://fonts.googleapis.com/css?family=Roboto:300,400,500"
-          />
+          <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,300i,400,500" rel="stylesheet" />
         </Head>
         <body>
           <Main />
