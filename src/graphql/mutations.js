@@ -181,3 +181,13 @@ export const deleteCartItem = gql`
     }
   }
 `;
+
+export const logoutMutation = gql`
+  mutation logout {
+    logout {
+      user {
+        name
+      }
+    }
+  }
+`;

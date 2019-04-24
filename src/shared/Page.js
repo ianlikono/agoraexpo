@@ -2,6 +2,7 @@ import Router from 'next/router';
 import NProgress from 'nprogress';
 import React from 'react';
 import { ThemeProvider } from 'styled-components';
+import Footer from '../components/Footer/Footer';
 import Header from '../components/Header/Header';
 import Meta from './Meta';
 
@@ -37,6 +38,7 @@ const Page = props => {
         <Meta />
         <Header />
         <div>{children}</div>
+        <Footer />
       </React.Fragment>
     </ThemeProvider>
   );

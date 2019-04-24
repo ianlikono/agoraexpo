@@ -11,6 +11,7 @@ export const Wrapper = styled.div`
   margin: 20px;
 `;
 
+
 export const ShareIconsWrapper = styled.div`
   color: #f44336;
   width: 100%;
@@ -23,11 +24,11 @@ export const ShareIcon = styled.div`
 `;
 
 export const HeaderTitle = styled.div`
-  align-text: center;
+  text-align: center;
 `;
 
 export const DescriptionWrapper = styled.div`
-  align-text: center;
+  text-align: center;
   margin-top: 10px;
 `;
 
