@@ -2,29 +2,11 @@ import Link from 'next/link';
 import React, { useEffect, useState } from 'react';
 import { Mutation } from 'react-apollo';
 import { IconContext } from 'react-icons';
-import {
-  IoLogoFacebook,
-  IoLogoInstagram,
-  IoLogoLinkedin,
-  IoLogoTwitter,
-  IoLogoYoutube,
-} from 'react-icons/io';
+import { IoLogoFacebook, IoLogoInstagram, IoLogoLinkedin, IoLogoTwitter, IoLogoYoutube } from 'react-icons/io';
 import { fire } from '../../../firebase';
 import { logoutMutation } from '../../graphql/mutations';
 import { getMeQuery } from '../../graphql/queries';
-import {
-  CopyRight,
-  Divider,
-  FollowTitle,
-  FooderHeader,
-  FooterInnerWrapper,
-  HeaderText,
-  LinkSection,
-  LinkText,
-  ShareIcon,
-  SocialIcons,
-  Wrapper,
-} from './styles';
+import { CopyRight, Divider, FollowTitle, FooderHeader, FooterInnerWrapper, HeaderText, LinkSection, LinkText, ShareIcon, SocialIcons, Wrapper } from './styles';
 
 export interface ShopCardProps {
   classes: any;

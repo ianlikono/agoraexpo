@@ -22,6 +22,9 @@ const styles = theme => ({
   },
   margin: {
     margin: theme.spacing.unit,
+    fontSize: '1.2rem',
+    height: '3rem',
+    marginTop: '1rem',
   },
 });
 

@@ -10,6 +10,7 @@ export interface CoverProps {
 const styles = theme => ({
     fab: {
         margin: theme.spacing.unit,
+        fontSize: '2rem'
       },
 });
 

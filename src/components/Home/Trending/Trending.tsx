@@ -1,11 +1,11 @@
 import Typography from '@material-ui/core/Typography';
 import React from 'react';
-import GroupCard from '../../GroupCards/GroupCard';
+import GroupCard from '../../ForumsCards/ForumCard';
 import ItemCaraosel from '../../itemsCaraosel/ItemCaraosel';
 import ShopCard from '../../ShopCard/ShopCard';
 import UserCard from '../../UserCard/UserCard';
 
-const TrendingShops: React.FunctionComponent = () => {
+const Trending: React.FunctionComponent = () => {
   return (
     <>
       <section>
@@ -103,4 +103,4 @@ const TrendingShops: React.FunctionComponent = () => {
   );
 };
 
-export default TrendingShops;
+export default Trending;

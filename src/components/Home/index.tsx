@@ -1,6 +1,6 @@
 import * as React from 'react';
 import Cover from './Cover';
-import TrendingShops from './TrendingShops/TrendingShops';
+import Trending from './Trending/Trending';
 
 export interface HomeProps {}
 
@@ -8,7 +8,7 @@ export default function Home(props: HomeProps) {
   return (
     <div>
       <Cover />
-      <TrendingShops />
+      <Trending />
     </div>
   );
 }

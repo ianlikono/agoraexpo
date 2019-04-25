@@ -1,7 +1,7 @@
 import Router from 'next/router';
 import NProgress from 'nprogress';
 import React from 'react';
-import { ThemeProvider } from 'styled-components';
+import { createGlobalStyle, ThemeProvider } from 'styled-components';
 import Footer from '../components/Footer/Footer';
 import Header from '../components/Header/Header';
 import Meta from './Meta';
@@ -16,6 +16,16 @@ Router.onRouteChangeComplete = () => {
 Router.onRouteChangeError = () => {
   NProgress.done();
 };
+
+const GlobalStyle = createGlobalStyle`
+  html {
+    font-size: 62.5%;
+  }
+  body {
+    background-color: #E6ECF0 !important;
+  }
+`;
+
 
 const theme = {
   colorRedPrimary: "#f44336",
@@ -38,6 +48,7 @@ const Page = props => {
         <Meta />
         <Header />
         <div>{children}</div>
+        <GlobalStyle />
         <Footer />
       </React.Fragment>
     </ThemeProvider>
