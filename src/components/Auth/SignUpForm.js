@@ -9,13 +9,12 @@ import Typography from '@material-ui/core/Typography';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Router from 'next/router';
 import React from 'react';
-import firebase from 'firebase/app';
 import { Mutation } from 'react-apollo';
 import { TextValidator, ValidatorForm } from 'react-material-ui-form-validator';
 import { fire } from '../../../firebase';
-import SocialAuth from './SocialAuth';
 import { signUp } from '../../graphql/mutations';
 import { getMeQuery } from '../../graphql/queries';
+import SocialAuth from './SocialAuth';
 
 const styles = theme => ({
   main: {
@@ -43,6 +42,7 @@ const styles = theme => ({
   },
   title: {
     marginTop: 20,
+    fontSize: '2rem',
   },
 });
 

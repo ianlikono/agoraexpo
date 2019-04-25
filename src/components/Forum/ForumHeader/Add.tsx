@@ -1,3 +1,4 @@
+import MenuItem from '@material-ui/core/MenuItem';
 import Link from 'next/link';
 import React, { useRef } from 'react';
 import DropDown from '../../DropDown';
@@ -19,7 +20,6 @@ function Add(props: AddProps) {
     if (anchorEl.current.contains(event.target)) {
       return;
     }
-    console.log(event)
 
     setOpen(false);
   }
@@ -33,12 +33,16 @@ function Add(props: AddProps) {
       <DropDown anchorEl={anchorEl} handlePopupClose={handleAddClose} open={open}>
         <Link href="/new-shop">
           <a>
-            <CategoryText>New Shop</CategoryText>
+            <MenuItem onClick={handleAddClose}>
+              <CategoryText>New Shop</CategoryText>
+            </MenuItem>
           </a>
         </Link>
         <Link href="/new-forum">
           <a>
-            <CategoryText>New Forum</CategoryText>
+            <MenuItem onClick={handleAddClose}>
+              <CategoryText>New Forum</CategoryText>
+            </MenuItem>
           </a>
         </Link>
       </DropDown>

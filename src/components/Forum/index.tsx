@@ -5,7 +5,7 @@ export interface ForumProps {}
 function Forum(props: ForumProps) {
   return (
     <>
-      <h2>Forum</h2>
+      <h2>Forum ddd</h2>
     </>
   );
 }

@@ -1,5 +1,6 @@
 import AppBar from '@material-ui/core/AppBar';
 import Button from '@material-ui/core/Button';
+import MenuItem from '@material-ui/core/MenuItem';
 import { withStyles } from '@material-ui/core/styles';
 import Toolbar from '@material-ui/core/Toolbar';
 import React, { useRef } from 'react';
@@ -9,7 +10,8 @@ import { MdGroupWork, MdNewReleases } from 'react-icons/md';
 import DropDown from '../../DropDown';
 import Add from './Add';
 import Search from './Search';
-import { ButtonText, CategoryText, HeaderWrapper, SortBar, ToolBarContent } from './styles';
+import { ButtonText, CategoryText, HeaderWrapper, SortBar, ToolBarContent, UserProfile } from './styles';
+import User from './User';
 
 export interface ForumHeaderProps {
   classes: any;
@@ -69,29 +71,38 @@ function ForumHeader(props: ForumHeaderProps) {
                     <ButtonText>Sort</ButtonText>
                   </Button>
                   <DropDown anchorEl={anchorEl} handlePopupClose={handleSortClose} open={open}>
-                    <IconContext.Provider
-                      value={{ style: { color: 'inherit', fontSize: '2rem' } }}
-                    >
-                      <IoIosTrendingUp />
-                      <CategoryText>Trending</CategoryText>
-                    </IconContext.Provider>
-                    <IconContext.Provider
-                      value={{ style: { color: 'inherit', fontSize: '2rem' } }}
-                    >
-                      <MdNewReleases />
-                      <CategoryText> New</CategoryText>
-                    </IconContext.Provider>
-                    <IconContext.Provider
-                      value={{ style: { color: 'inherit', fontSize: '2rem' } }}
-                    >
-                      <MdGroupWork />
-                      <CategoryText>My Forums</CategoryText>
-                    </IconContext.Provider>
+                  <MenuItem onClick={handleSortClose}>
+                      <IconContext.Provider
+                        value={{ style: { color: 'inherit', fontSize: '2rem' } }}
+                      >
+                        <IoIosTrendingUp />
+                        <CategoryText>Trending</CategoryText>
+                      </IconContext.Provider>
+                    </MenuItem>
+                    <MenuItem onClick={handleSortClose}>
+                      <IconContext.Provider
+                        value={{ style: { color: 'inherit', fontSize: '2rem' } }}
+                      >
+                        <MdNewReleases />
+                        <CategoryText> New</CategoryText>
+                      </IconContext.Provider>
+                    </MenuItem>
+                    <MenuItem onClick={handleSortClose}>
+                      <IconContext.Provider
+                        value={{ style: { color: 'inherit', fontSize: '2rem' } }}
+                      >
+                        <MdGroupWork />
+                        <CategoryText>My Forums</CategoryText>
+                      </IconContext.Provider>
+                    </MenuItem>
                   </DropDown>
                 </>
               </SortBar>
               <Search />
               <Add />
+              <UserProfile>
+                <User />
+              </UserProfile>
             </ToolBarContent>
           </Toolbar>
         </HeaderWrapper>

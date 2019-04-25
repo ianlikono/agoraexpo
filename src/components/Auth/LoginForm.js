@@ -4,20 +4,19 @@ import Button from '@material-ui/core/Button';
 import Checkbox from '@material-ui/core/Checkbox';
 import FormControl from '@material-ui/core/FormControl';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Snackbar from '@material-ui/core/Snackbar';
 import withStyles from '@material-ui/core/styles/withStyles';
 import Typography from '@material-ui/core/Typography';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
-import React from 'react';
 import Router from 'next/router';
-import firebase from 'firebase/app';
+import React from 'react';
 import { Mutation } from 'react-apollo';
 import { TextValidator, ValidatorForm } from 'react-material-ui-form-validator';
-import Snackbar from '@material-ui/core/Snackbar';
 import { fire } from '../../../firebase';
 import { login } from '../../graphql/mutations';
 import { getMeQuery } from '../../graphql/queries';
-import SocialAuth from './SocialAuth';
 import AppSnackBar from '../Snack/AppSnackBar';
+import SocialAuth from './SocialAuth';
 
 const styles = theme => ({
   main: {
@@ -45,6 +44,7 @@ const styles = theme => ({
   },
   title: {
     marginTop: 20,
+    fontSize: '2rem',
   },
   margin: {
     margin: theme.spacing.unit,

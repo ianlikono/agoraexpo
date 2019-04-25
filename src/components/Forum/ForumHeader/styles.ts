@@ -10,6 +10,7 @@ export const ToolBarContent = styled.div`
   justify-content: center;
   align-items: center;
   width: 100%;
+  position: relative;
 `;
 
 export const SortBar = styled.div`
@@ -25,6 +26,11 @@ export const CategoryText = styled.span`
   font-size: 1.3rem;
 `;
 
+export const UserProfile = styled.div`
+  justify-self: flex-end;
+  position: absolute;
+  right: 0;
+`;
 
 
 
