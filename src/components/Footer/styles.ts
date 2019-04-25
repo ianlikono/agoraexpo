@@ -31,7 +31,7 @@ export const HeaderText = styled.h2`
   margin: 0;
   opacity: ${props => (props.disabled ? 0.4 : 1)};
   cursor: ${props => (props.disabled ? 'not-allowed' : 'pointer')};
-  :hover {
+  &:hover {
     opacity: 0.7;
   }
   pointer-events: ${props => props.disabled && 'none'};
@@ -54,7 +54,7 @@ export const LinkText = styled.h4`
   font-size: 16px;
   cursor: pointer;
   text-align: center;
-  :hover {
+  &:hover {
     opacity: 0.7;
   }
 `;

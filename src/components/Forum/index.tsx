@@ -1,11 +1,12 @@
 import React from 'react';
+import ForumHome from './Home';
 
-export interface ForumProps {}
+export interface ForumProps { }
 
 function Forum(props: ForumProps) {
   return (
     <>
-      <h2>Forum ddd</h2>
+      <ForumHome />
     </>
   );
 }
