@@ -35,13 +35,23 @@ app.prepare().then(() => {
     renderAndCache(req, res, '/product', queryParams);
   });
 
+  server.get('/f/:name', (req: any, res: any) => {
+    const queryParams = { name: req.params.name };
+    renderAndCache(req, res, '/forum', queryParams);
+  });
+
+  server.get('/f/:name/:id', (req: any, res: any) => {
+    const queryParams = { name: req.params.name, id: req.params.id };
+    renderAndCache(req, res, '/forumItem', queryParams);
+  });
+
   server.get('*', (req: any, res: any) => {
     return handle(req, res);
   });
 
   server.listen(port, (err: any) => {
     if (err) throw err;
-    console.log(`> Ready on http://localhost:${port}`);
+    console.log(`> Ready on 🚀 http://localhost:${port}`);
   });
 });
 

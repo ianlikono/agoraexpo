@@ -1,0 +1,30 @@
+.container {
+  background: linear-gradient(to right, #eee 8%, lightgray 25%, #eee 33%);
+  background-size: 200% 50px;
+  height: 100%;
+  width: 100%;
+  -webkit-animation: loader 1s linear infinite;
+  animation: loader 1s linear infinite;
+}
+
+@-webkit-keyframes loader {
+  0% {
+    background-position: -280px 0;
+  }
+  100% {
+    background-position: 300px 0;
+  }
+}
+
+@keyframes loader {
+  0% {
+    background-position: -280px 0;
+  }
+  100% {
+    background-position: 300px 0;
+  }
+}
+
+.item {
+  border: 0.5em solid rgb(255, 255, 255);
+}

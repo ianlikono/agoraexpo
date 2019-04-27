@@ -72,6 +72,7 @@ class MyDocument extends Document {
             name="theme-color"
             content={pageContext ? pageContext.theme.palette.primary.main : null}
           />
+          <link rel="stylesheet" href="//cdn.quilljs.com/1.2.6/quill.snow.css" />
           <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,300i,400,500" rel="stylesheet" />
         </Head>
         <body>

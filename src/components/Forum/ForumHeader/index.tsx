@@ -9,6 +9,7 @@ import { IoIosTrendingUp } from 'react-icons/io';
 import { MdGroupWork, MdNewReleases } from 'react-icons/md';
 import DropDown from '../../DropDown';
 import Add from './Add';
+import CreatePost from './CreatePost';
 import Search from './Search';
 import { ButtonText, CategoryText, HeaderWrapper, SortBar, ToolBarContent, UserProfile } from './styles';
 import User from './User';
@@ -99,6 +100,7 @@ function ForumHeader(props: ForumHeaderProps) {
                 </>
               </SortBar>
               <Search />
+              <CreatePost />
               <Add />
               <UserProfile>
                 <User />
