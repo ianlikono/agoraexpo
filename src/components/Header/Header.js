@@ -235,7 +235,6 @@ class Header extends React.Component {
         {({ loading, error, data }) => {
           if (loading) return 'Loading...';
           if (error) return null;
-          console.log(data);
           return (
             <div className={classes.root}>
               <AppBar position="static">

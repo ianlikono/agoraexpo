@@ -1,7 +1,8 @@
 import Paper from '@material-ui/core/Paper';
 import { withStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
-import React from 'react';
+import React, { useContext } from 'react';
+import { CreatePostContext } from '../../contexts/CreatePost';
 import './styles.css';
 
 export interface TitleProps {
@@ -30,10 +31,14 @@ const styles = theme => ({
 
 function Title(props: TitleProps) {
   const { classes } = props;
+  const { title, onTitleChange } = useContext(CreatePostContext);
+  console.log(title);
   return (
     <>
       <Paper className={classes.searchPaper} elevation={1}>
         <TextField
+          value={title}
+          onChange={(e) => onTitleChange(e)}
           fullWidth
           label="Title"
           placeholder="Enter Title"

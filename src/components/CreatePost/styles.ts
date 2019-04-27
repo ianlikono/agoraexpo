@@ -1,6 +1,5 @@
 import styled from 'styled-components';
 
-
 export const Wrapper = styled.div`
   width: 70%;
   margin: 1.5rem auto;
@@ -21,4 +20,15 @@ export const ForumSearch = styled.div`
   max-width: 40%;
 `;
 
+export const TabWrapper = styled.div`
+  height: fill-available;
+`;
 
+export const SubmitWrapper = styled.div`
+  position: relative;
+`;
+
+export const SubmitButton = styled.div`
+  position: absolute;
+  right: 0;
+`;

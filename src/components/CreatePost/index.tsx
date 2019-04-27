@@ -74,15 +74,15 @@ function CreatePost(props: CreatePostProps) {
               <Tab label="Link" icon={<LinkIcon />}/>
             </Tabs>
           </AppBar>
-          <SwipeableViews
-            axis={theme.direction === 'rtl' ? 'x-reverse' : 'x'}
-            index={value}
-            onChangeIndex={handleValueChangeIndex}
-          >
-            <TabContainer dir={theme.direction}><Post /></TabContainer>
-            <TabContainer dir={theme.direction}>Item Two</TabContainer>
-            <TabContainer dir={theme.direction}>Item Three</TabContainer>
-          </SwipeableViews>
+            <SwipeableViews
+              axis={theme.direction === 'rtl' ? 'x-reverse' : 'x'}
+              index={value}
+              onChangeIndex={handleValueChangeIndex}
+            >
+                <TabContainer dir={theme.direction}><Post /></TabContainer>
+                <TabContainer dir={theme.direction}>Item Two</TabContainer>
+                <TabContainer dir={theme.direction}>Item Three</TabContainer>
+            </SwipeableViews>
         </div>
       </Wrapper>
     </>

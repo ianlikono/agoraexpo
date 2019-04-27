@@ -191,3 +191,29 @@ export const logoutMutation = gql`
     }
   }
 `;
+
+export const createForumMutation = gql`
+  mutation createForum($name: String!, $description: String, $avatarPic: String!, $coverPic: String!) {
+  createForum(name: $name, description: $description, avatarPic: $avatarPic, coverPic: $coverPic) {
+    id
+    name
+    description
+    avatarPic
+    coverPic
+    createdAt
+    updatedAt
+    members {
+      id
+      username
+      profilePic
+    }
+    posts {
+      content
+      title
+      postedBy {
+        username
+      }
+    }
+  }
+}
+`;

@@ -4,7 +4,8 @@ import Title from './Title';
 
 export interface PostProps {}
 
-function Post (props: PostProps) {
+
+function Post(props: PostProps) {
   return (
     <>
       <Title />
@@ -12,5 +13,5 @@ function Post (props: PostProps) {
     </>
   );
 }
-
 export default Post;
+

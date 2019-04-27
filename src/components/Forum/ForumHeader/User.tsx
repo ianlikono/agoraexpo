@@ -141,7 +141,6 @@ function User (props: UserProps) {
         {({ loading, error, data }) => {
           if (loading) return '...';
           if (error) return null;
-          console.log(data);
           return (
             <>
                <Mutation mutation={logoutMutation}>

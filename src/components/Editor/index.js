@@ -1,12 +1,19 @@
+import Button from '@material-ui/core/Button';
 import { withStyles } from '@material-ui/core/styles';
 import React from 'react';
+import { CreatePostConsumer } from '../../contexts/CreatePost';
+import { SubmitButton, SubmitWrapper } from './styles';
 import './styles.css';
+
 
 const styles = theme => ({
   root: {
     width: '60%',
     margin: '2.5rem auto',
   },
+  button: {
+    width: '20rem',
+  }
 });
 
 
@@ -16,9 +23,6 @@ class Editor extends React.PureComponent {
     if (typeof window !== 'undefined') {
       this.ReactQuill = require('react-quill')
     }
-    this.state = {
-      quillHtml: ""
-    };
   }
 
    editorOptions = {
@@ -72,38 +76,37 @@ class Editor extends React.PureComponent {
     ]
   }
 
-  handleEditorChange = (value) => {
-    this.setState({
-      quillHtml: value,
-    })
-    // console.log(this.state.quillHtml)
-  }
-
-  // imageHandler = (image, callback)  => {
-  //   console.log(' i run')
-  //   var range = this.quillRef.getEditor().getSelection();
-  //   var value = prompt('What is the image URL');
-  //   if(value) {
-  //       this.quillRef.getEditor().insertEmbed(range.index, 'image', value, "user");
-  //   }
-  // }
 
   render() {
     const { classes } = this.props;
-    const { quillHtml } = this.state;
-    const ReactQuill = this.ReactQuill
+    const ReactQuill = this.ReactQuill;
+    // const {quillHtml, onQuillHtmlChange} = useContext(CreatePostContext);
     if (typeof window !== 'undefined' && ReactQuill) {
       return (
-        <>
-            <ReactQuill theme="snow"
-              ref={(el) => this.quillRef = el}
-              value={this.state.quillHtml}
-              onChange={(value) => this.handleEditorChange(value)}
-              modules={this.editorOptions.modules}
-              formats={this.editorOptions.formats}
-              placeholder="Write Text"
-              />
-        </>
+        <CreatePostConsumer>
+          {value => {
+            const {quillHtml, onQuillHtmlChange} = value;
+            return (
+              <>
+                <ReactQuill theme="snow"
+                ref={(el) => this.quillRef = el}
+                value={quillHtml}
+                onChange={(value) => onQuillHtmlChange(value)}
+                modules={this.editorOptions.modules}
+                formats={this.editorOptions.formats}
+                placeholder="Write Text"
+                />
+                <SubmitWrapper>
+                  <SubmitButton>
+                    <Button size="large" variant="contained" color="primary" className={classes.button}>
+                      Post
+                    </Button>
+                  </SubmitButton>
+                </SubmitWrapper>
+              </>
+            );
+          }}
+        </CreatePostConsumer>
       )
     } else {
       return (
