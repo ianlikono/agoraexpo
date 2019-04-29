@@ -38,7 +38,7 @@ function Add(props: AddProps) {
             </MenuItem>
           </a>
         </Link>
-        <Link href="/new-forum">
+        <Link href="/create-forum">
           <a>
             <MenuItem onClick={handleAddClose}>
               <CategoryText>New Forum</CategoryText>

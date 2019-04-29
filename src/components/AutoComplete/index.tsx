@@ -1,16 +1,30 @@
+import { InputAdornment } from '@material-ui/core';
 import Avatar from '@material-ui/core/Avatar';
 import MenuItem from '@material-ui/core/MenuItem';
 import Paper from '@material-ui/core/Paper';
 import { withStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
+import DropDownIcon from '@material-ui/icons/ArrowDropDownCircle';
 import Downshift from 'downshift';
+import gql from 'graphql-tag';
 import deburr from 'lodash/deburr';
-import React from 'react';
+import React, { useContext, useState } from 'react';
+import { ApolloConsumer } from 'react-apollo';
+import { CreatePostContext } from '../../contexts/CreatePost';
 import { ForumImage, Wrapper } from './styles';
+
+const SEARCH_FORUMS = gql`
+    query filterForums($searchString: String) {
+    filterForums(searchString: $searchString) {
+      id
+      name
+      avatarPic
+    }
+  }
+`;
 
 
 export interface AutoCompleteProps {
-  suggestions: any;
   classes: any;
   placeholder: any;
 }
@@ -25,6 +39,8 @@ const styles = theme => ({
     display: 'flex',
     alignItems: 'center',
     width: '100%',
+    flexDirection: 'column',
+    justifyContent: 'center'
   },
   container: {
     flexGrow: 1,
@@ -53,7 +69,10 @@ const styles = theme => ({
 
 
 function AutoComplete(props: AutoCompleteProps) {
-  const { suggestions, classes, placeholder } = props;
+  const { classes, placeholder } = props;
+  const [suggestions, setSuggestions] = useState([]);
+  const [selectedForumError, setSelectedForumError] = useState(false);
+  const { selectedForum, onForumSelected } = useContext(CreatePostContext);
 
   function renderInput(inputProps: any) {
     const { InputProps, classes, ref, ...other } = inputProps;
@@ -63,6 +82,11 @@ function AutoComplete(props: AutoCompleteProps) {
         <TextField
           InputProps={{
             inputRef: ref,
+            startAdornment: (
+              <InputAdornment position="start">
+                {selectedForum ? <Avatar alt="Remy Sharp" src={selectedForum.avatarPic} /> : <DropDownIcon />}
+              </InputAdornment>
+            ),
             classes: {
               root: classes.inputRoot,
               input: classes.inputInput,
@@ -71,6 +95,7 @@ function AutoComplete(props: AutoCompleteProps) {
           }}
           {...other}
         />
+        {selectedForumError ? <span style={{ width: '100%', color: 'red', textAlign: 'center', fontSize: '2rem' }}>Select a forum</span> : null}
       </Paper>
     );
   }
@@ -93,7 +118,7 @@ function AutoComplete(props: AutoCompleteProps) {
       >
         <Wrapper>
           <ForumImage>
-            <Avatar alt="Remy Sharp" src={suggestion.pic} />
+            <Avatar alt="Remy Sharp" src={suggestion.avatarPic} />
           </ForumImage>
           {suggestion.name}
         </Wrapper>
@@ -120,46 +145,73 @@ function AutoComplete(props: AutoCompleteProps) {
       });
   }
 
+  async function onInputChange(e, client) {
+    setSelectedForumError(false);
+    const res = await client.query({
+      query: SEARCH_FORUMS,
+      variables: { searchString: e.target.value },
+    });
+    setSuggestions(res.data.filterForums)
+  }
+
+  function onInputBlured() {
+    if (!selectedForum) {
+      setSelectedForumError(true);
+    } else {
+      setSelectedForumError(false);
+    }
+
+  }
+
+
 
   return (
     <>
       <div className={classes.root}>
-        <Downshift id="downshift-simple">
-          {({
-            getInputProps,
-            getItemProps,
-            getMenuProps,
-            highlightedIndex,
-            inputValue,
-            isOpen,
-            selectedItem,
-          }) => (
-              <div className={classes.container}>
-                {renderInput({
-                  fullWidth: true,
-                  classes,
-                  InputProps: getInputProps({
-                    placeholder: `${placeholder}`,
-                  }),
-                })}
-                <div {...getMenuProps()}>
-                  {isOpen ? (
-                    <Paper className={classes.paper} square>
-                      {getSuggestions(inputValue).map((suggestion, index) =>
-                        renderSuggestion({
-                          suggestion,
-                          index,
-                          itemProps: getItemProps({ item: suggestion.name }),
-                          highlightedIndex,
-                          selectedItem,
-                        }),
-                      )}
-                    </Paper>
-                  ) : null}
-                </div>
-              </div>
-            )}
-        </Downshift>
+        <ApolloConsumer>
+          {client => (
+            <Downshift onChange={(item) => onForumSelected(item, suggestions)} id="downshift-simple">
+              {({
+                getInputProps,
+                getItemProps,
+                getMenuProps,
+                highlightedIndex,
+                inputValue,
+                isOpen,
+                selectedItem,
+              }) => (
+                  <div className={classes.container}>
+                    {renderInput({
+                      fullWidth: true,
+                      classes,
+                      InputProps: getInputProps({
+                        placeholder: `${placeholder}`,
+                        onChange: (e) => onInputChange(e, client),
+                        onBlur: onInputBlured,
+                        error: selectedForumError,
+                        label: selectedForumError ? "Select Forum" : null,
+                      }),
+                    })}
+                    <div {...getMenuProps()}>
+                      {isOpen ? (
+                        <Paper className={classes.paper} square>
+                          {getSuggestions(inputValue).map((suggestion, index) =>
+                            renderSuggestion({
+                              suggestion,
+                              index,
+                              itemProps: getItemProps({ item: suggestion.name }),
+                              highlightedIndex,
+                              selectedItem,
+                            }),
+                          )}
+                        </Paper>
+                      ) : null}
+                    </div>
+                  </div>
+                )}
+            </Downshift>
+          )}
+        </ApolloConsumer>
       </div>
     </>
   );

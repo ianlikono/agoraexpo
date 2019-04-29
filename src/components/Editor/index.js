@@ -1,7 +1,10 @@
 import Button from '@material-ui/core/Button';
 import { withStyles } from '@material-ui/core/styles';
+import Router from 'next/router';
 import React from 'react';
+import { Mutation } from 'react-apollo';
 import { CreatePostConsumer } from '../../contexts/CreatePost';
+import { createForumPostMutation } from '../../graphql/mutations';
 import { SubmitButton, SubmitWrapper } from './styles';
 import './styles.css';
 
@@ -76,6 +79,25 @@ class Editor extends React.PureComponent {
     ]
   }
 
+  onCreatePostClick = async (postCreate, error, value) => {
+    try {
+      const response = await postCreate({
+        variables: {
+          title: value.title,
+          content: value.quillHtml,
+          type: "POST",
+          forumId: value.selectedForum.id,
+        }
+      })
+      Router.push({
+        pathname: `/f/${response.data.createForumPost.forum.name}/${response.data.createForumPost.id}`,
+      });
+    } catch(e) {
+      console.log(e);
+      console.log(error);
+    }
+  }
+
 
   render() {
     const { classes } = this.props;
@@ -83,30 +105,37 @@ class Editor extends React.PureComponent {
     // const {quillHtml, onQuillHtmlChange} = useContext(CreatePostContext);
     if (typeof window !== 'undefined' && ReactQuill) {
       return (
-        <CreatePostConsumer>
-          {value => {
-            const {quillHtml, onQuillHtmlChange} = value;
-            return (
-              <>
-                <ReactQuill theme="snow"
-                ref={(el) => this.quillRef = el}
-                value={quillHtml}
-                onChange={(value) => onQuillHtmlChange(value)}
-                modules={this.editorOptions.modules}
-                formats={this.editorOptions.formats}
-                placeholder="Write Text"
-                />
-                <SubmitWrapper>
-                  <SubmitButton>
-                    <Button size="large" variant="contained" color="primary" className={classes.button}>
-                      Post
-                    </Button>
-                  </SubmitButton>
-                </SubmitWrapper>
+        <Mutation mutation={createForumPostMutation}>
+          {(postCreate, { loading, error }) => (
+            <>
+              <CreatePostConsumer>
+                {value => {
+                  const {quillHtml, onQuillHtmlChange, title, selectedForum} = value;
+                  const isValid = title.length > 0 && quillHtml.length > 0 && selectedForum;
+                  return (
+                    <>
+                      <ReactQuill theme="snow"
+                      ref={(el) => this.quillRef = el}
+                      value={quillHtml}
+                      onChange={(value) => onQuillHtmlChange(value)}
+                      modules={this.editorOptions.modules}
+                      formats={this.editorOptions.formats}
+                      placeholder="Write Text"
+                      />
+                      <SubmitWrapper>
+                        <SubmitButton>
+                          <Button disabled={loading || !isValid} onClick={() => this.onCreatePostClick(postCreate, error, value)} size="large" variant="contained" color="primary" className={classes.button}>
+                            Post
+                          </Button>
+                        </SubmitButton>
+                      </SubmitWrapper>
+                    </>
+                  );
+                }}
+              </CreatePostConsumer>
               </>
-            );
-          }}
-        </CreatePostConsumer>
+            )}
+         </Mutation>
       )
     } else {
       return (

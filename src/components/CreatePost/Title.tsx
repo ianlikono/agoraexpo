@@ -32,7 +32,6 @@ const styles = theme => ({
 function Title(props: TitleProps) {
   const { classes } = props;
   const { title, onTitleChange } = useContext(CreatePostContext);
-  console.log(title);
   return (
     <>
       <Paper className={classes.searchPaper} elevation={1}>

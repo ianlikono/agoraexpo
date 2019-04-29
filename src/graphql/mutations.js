@@ -217,3 +217,21 @@ export const createForumMutation = gql`
   }
 }
 `;
+
+export const createForumPostMutation = gql`
+  mutation createForumPost($title: String!, $content: String, $type: String!, $forumId: String!) {
+    createForumPost(title: $title, content: $content, type: $type, forumId: $forumId) {
+      id
+      title
+      content
+      type
+      forum {
+        id
+        name
+      }
+      postedBy {
+        username
+      }
+    }
+  }
+`;

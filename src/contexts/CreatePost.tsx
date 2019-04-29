@@ -12,6 +12,7 @@ function CreatePostProvider(props: CreatePostProps) {
   const { children } = props;
   const [title, setTitle] = useState("");
   const [quillHtml, setQuillHtml] = useState("");
+  const [selectedForum, setSelectedForum] = useState(null);
 
   function onTitleChange(e: any) {
     setTitle(e.target.value);
@@ -19,11 +20,21 @@ function CreatePostProvider(props: CreatePostProps) {
 
   function onQuillHtmlChange(value: any) {
     setQuillHtml(value);
-    console.log(quillHtml);
   }
+
+  function onForumSelected(item, suggestions) {
+    let selectedItem = suggestions.filter(sug => (
+      sug.name === item
+    ))
+    setSelectedForum(selectedItem[0]);
+  }
+
+
+
+
   return (
     <>
-      <CreatePostContext.Provider value={{ title, onTitleChange, quillHtml, onQuillHtmlChange }}>
+      <CreatePostContext.Provider value={{ title, onTitleChange, quillHtml, onQuillHtmlChange, selectedForum, onForumSelected }}>
         {children}
       </CreatePostContext.Provider>
     </>

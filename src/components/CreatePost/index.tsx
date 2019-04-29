@@ -17,14 +17,6 @@ export interface CreatePostProps {
   theme: any;
 }
 
-const forums = [
-  { name: "mimi", pic: "https://images.unsplash.com/photo-1509563268479-0f004cf3f58b?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60" },
-  { name: "next events", pic: "https://images.unsplash.com/photo-1469510038946-6bf892bbe9d6?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60" },
-  { name: "eventsjucture", pic: "https://images.unsplash.com/photo-1544519838-0f1346c8bcf0?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60" },
-  { name: "devtinder", pic: "https://images.unsplash.com/photo-1502158817207-08ef5c149b03?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60" },
-  { name: "fetcheasy", pic: "https://images.unsplash.com/photo-1539122885057-0f86d813303c?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60" },
-  { name: "fetch", pic: "https://images.unsplash.com/photo-1539122885057-0f86d813303c?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60" },
-]
 
 const styles = theme => ({
   root: {
@@ -53,12 +45,15 @@ function CreatePost(props: CreatePostProps) {
   function handleValueChangeIndex(index) {
     setValue(index);
   }
+  function onSearchInputChange(state, changes) {
+    console.log('state', state);
+  }
   return (
     <>
       <Wrapper>
         <Header>Create Post</Header>
         <ForumSearch>
-          <Autocomplete placeholder="Search For Forums" suggestions={forums} />
+          <Autocomplete placeholder="Search For Forums" />
         </ForumSearch>
         <div className={classes.root}>
           <AppBar position="static" color="default">
