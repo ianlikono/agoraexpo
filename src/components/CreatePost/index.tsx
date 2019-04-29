@@ -3,8 +3,6 @@ import { withStyles } from '@material-ui/core/styles';
 import Tab from '@material-ui/core/Tab';
 import Tabs from '@material-ui/core/Tabs';
 import Typography from '@material-ui/core/Typography';
-import ImageIcon from '@material-ui/icons/Image';
-import LinkIcon from '@material-ui/icons/Link';
 import PostIcon from '@material-ui/icons/Message';
 import React, { useState } from 'react';
 import SwipeableViews from 'react-swipeable-views';
@@ -65,8 +63,6 @@ function CreatePost(props: CreatePostProps) {
               variant="fullWidth"
             >
               <Tab label="Post" icon={<PostIcon />}/>
-              <Tab label="Image" icon={<ImageIcon />}/>
-              <Tab label="Link" icon={<LinkIcon />}/>
             </Tabs>
           </AppBar>
             <SwipeableViews
@@ -75,8 +71,6 @@ function CreatePost(props: CreatePostProps) {
               onChangeIndex={handleValueChangeIndex}
             >
                 <TabContainer dir={theme.direction}><Post /></TabContainer>
-                <TabContainer dir={theme.direction}>Item Two</TabContainer>
-                <TabContainer dir={theme.direction}>Item Three</TabContainer>
             </SwipeableViews>
         </div>
       </Wrapper>

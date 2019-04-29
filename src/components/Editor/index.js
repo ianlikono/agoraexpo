@@ -37,6 +37,7 @@ class Editor extends React.PureComponent {
         [{'list': 'ordered'}, {'list': 'bullet'},
          {'indent': '-1'}, {'indent': '+1'}],
         ['link', 'image', 'video'],
+        [{ 'color': []}, {'background': []}]
         ['clean']
       ],
       handlers: {

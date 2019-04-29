@@ -13,15 +13,6 @@ const styles = theme => ({
     minHeight: 200,
     minWidth: 200,
   },
-  button: {
-    margin: theme.spacing.unit,
-  },
-  input: {
-    display: 'none',
-  },
-  margin: {
-    margin: theme.spacing.unit,
-  },
 });
 
 export interface GroupCardProps {

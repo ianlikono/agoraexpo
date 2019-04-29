@@ -1,5 +1,14 @@
 import styled from 'styled-components';
 
+export const Wrapper = styled.div`
+  width: 80%;
+  margin: 0 auto;
+  @media (max-width: 600px) {
+    width: 100%;
+  }
+`;
+
+
 export const CardHeader = styled.div`
   margin: 0 0.8rem 0.8rem;
   font-size: 1.2rem;
@@ -71,10 +80,10 @@ export const UserText = styled.span`
 `;
 
 export const PostedTime = styled.span`
-  font-size: 1.5rem;
-  text-decoration: none;
-  color: ${props => props.theme.colorTextLight};
-  display: inline-block;
+    font-size: 1.5rem;
+    text-decoration: none;
+    color: ${props => props.theme.colorTextLight};
+    display: inline-block;
 `;
 
 export const ForumWrapper = styled.div`

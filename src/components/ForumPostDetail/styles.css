@@ -1,0 +1,26 @@
+p {
+  font-size: 2rem;
+}
+
+h1 {
+  font-size: 3rem;
+}
+
+p > a {
+  color: rgb(0, 121, 211) !important;
+}
+
+.ql-syntax {
+  background-color: #23241f;
+  color: #f8f8f2;
+  overflow: visible;
+  white-space: pre-wrap;
+  margin-bottom: 0.5rem;
+  margin-top: 0.5rem;
+  padding: 0.5rem 1rem;
+  font-size: 2rem;
+}
+
+img {
+  width: 100%;
+}

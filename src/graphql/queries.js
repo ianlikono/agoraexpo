@@ -119,3 +119,24 @@ export const getMeQuery = gql`
     }
   }
 `;
+
+export const forumPostQuery = gql`
+  query forumPost($id: ID!) {
+    forumPost(id: $id) {
+      id
+      postedBy {
+        username
+        id
+      }
+      forum {
+        id
+        name
+        avatarPic
+      }
+      createdAt
+      title
+      content
+      type
+    }
+  }
+`;
