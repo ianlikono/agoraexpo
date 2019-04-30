@@ -235,3 +235,17 @@ export const createForumPostMutation = gql`
     }
   }
 `;
+
+export const createPostComment = gql`
+  mutation createPostForumComment($postId: ID!, $comment: String!) {
+  createPostForumComment(postId: $postId, comment: $comment) {
+    id
+    comment
+    createdAt
+    user {
+      username
+      profilePic
+    }
+  }
+}
+`;

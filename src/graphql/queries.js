@@ -137,6 +137,81 @@ export const forumPostQuery = gql`
       title
       content
       type
+      comments {
+        id
+        comment
+        createdAt
+        user {
+          username
+          profilePic
+        }
+      }
+    }
+  }
+`;
+
+export const forumPostComments = gql`
+  query forumPostComments($postId: ID!) {
+    forumPostComments(postId: $postId) {
+      id
+      comment
+      user {
+        username
+        profilePic
+      }
+      createdAt
+      }
+  }
+`;
+
+export const forums = gql`
+  {
+  forums {
+    id
+    title
+    createdAt
+    content
+    forum {
+      avatarPic
+      name
+    }
+    postedBy {
+      username
+    }
+    comments {
+      id
+      comment
+      user {
+        username
+        profilePic
+      }
+    }
+  }
+}
+`;
+
+export const forumPosts = gql`
+  query forumPosts($forumName: String!) {
+    forumPosts(forumName: $forumName) {
+      id
+      title
+      createdAt
+      content
+      forum {
+        avatarPic
+        name
+      }
+      postedBy {
+        username
+      }
+      comments {
+        id
+        comment
+        user {
+          username
+          profilePic
+        }
+      }
     }
   }
 `;

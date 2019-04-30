@@ -3,13 +3,19 @@ import { withStyles } from '@material-ui/core/styles';
 import Link from 'next/link';
 import React, { useState } from 'react';
 import { IconContext } from 'react-icons';
-import { IoIosArrowRoundDown, IoIosArrowRoundUp } from 'react-icons/io';
 import { MdComment } from 'react-icons/md';
-import { CardHeader, CommentCountText, CommentIcon, ForumAvatar, ForumAvatarImage, ForumTitle, ForumWrapper, HeaderTitles, HeaderTitlesContent, PostedBy, PostedTime, UserText, VoteCountText, VoteIcon, VotingWrapper } from './styles';
+import Moment from 'react-moment';
+import { CardHeader, CommentCountText, CommentIcon, ForumAvatar, ForumAvatarImage, ForumTitle, ForumWrapper, HeaderTitles, HeaderTitlesContent, PostedBy, PostedTime, UserText } from './styles';
 
 export interface ForumCardProps {
   classes: any;
   children: any;
+  forumName: any;
+  ForumAvatarPic: any;
+  OwnerName: any;
+  createdAt: any;
+  id: any;
+  commentsNumber: any;
 }
 
 const styles = theme => ({
@@ -24,21 +30,20 @@ const styles = theme => ({
   },
 });
 
-const ForumCardItems = {
-  forumName: "awesome",
-  ForumAvatarPic: "https://images.unsplash.com/photo-1546171995-fc8620224997?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60",
-  OwnerName: "ianlikono",
-  createdAt: "9 minutes ago",
-  voteCount: 500,
-  id: 3444,
-  commentsNumber: 500,
-}
+// const ForumCardItems = {
+//   forumName: "awesome",
+//   ForumAvatarPic: "https://images.unsplash.com/photo-1546171995-fc8620224997?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60",
+//   OwnerName: "ianlikono",
+//   createdAt: "9 minutes ago",
+//   id: 3444,
+//   commentsNumber: 500,
+// }
 
 {/* <Wrapper onMouseLeave={onMouseLeave} onMouseEnter={onMouseEnter}> */ }
 
 function ForumCard(props: ForumCardProps) {
   const { classes, children } = props;
-  const { forumName, ForumAvatarPic, OwnerName, createdAt, voteCount, id, commentsNumber } = ForumCardItems;
+  const { forumName, ForumAvatarPic, OwnerName, createdAt, id, commentsNumber } = props;
 
   const [elevation, setElevation] = useState(1);
 
@@ -52,19 +57,6 @@ function ForumCard(props: ForumCardProps) {
     <>
       <Paper className={classes.root} elevation={elevation} onMouseLeave={onMouseLeave} onMouseEnter={onMouseEnter}>
         <ForumWrapper>
-          <VotingWrapper>
-            <VoteIcon>
-              <IconContext.Provider value={{ style: { color: 'inherit', fontSize: '4.5rem' } }}>
-                <IoIosArrowRoundUp />
-              </IconContext.Provider>
-            </VoteIcon>
-            <VoteCountText>{voteCount}</VoteCountText>
-            <VoteIcon>
-              <IconContext.Provider value={{ style: { color: 'inherit', fontSize: '4.5rem' } }}>
-                <IoIosArrowRoundDown />
-              </IconContext.Provider>
-            </VoteIcon>
-          </VotingWrapper>
           <div>
             <CardHeader>
               <ForumAvatar>
@@ -87,7 +79,9 @@ function ForumCard(props: ForumCardProps) {
                       <UserText>{`u/${OwnerName}`} {" . "}</UserText>
                     </a>
                   </Link>
-                  <PostedTime>{createdAt}</PostedTime>
+                  <PostedTime>
+                  <Moment fromNow>{createdAt}</Moment>
+                  </PostedTime>
                 </HeaderTitlesContent>
               </HeaderTitles>
             </CardHeader>
