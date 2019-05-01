@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import React from 'react';
 import { Query } from 'react-apollo';
+import Helmet from 'react-helmet';
 import { forumPosts } from '../../../../graphql/queries';
 import ForumCard from '../../ForumCard';
 import { ChildrenWrapper, ItemContent, ItemTitle, Wrapper } from './styles';
@@ -40,9 +41,14 @@ function ForumHome(props: ForumHomeProps) {
       {({ loading, error, data }) => {
         if (loading) return 'Loading...';
         if (error) return `Error! ${error.message}`;
-        console.log(data);
         return (
-          renderForumPosts(data.forumPosts)
+          <>
+            <Helmet
+              title={`${forumName} | posts`}
+              meta={[{ name: "description", content:  `${forumName} posts`}]}
+            />
+            {renderForumPosts(data.forumPosts)}
+          </>
         )
       }}
     </Query>

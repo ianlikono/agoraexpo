@@ -5,6 +5,7 @@ import { DropzoneArea } from 'material-ui-dropzone';
 import Router from 'next/router';
 import React, { useState } from 'react';
 import { Mutation } from 'react-apollo';
+import Helmet from 'react-helmet';
 import styled from 'styled-components';
 import ForumHeader from '../src/components/Forum/ForumHeader';
 import Input from '../src/components/Input';
@@ -128,6 +129,10 @@ function NewForumPage(props: CreateForumProps) {
 
   return (
     <>
+    <Helmet
+        title='create new forum'
+        meta={[{ name: "description", content: "create new agora expo forum" }]}
+      />
     <Mutation mutation={createForumMutation}>
           {(createForum, { loading, error }) => (
             <>

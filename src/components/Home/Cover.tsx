@@ -1,5 +1,6 @@
 import Fab from '@material-ui/core/Fab';
 import { withStyles } from '@material-ui/core/styles';
+import Link from 'next/link';
 import * as React from 'react';
 import { CoverH1, CoverH3, CoverImage, CoverText, Wrapper } from './styles';
 
@@ -22,9 +23,13 @@ function Cover(props: CoverProps) {
         <CoverText>
           <CoverH1>Accomplish Your Dreams</CoverH1>
           <CoverH3>Start Your Online Business Risk Free with No Starting Capital Required</CoverH3>
-          <Fab size="large" color="primary" variant="extended" aria-label="sign-up" className={classes.fab}>
-            Sign Up
-        </Fab>
+          <Link href="/auth">
+            <a>
+            <Fab size="large" color="primary" variant="extended" aria-label="sign-up" className={classes.fab}>
+              Sign Up
+            </Fab>
+            </a>
+        </Link>
         </CoverText>
       </CoverImage>
     </Wrapper>

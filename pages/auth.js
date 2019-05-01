@@ -5,6 +5,7 @@ import Tab from '@material-ui/core/Tab';
 import Tabs from '@material-ui/core/Tabs';
 import Typography from '@material-ui/core/Typography';
 import React from 'react';
+import Helmet from "react-helmet";
 import LoginForm from '../src/components/Auth/LoginForm';
 import SignUpForm from '../src/components/Auth/SignUpForm';
 
@@ -59,24 +60,30 @@ class Auth extends React.PureComponent {
     const { classes } = this.props;
     const { value } = this.state;
     return (
-      <div style={{ maxWidth: '600px', margin: '60px auto 0 auto' }}>
-        <div className={classes.root}>
-          <AppBar position="static" color="default">
-            <Tabs
-              value={value}
-              onChange={this.handleTabsChange}
-              indicatorColor="primary"
-              textColor="primary"
-              variant="fullWidth"
-            >
-              <Tab label="LOGIN" />
-              <Tab label="SIGN UP" />
-            </Tabs>
-          </AppBar>
-          {value === 0 && this.renderLoginForm()}
-          {value === 1 && this.renderSignUpForm()}
+      <>
+        <Helmet
+          title='authentication'
+          meta={[{ name: "authentication page", content: "authentication page" }]}
+        />
+        <div style={{ maxWidth: '600px', margin: '60px auto 0 auto' }}>
+          <div className={classes.root}>
+            <AppBar position="static" color="default">
+              <Tabs
+                value={value}
+                onChange={this.handleTabsChange}
+                indicatorColor="primary"
+                textColor="primary"
+                variant="fullWidth"
+              >
+                <Tab label="LOGIN" />
+                <Tab label="SIGN UP" />
+              </Tabs>
+            </AppBar>
+            {value === 0 && this.renderLoginForm()}
+            {value === 1 && this.renderSignUpForm()}
+          </div>
         </div>
-      </div>
+      </>
     );
   }
 }

@@ -40,6 +40,11 @@ app.prepare().then(() => {
     renderAndCache(req, res, '/forum', queryParams);
   });
 
+  server.get('/u/:username', (req: any, res: any) => {
+    const queryParams = { username: req.params.username };
+    renderAndCache(req, res, '/user', queryParams);
+  });
+
   server.get('/f/:name/:id', (req: any, res: any) => {
     const queryParams = { name: req.params.name, id: req.params.id };
     renderAndCache(req, res, '/forumItem', queryParams);

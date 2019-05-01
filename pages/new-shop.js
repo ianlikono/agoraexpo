@@ -17,6 +17,7 @@ import Router from 'next/router';
 import { TweenOneGroup } from 'rc-tween-one';
 import React, { Component } from 'react';
 import { ApolloConsumer, Mutation } from 'react-apollo';
+import Helmet from 'react-helmet';
 import { createDraft } from '../src/graphql/mutations';
 import { filterCategories } from '../src/graphql/queries';
 
@@ -244,117 +245,123 @@ class CreateShopPage extends Component {
     const { classes, className, message, onClose, variant, ...other } = this.props;
     const tagChild = ownerNames.map(this.forMap);
     return (
-      <Mutation mutation={createDraft}>
-        {(createShopDraft, { loading, error }) => (
-          <div style={{ maxWidth: '600px', margin: '0 auto' }}>
-            <h1 style={{ textAlign: 'center' }}>Create Shop</h1>
-            <Paper elevation={1} className={classes.paper}>
-              <Input
-                name="name"
-                value={name}
-                onChange={this.handleInputChange}
-                size="large"
-                placeholder="Shop Name"
-              />
-              <ApolloConsumer>
-                {client => (
-                  <AutoComplete
-                    backfill
-                    onChange={value => this.handleCategoryChange(client, value)}
-                    size="large"
-                    style={{ width: '100%' }}
-                    dataSource={categorySuggestions}
-                    filterOption={(inputValue, option) =>
-                      option.props.children.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1
-                    }
-                  >
-                    <Input size="large" placeholder="Category" />
-                  </AutoComplete>
-                )}
-              </ApolloConsumer>
-              <TextArea
-                onChange={this.handleInputChange}
-                name="description"
-                value={description}
-                rows={4}
-                placeholder="Shop Description"
-              />
-              <div style={{ marginTop: '20px' }}>
-                <h3 style={{ textAlign: 'center' }}> Add Owners</h3>
-                <div style={{ display: 'flex', justifyContent: 'center' }}>
-                  <div>
-                    <div style={{ marginBottom: 16 }}>
-                      <TweenOneGroup
-                        enter={{
-                          scale: 0.8,
-                          opacity: 0,
-                          type: 'from',
-                          duration: 100,
-                          onComplete: e => {
-                            e.target.style = '';
-                          },
-                        }}
-                        leave={{ opacity: 0, width: 0, scale: 0, duration: 200 }}
-                        appear={false}
-                      >
-                        {tagChild}
-                      </TweenOneGroup>
+      <>
+         <Helmet
+          title='create new shop'
+          meta={[{ name: "description", content: "create new agora expo shop" }]}
+        />
+        <Mutation mutation={createDraft}>
+          {(createShopDraft, { loading, error }) => (
+            <div style={{ maxWidth: '600px', margin: '0 auto' }}>
+              <h1 style={{ textAlign: 'center' }}>Create Shop</h1>
+              <Paper elevation={1} className={classes.paper}>
+                <Input
+                  name="name"
+                  value={name}
+                  onChange={this.handleInputChange}
+                  size="large"
+                  placeholder="Shop Name"
+                />
+                <ApolloConsumer>
+                  {client => (
+                    <AutoComplete
+                      backfill
+                      onChange={value => this.handleCategoryChange(client, value)}
+                      size="large"
+                      style={{ width: '100%' }}
+                      dataSource={categorySuggestions}
+                      filterOption={(inputValue, option) =>
+                        option.props.children.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1
+                      }
+                    >
+                      <Input size="large" placeholder="Category" />
+                    </AutoComplete>
+                  )}
+                </ApolloConsumer>
+                <TextArea
+                  onChange={this.handleInputChange}
+                  name="description"
+                  value={description}
+                  rows={4}
+                  placeholder="Shop Description"
+                />
+                <div style={{ marginTop: '20px' }}>
+                  <h3 style={{ textAlign: 'center' }}> Add Owners</h3>
+                  <div style={{ display: 'flex', justifyContent: 'center' }}>
+                    <div>
+                      <div style={{ marginBottom: 16 }}>
+                        <TweenOneGroup
+                          enter={{
+                            scale: 0.8,
+                            opacity: 0,
+                            type: 'from',
+                            duration: 100,
+                            onComplete: e => {
+                              e.target.style = '';
+                            },
+                          }}
+                          leave={{ opacity: 0, width: 0, scale: 0, duration: 200 }}
+                          appear={false}
+                        >
+                          {tagChild}
+                        </TweenOneGroup>
+                      </div>
+                      {inputVisible && (
+                        <ApolloConsumer>
+                          {client => (
+                            <div
+                              style={{
+                                display: 'flex',
+                                flexDirection: 'column',
+                                alignItems: 'center',
+                              }}
+                            >
+                              <AutoComplete
+                                backfill
+                                ref={this.saveInputRef}
+                                size="medium"
+                                style={{ width: 300 }}
+                                dataSource={fetchedUsers.map(this.renderUserOptions)}
+                                onSelect={val => this.handleUserSelect(val)}
+                                onSearch={value => this.handleUserInputChange(client, value)}
+                                placeholder="Search User"
+                                optionLabelProp="text"
+                                value={selectedUser}
+                                onBlur={this.handleInputConfirm}
+                              />
+                              {noUserMsg && <span style={{ color: 'red' }}>No User Found</span>}
+                            </div>
+                          )}
+                        </ApolloConsumer>
+                      )}
+                      {!inputVisible && (
+                        <Tag
+                          onClick={this.showInput}
+                          style={{ background: '#f44336', borderStyle: 'dashed' }}
+                        >
+                          <Icon type="plus" /> <span style={{ color: '#fff' }}>Add Owner</span>
+                        </Tag>
+                      )}
                     </div>
-                    {inputVisible && (
-                      <ApolloConsumer>
-                        {client => (
-                          <div
-                            style={{
-                              display: 'flex',
-                              flexDirection: 'column',
-                              alignItems: 'center',
-                            }}
-                          >
-                            <AutoComplete
-                              backfill
-                              ref={this.saveInputRef}
-                              size="medium"
-                              style={{ width: 300 }}
-                              dataSource={fetchedUsers.map(this.renderUserOptions)}
-                              onSelect={val => this.handleUserSelect(val)}
-                              onSearch={value => this.handleUserInputChange(client, value)}
-                              placeholder="Search User"
-                              optionLabelProp="text"
-                              value={selectedUser}
-                              onBlur={this.handleInputConfirm}
-                            />
-                            {noUserMsg && <span style={{ color: 'red' }}>No User Found</span>}
-                          </div>
-                        )}
-                      </ApolloConsumer>
-                    )}
-                    {!inputVisible && (
-                      <Tag
-                        onClick={this.showInput}
-                        style={{ background: '#f44336', borderStyle: 'dashed' }}
-                      >
-                        <Icon type="plus" /> <span style={{ color: '#fff' }}>Add Owner</span>
-                      </Tag>
-                    )}
                   </div>
                 </div>
-              </div>
-              <div style={{ marginTop: '100px' }}>
-                <Button
-                  onClick={() => this.formSubmit(createShopDraft, error)}
-                  type="submit"
-                  fullWidth
-                  variant="raised"
-                  color="primary"
-                  disabled={!activeButton || loading}
-                >
-                  Create
-                </Button>
-              </div>
-            </Paper>
-          </div>
-        )}
-      </Mutation>
+                <div style={{ marginTop: '100px' }}>
+                  <Button
+                    onClick={() => this.formSubmit(createShopDraft, error)}
+                    type="submit"
+                    fullWidth
+                    variant="raised"
+                    color="primary"
+                    disabled={!activeButton || loading}
+                  >
+                    Create
+                  </Button>
+                </div>
+              </Paper>
+            </div>
+          )}
+        </Mutation>
+      </>
     );
   }
 }

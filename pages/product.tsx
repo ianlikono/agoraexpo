@@ -3,6 +3,7 @@ import { NextContext } from 'next';
 import React from 'react';
 // eslint-disable-next-line import/no-unresolved
 import { Query } from 'react-apollo';
+import Helmet from 'react-helmet';
 import ProductDetails from '../src/components/ProductDetails/index';
 import { productQuery } from '../src/graphql/queries';
 
@@ -18,13 +19,23 @@ class Product extends React.Component<queryProps> {
   render() {
     const { id } = this.props;
     return (
-      <Query query={productQuery} variables={{ id }}>
-        {({ loading, error, data }) => {
-          if (loading) return 'Loading...';
-          if (error) return `Error! ${error.message}`;
-          return <ProductDetails productId={id} product={data.product} />;
-        }}
-      </Query>
+      <>
+        <Query query={productQuery} variables={{ id }}>
+          {({ loading, error, data }) => {
+            if (loading) return 'Loading...';
+            if (error) return `Error! ${error.message}`;
+            return (
+              <>
+                <Helmet
+                  title={`${data.product && data.product.title}`}
+                  meta={[{ name: "description", content: data.product && data.product.description }]}
+                />
+                <ProductDetails productId={id} product={data.product} />
+              </>
+            );
+          }}
+        </Query>
+      </>
     );
   }
 }

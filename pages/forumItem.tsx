@@ -1,6 +1,7 @@
 import { NextContext } from 'next';
 import React from 'react';
 import { Query } from 'react-apollo';
+import Helmet from 'react-helmet';
 import ForumHeader from '../src/components/Forum/ForumHeader';
 import ForumPostDetail from '../src/components/ForumPostDetail';
 import { forumPostQuery } from '../src/graphql/queries';
@@ -24,10 +25,20 @@ class ForumItemPage extends React.Component<queryProps> {
         <ForumHeader />
         <Query query={forumPostQuery} variables={{ id }}>
           {({ loading, error, data }) => {
-            console.log(data);
             if (loading) return 'Loading...';
             if (error) return `Error! ${error.message}`;
-            return <ForumPostDetail data={data} />;
+            const HtmlToReactParser = require('html-to-react').Parser;
+            const htmlToReactParser = new HtmlToReactParser();
+            const contentElement = data && htmlToReactParser.parse(data.forumPost.content);
+            return (
+              <>
+                <Helmet
+                  title={`${data.forumPost && data.forumPost.title} | ${data.forumPost && data.forumPost.forum.name}`}
+                  meta={[{ name: "description", content: contentElement }]}
+                />
+                <ForumPostDetail data={data} />
+              </>
+            );
           }}
         </Query>
       </>

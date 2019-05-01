@@ -1,8 +1,8 @@
 /* eslint-disable react/destructuring-assignment */
 import { withStyles } from '@material-ui/core/styles';
-import gql from 'graphql-tag';
 import React from 'react';
 import { Query } from 'react-apollo';
+import Helmet from 'react-helmet';
 import { Carousel } from 'react-responsive-carousel';
 import PlusIcon from '../src/components/PlusIcon/PlusIcon';
 import Sections from '../src/components/shopProductsSections';
@@ -28,9 +28,12 @@ class Shop extends React.PureComponent {
         {({ loading, error, data }) => {
           if (loading) return 'Loading...';
           if (error) return `Error! ${error.message}`;
-          console.log(data);
           return (
             <>
+              <Helmet
+                title={`${data.shop.name && data.shop.name}`}
+                meta={[{ name: "description", content: data.shop && data.shop.description }]}
+              />
               <div>
                 <div style={{ position: 'relative' }}>
                   <div style={{ position: 'absolute', top: 5, right: 10, zIndex: 10 }}>
