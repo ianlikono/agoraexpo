@@ -6,6 +6,7 @@ import Helmet from 'react-helmet';
 import { Carousel } from 'react-responsive-carousel';
 import PlusIcon from '../src/components/PlusIcon/PlusIcon';
 import Sections from '../src/components/shopProductsSections';
+import MeProvider from '../src/contexts/Me';
 import { GetShop } from '../src/graphql/queries';
 
 const styles = theme => ({
@@ -17,6 +18,7 @@ const styles = theme => ({
 class Shop extends React.PureComponent {
   state = {};
 
+
   static getInitialProps({ query }) {
     return { query };
   }
@@ -27,9 +29,8 @@ class Shop extends React.PureComponent {
       <Query query={GetShop} variables={{ id }}>
         {({ loading, error, data }) => {
           if (loading) return 'Loading...';
-          if (error) return `Error! ${error.message}`;
           return (
-            <>
+            <MeProvider>
               <Helmet
                 title={`${data.shop.name && data.shop.name}`}
                 meta={[{ name: "description", content: data.shop && data.shop.description }]}
@@ -63,8 +64,8 @@ class Shop extends React.PureComponent {
                   </div>
                 </div>
               </div>
-              <Sections shopId={id} />
-            </>
+              <Sections owners={data.shop.owners} shopId={id} />
+            </MeProvider>
           );
         }}
       </Query>

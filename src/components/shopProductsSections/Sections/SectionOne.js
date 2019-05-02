@@ -4,14 +4,12 @@ import ItemCaraosel from '../../itemsCaraosel/ItemCaraosel';
 import PlusIcon from '../../PlusIcon/PlusIcon';
 import ProductCard from '../../ProductCard/ProductCard';
 
-const Product = {
+const product = {
   id: 'b07c1424-c262-4cb8-855e-58573a909759',
   title: 'Product One',
   description: 'Best you will ever get',
-  image:
-    'https://images.unsplash.com/photo-1514560353475-9141afac0f8f?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60',
-  largeImage:
-    'https://images.unsplash.com/photo-1514560353475-9141afac0f8f?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60',
+  images:
+    [{imageUrl: 'https://images.unsplash.com/photo-1514560353475-9141afac0f8f?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60'}],
   price: 30,
 };
 
@@ -47,18 +45,10 @@ class SectionOne extends React.PureComponent {
         <section>
           <div>
             <ItemCaraosel>
-              <ProductCard />
-              <ProductCard />
-              <ProductCard />
-              <ProductCard />
-              <ProductCard />
-              <ProductCard />
-              <ProductCard />
-              <ProductCard />
-              <ProductCard />
-              <ProductCard />
-              <ProductCard />
-              <ProductCard />
+            <ProductCard id={product.id} title={product.title} description={product.description} price={product.price} image={product.images[0]} />
+            <ProductCard id={product.id} title={product.title} description={product.description} price={product.price} image={product.images[0]} />
+            <ProductCard id={product.id} title={product.title} description={product.description} price={product.price} image={product.images[0]} />
+            <ProductCard id={product.id} title={product.title} description={product.description} price={product.price} image={product.images[0]} />
             </ItemCaraosel>
           </div>
         </section>

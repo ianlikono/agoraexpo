@@ -1,8 +1,13 @@
 import Button from '@material-ui/core/Button';
 import Paper from '@material-ui/core/Paper';
 import { withStyles } from '@material-ui/core/styles';
-import Typography from '@material-ui/core/Typography';
+import truncate from 'lodash/truncate';
+import Link from 'next/link';
 import React from 'react';
+import { Mutation } from 'react-apollo';
+import { addItemToCart } from '../../graphql/mutations';
+import { getMeCart } from '../../graphql/queries';
+import { ContentTitle } from './styles';
 
 const styles = theme => ({
   root: {
@@ -38,9 +43,24 @@ class ProductCard extends React.PureComponent {
     });
   };
 
+  onAddToCartClick = async (id, addItem) => {
+    await addItem({
+      variables: {
+        productId: id,
+        quantity: 1,
+      },
+      refetchQueries: [
+        {
+          query: getMeCart,
+        }
+      ]
+    })
+  }
+
   render() {
     const { classes } = this.props;
     const { cardElevation } = this.state;
+    const { title, description, price, image, id } = this.props;
     return (
       <>
         <div
@@ -48,35 +68,48 @@ class ProductCard extends React.PureComponent {
           onMouseEnter={this.onMouseEnter}
           className="main-card"
           style={{
-            minWidth: '250px',
+            minWidth: '300px',
             borderRadius: '50px',
-            maxWidth: '250px',
+            maxWidth: '350px',
             margin: '0px 35px 0px 35px',
             marginBottom: '20px',
           }}
         >
           <Paper className={classes.root} elevation={cardElevation}>
-            <div style={{ height: '70%', width: '100%' }}>
-              <img
-                style={{ height: '100%', width: '100%', borderRadius: '50px' }}
-                src="https://images.unsplash.com/photo-1519415943484-9fa1873496d4?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60"
-              />
-            </div>
-            <div style={{ marginTop: '10px', paddingLeft: '24px' }}>
-              <Typography variant="h4">Magic Leap One</Typography>
-            </div>
-            <div
-              style={{
-                marginTop: '10px',
-                paddingLeft: '24px',
-                textAlign: 'center',
-                paddingRight: '24px',
-              }}
-            >
-              <Typography component="p">
-                women's seven assorted-color footwear on surface
-              </Typography>
-            </div>
+            <Link href={`/product/${id}`}>
+              <a>
+                <div style={{ height: '70%', width: '100%' }}>
+                  <img
+                    style={{ height: '25rem', width: '100%', borderRadius: '50px', backgroundSize: 'cover' }}
+                    src={image.imageUrl}
+                  />
+                </div>
+                <div style={{ marginTop: '10px', paddingLeft: '24px' }}>
+                  <ContentTitle>
+                    {truncate(title, {
+                      length: 40,
+                      separator: ' ',
+                    })}
+                  </ContentTitle>
+                </div>
+                <div
+                  style={{
+                    marginTop: '10px',
+                    paddingLeft: '24px',
+                    textAlign: 'center',
+                    paddingRight: '24px',
+                  }}
+                >
+                  <p>
+                  {truncate(description, {
+                      length: 100,
+                      separator: ' ',
+                      'omission': ' [...]'
+                    })}
+                  </p>
+                </div>
+              </a>
+            </Link>
             <div
               style={{
                 backgroundColor: '#f2ebea',
@@ -86,10 +119,14 @@ class ProductCard extends React.PureComponent {
                 alignItems: 'center',
               }}
             >
-              <span style={{ fontSize: 20, fontWeight: 600, marginLeft: '10px' }}>$500</span>
-              <Button variant="contained" color="primary" className={classes.button}>
-                Add To Cart
-              </Button>
+              <span style={{ fontSize: 20, fontWeight: 600, marginLeft: '10px' }}>${price}</span>
+              <Mutation mutation={addItemToCart}>
+                {(addItem, { data }) => (
+                    <Button size="large" onClick={() => this.onAddToCartClick(id, addItem)} variant="contained" color="primary" className={classes.button}>
+                      Add To Cart
+                    </Button>
+              )}
+              </Mutation>
             </div>
           </Paper>
           <style jsx>{`

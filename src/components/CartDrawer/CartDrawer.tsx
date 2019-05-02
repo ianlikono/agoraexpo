@@ -1,22 +1,22 @@
+import Badge from '@material-ui/core/Badge';
 import Divider from '@material-ui/core/Divider';
 import Drawer from '@material-ui/core/Drawer';
 import IconButton from '@material-ui/core/IconButton';
-import Badge from '@material-ui/core/Badge';
-import Typography from '@material-ui/core/Typography';
-import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
 import { withStyles } from '@material-ui/core/styles';
+import Typography from '@material-ui/core/Typography';
+import AddIcon from '@material-ui/icons/Add';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
-import React from 'react';
-import truncate from 'lodash/truncate';
-import AddIcon from '@material-ui/icons/Add';
 import RemoveIcon from '@material-ui/icons/Remove';
+import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
+import truncate from 'lodash/truncate';
+import React from 'react';
+import { Mutation, Query } from 'react-apollo';
 import { IconContext } from 'react-icons';
 import { IoMdRemoveCircle } from 'react-icons/io';
-import { Query, Mutation } from 'react-apollo';
-import { getMeCart } from '../../graphql/queries';
 import { addItemToCart, deleteCartItem } from '../../graphql/mutations';
-import { Wrapper, CartItem, ItemImg, ItemsDetails, ItemControls, DeleteItem } from './styles';
+import { getMeCart } from '../../graphql/queries';
+import { CartItem, DeleteItem, ItemControls, ItemImg, ItemsDetails, Wrapper } from './styles';
 
 interface CartDrawerProps {
   props: any;
@@ -217,26 +217,33 @@ const CartDrawer: React.SFC<CartDrawerProps> = props => {
         <Query query={getMeCart}>
           {({ loading, error, data }) => {
             if (loading) return 'Loading...';
-            if (error) return `Error! ${error.message}`;
-            return (
-              <>
-                <div className={classes.drawerHeader}>
-                  <IconButton onClick={manageDrawer}>
-                    {theme.direction === 'rtl' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
-                  </IconButton>
-                  <Typography variant="h5">Cart Items</Typography>
-                  <IconButton color="inherit">
-                    <Badge badgeContent={11} color="primary">
-                      <ShoppingCartIcon />
-                    </Badge>
-                  </IconButton>
+            if(data.getMeCart) {
+              return (
+                <>
+                  <div className={classes.drawerHeader}>
+                    <IconButton onClick={manageDrawer}>
+                      {theme.direction === 'rtl' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
+                    </IconButton>
+                    <Typography variant="h5">Cart Items</Typography>
+                    <IconButton color="inherit">
+                      <Badge badgeContent={data.getMeCart ? data.getMeCart[0].items.length : 0} color="primary">
+                        <ShoppingCartIcon />
+                      </Badge>
+                    </IconButton>
+                  </div>
+                  <Divider />
+                  <Wrapper>
+                    {data.getMeCart.length > 0 ? renderCartItems(data.getMeCart[0].items) : null}
+                  </Wrapper>
+                </>
+              );
+            } else {
+              return (
+                <div style={{display: 'flex', justifyItems: 'center', alignItems: 'center'}}>
+                  <h4>No Cart Items</h4>
                 </div>
-                <Divider />
-                <Wrapper>
-                  {data.getMeCart.length > 0 ? renderCartItems(data.getMeCart[0].items) : null}
-                </Wrapper>
-              </>
-            );
+              )
+            }
           }}
         </Query>
       </Drawer>

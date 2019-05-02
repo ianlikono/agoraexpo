@@ -144,7 +144,7 @@ class AddProductsDialog extends React.PureComponent {
   onFilesDropped = async file => {
     const data = new FormData();
     data.append('file', file);
-    data.append('upload_preset', 'agoraexpo');
+    data.append('upload_preset', 'shop-products');
 
     const res = await fetch('https://api.cloudinary.com/v1_1/doelo01na/image/upload', {
       method: 'POST',

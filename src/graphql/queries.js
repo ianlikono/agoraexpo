@@ -10,7 +10,10 @@ export const GetShop = gql`
       category
       live
       owners {
+        id
         username
+        name
+        profilePic
       }
       images {
         imageUrl
@@ -211,6 +214,43 @@ export const forumPosts = gql`
           username
           profilePic
         }
+      }
+    }
+  }
+`;
+
+export const getShopProducts = gql`
+  query getShopProducts($shopId: ID!) {
+    getShopProducts(shopId: $shopId) {
+      shop {
+        owners {
+          id
+          username
+        }
+      }
+      id
+      title
+      description
+      price
+      categories {
+        id
+        name
+      }
+      brand {
+        id
+        name
+      }
+      tags {
+        id
+        name
+      }
+      images {
+        imageUrl
+      }
+      variants {
+        id
+        name
+        values
       }
     }
   }

@@ -12,7 +12,6 @@ import { fade } from '@material-ui/core/styles/colorManipulator';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import AddIcon from '@material-ui/icons/Add';
-import MenuIcon from '@material-ui/icons/Menu';
 import MoreIcon from '@material-ui/icons/MoreVert';
 import SearchIcon from '@material-ui/icons/Search';
 import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
@@ -20,7 +19,7 @@ import Link from 'next/link';
 import Router from 'next/router';
 import React from 'react';
 import { Query } from 'react-apollo';
-import { getMeQuery } from '../../graphql/queries';
+import { getMeCart, getMeQuery } from '../../graphql/queries';
 import CartDrawer from '../CartDrawer/CartDrawer';
 import PlusIcon from '../PlusIcon/PlusIcon';
 
@@ -235,74 +234,78 @@ class Header extends React.Component {
         {({ loading, error, data }) => {
           if (loading) return 'Loading...';
           if (error) return null;
+          const meData = data;
           return (
-            <div className={classes.root}>
-              <AppBar position="static">
-                <Toolbar>
-                  <IconButton
-                    className={classes.menuButton}
-                    color="inherit"
-                    aria-label="Open drawer"
-                  >
-                    <MenuIcon />
-                  </IconButton>
-                  <Link href="/">
-                    <a>
-                      <Typography className={classes.title} variant="h6" color="inherit" noWrap>
-                        AgoraExpo
-                      </Typography>
-                    </a>
-                  </Link>
-                  <div className={classes.search}>
-                    <div className={classes.searchIcon}>
-                      <SearchIcon />
-                    </div>
-                    <InputBase
-                      placeholder="Search…"
-                      classes={{
-                        root: classes.inputRoot,
-                        input: classes.inputInput,
-                      }}
-                    />
-                  </div>
-                  <div className={classes.grow} />
-                  <div className={classes.sectionDesktop}>
-                    <Link href="/new-shop">
-                      <a>
-                        <PlusIcon toolTipTitle="Create Shop" fabSize="small" />
-                      </a>
-                    </Link>
-                    <div onClick={this.onCartClicked} role="button">
-                      <IconButton color="inherit">
-                        <Badge badgeContent={17} color="secondary">
-                          <ShoppingCartIcon />
-                        </Badge>
-                      </IconButton>
-                    </div>
-                    {renderUserAvatar(data)}
-                  </div>
-                  <div className={classes.sectionMobile}>
-                    <div onClick={() => this.handleMobileMenuClose('cart')} role="button">
-                      <IconButton color="inherit">
-                        <Badge badgeContent={11} color="secondary">
-                          <ShoppingCartIcon />
-                        </Badge>
-                      </IconButton>
-                    </div>
-                    <IconButton
-                      aria-haspopup="true"
-                      onClick={this.handleMobileMenuOpen}
-                      color="inherit"
-                    >
-                      <MoreIcon />
-                    </IconButton>
-                  </div>
-                </Toolbar>
-              </AppBar>
-              <CartDrawer open={this.state.cartOpen} manageDrawer={this.onCartClicked} />
-              {renderMenu}
-              {renderMobileMenu(data)}
-            </div>
+            <>
+              <Query query={getMeCart}>
+                {({ loading, error, data }) => {
+                  if (loading) return 'Loading...';
+                    return (
+                      <div className={classes.root}>
+                        <AppBar position="static">
+                          <Toolbar>
+                            <Link href="/">
+                              <a>
+                                <Typography className={classes.title} variant="h2" color="inherit" noWrap>
+                                  AgoraExpo
+                                </Typography>
+                              </a>
+                            </Link>
+                            <div className={classes.search}>
+                              <div className={classes.searchIcon}>
+                                <SearchIcon />
+                              </div>
+                              <InputBase
+                                placeholder="Search…"
+                                classes={{
+                                  root: classes.inputRoot,
+                                  input: classes.inputInput,
+                                }}
+                              />
+                            </div>
+                            <div className={classes.grow} />
+                            <div className={classes.sectionDesktop}>
+                              <Link href="/new-shop">
+                                <a>
+                                  <PlusIcon toolTipTitle="Create Shop" fabSize="small" />
+                                </a>
+                              </Link>
+                              <div onClick={this.onCartClicked} role="button">
+                                <IconButton color="inherit">
+                                  <Badge badgeContent={data.getMeCart && data.getMeCart[0] ? data.getMeCart[0].items.length : 0} color="secondary">
+                                    <ShoppingCartIcon />
+                                  </Badge>
+                                </IconButton>
+                              </div>
+                              {renderUserAvatar(meData)}
+                            </div>
+                            <div className={classes.sectionMobile}>
+                              <div onClick={() => this.handleMobileMenuClose('cart')} role="button">
+                                <IconButton color="inherit">
+                                  <Badge badgeContent={data.getMeCart && data.getMeCart[0] ? data.getMeCart[0].items.length : 0} color="secondary">
+                                    <ShoppingCartIcon />
+                                  </Badge>
+                                </IconButton>
+                              </div>
+                              <IconButton
+                                aria-haspopup="true"
+                                onClick={this.handleMobileMenuOpen}
+                                color="inherit"
+                              >
+                                <MoreIcon />
+                              </IconButton>
+                            </div>
+                          </Toolbar>
+                        </AppBar>
+                        <CartDrawer open={this.state.cartOpen} manageDrawer={this.onCartClicked} />
+                        {renderMenu}
+                        {renderMobileMenu(meData)}
+                      </div>
+                  )
+              }
+            }
+            </Query>
+          </>
           );
         }}
       </Query>
