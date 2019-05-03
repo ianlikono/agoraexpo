@@ -249,3 +249,23 @@ export const createPostComment = gql`
   }
 }
 `;
+
+export const addShopCoverImage = gql`
+  mutation addShopCoverImage($shopId: ID!, $imageUrl: String!, $largeImageUrl: String!) {
+    addShopCoverImage(shopId: $shopId, imageUrl: $imageUrl, largeImageUrl: $largeImageUrl) {
+      id
+      imageUrl,
+      largeImageUrl,
+    }
+  }
+`;
+
+export const deleteShopCoverImage = gql`
+  mutation deleteShopCoverImage($imageId: ID!) {
+    deleteShopCoverImage(imageId: $imageId) {
+      id
+      imageUrl,
+      largeImageUrl,
+    }
+  }
+`;

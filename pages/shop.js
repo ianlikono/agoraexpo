@@ -1,12 +1,15 @@
 /* eslint-disable react/destructuring-assignment */
+import Fab from '@material-ui/core/Fab';
 import { withStyles } from '@material-ui/core/styles';
+import DeleteIcon from '@material-ui/icons/Delete';
 import React from 'react';
-import { Query } from 'react-apollo';
+import { Mutation, Query } from 'react-apollo';
 import Helmet from 'react-helmet';
 import { Carousel } from 'react-responsive-carousel';
 import PlusIcon from '../src/components/PlusIcon/PlusIcon';
 import Sections from '../src/components/shopProductsSections';
-import MeProvider from '../src/contexts/Me';
+import MeProvider, { MeConsumer } from '../src/contexts/Me';
+import { addShopCoverImage, deleteShopCoverImage } from '../src/graphql/mutations';
 import { GetShop } from '../src/graphql/queries';
 
 const styles = theme => ({
@@ -23,6 +26,99 @@ class Shop extends React.PureComponent {
     return { query };
   }
 
+  onUploadImageClick = async (imageCreate) => {
+    const fileSelector = document.createElement('input');
+    fileSelector.setAttribute('type', 'file');
+    fileSelector.setAttribute('accept', 'image/*');
+    fileSelector.click();
+    fileSelector.onchange = async () => {
+      const file = fileSelector.files[0];
+      const data = new FormData();
+      data.append('file', file);
+      data.append('upload_preset', 'shop-covers');
+      const res = await fetch('https://api.cloudinary.com/v1_1/doelo01na/image/upload', {
+        method: 'POST',
+        body: data,
+      });
+      const uploadedFile = await res.json();
+
+      const response = await imageCreate({
+        variables: {
+          shopId: this.props.query.id.toString(),
+          imageUrl: uploadedFile.secure_url,
+          largeImageUrl: uploadedFile.eager[0].secure_url
+        },
+        refetchQueries: [
+          {
+            query: GetShop,
+            variables: { id: this.props.query.id.toString() }
+          },
+        ],
+      })
+    };
+  }
+
+  onDeleteImageClicked = async (image, imageDelete) => {
+    console.log('clicked', image);
+    const response = await imageDelete({
+      variables: {
+        imageId: image
+      },
+      refetchQueries: [
+        {
+          query: GetShop,
+          variables: { id: this.props.query.id.toString() }
+        },
+      ],
+    })
+  }
+
+  renderAddImages = (value, owners) => {
+    const isShopOwner = value.isShopOwner(owners);
+    if(isShopOwner) {
+      return(
+        <>
+          <Mutation mutation={addShopCoverImage}>
+            {(imageCreate, { loading, error }) => (
+              <>
+                <div onClick={() => this.onUploadImageClick(imageCreate)} style={{ position: 'absolute', top: 5, right: 10, zIndex: 10 }}>
+                  <PlusIcon toolTipTitle="Add Shop Cover Images" fabSize="medium" />
+                </div>
+              </>
+            )}
+           </Mutation>
+        </>
+      )
+    }
+  }
+
+  renderCaraoselImages = (images) => {
+    if(images.length > 0) {
+      return images.map((image, i) => (
+        <div key={i} style={{ height: '50vh', width: '100%' }}>
+          <img
+            id={i}
+            style={{ height: '100%' }}
+            src={image.largeImageUrl}
+          />
+          <>
+          <Mutation mutation={deleteShopCoverImage}>
+              {(imageDelete, { loading, error }) => (
+              <div onClick={() => this.onDeleteImageClicked(image.id, imageDelete)} style={{ position: 'absolute', bottom: 5, right: 10, zIndex: 10 }}>
+                <Fab size="medium" color="primary" aria-label="Delete">
+                  <DeleteIcon />
+                </Fab>
+              </div>
+              )}
+          </Mutation> */}
+          </>
+        </div>
+      ))
+    }else {
+      return null;
+    }
+  }
+
   render() {
     const id = this.props.query.id.toString();
     return (
@@ -36,33 +132,21 @@ class Shop extends React.PureComponent {
                 meta={[{ name: "description", content: data.shop && data.shop.description }]}
               />
               <div>
-                <div style={{ position: 'relative' }}>
-                  <div style={{ position: 'absolute', top: 5, right: 10, zIndex: 10 }}>
-                    <PlusIcon toolTipTitle="Add Images" fabSize="medium" />
-                  </div>
-                  <div>
-                    <Carousel showThumbs={false} infiniteLoop autoPlay>
-                      <div style={{ height: '50vh', width: '100%' }}>
-                        <img
-                          style={{ height: '100%' }}
-                          src="https://images.unsplash.com/photo-1481437156560-3205f6a55735?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60"
-                        />
+              <MeConsumer>
+                {value => {
+                    return (
+                      <div style={{ position: 'relative' }}>
+                        {this.renderAddImages(value, data.shop.owners)}
+                        <div>
+                          <Carousel showThumbs={false} infiniteLoop autoPlay>
+                            {this.renderCaraoselImages(data.shop.images)}
+                          </Carousel>
+                        </div>
                       </div>
-                      <div style={{ height: '50vh', width: '100%' }}>
-                        <img
-                          style={{ height: '100%' }}
-                          src="https://images.unsplash.com/photo-1468582232004-7f2dc42c8e2d?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60"
-                        />
-                      </div>
-                      <div style={{ height: '50vh', width: '100%' }}>
-                        <img
-                          style={{ height: '100%' }}
-                          src="https://images.unsplash.com/photo-1424296308064-1eead03d1ad9?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60"
-                        />
-                      </div>
-                    </Carousel>
-                  </div>
-                </div>
+                    )
+                  }
+                }
+                </MeConsumer>
               </div>
               <Sections owners={data.shop.owners} shopId={id} />
             </MeProvider>

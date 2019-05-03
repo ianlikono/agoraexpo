@@ -16,7 +16,9 @@ export const GetShop = gql`
         profilePic
       }
       images {
+        id
         imageUrl
+        largeImageUrl
       }
       products {
         id
@@ -24,16 +26,16 @@ export const GetShop = gql`
         description
         price
         categories {
+          id
           name
         }
         brand {
+          id
           name
         }
         tags {
+          id
           name
-        }
-        images {
-          imageUrl
         }
       }
     }
@@ -246,6 +248,7 @@ export const getShopProducts = gql`
       }
       images {
         imageUrl
+        largeImageUrl
       }
       variants {
         id
