@@ -127,10 +127,27 @@ class Shop extends React.PureComponent {
           if (loading) return 'Loading...';
           return (
             <MeProvider>
-              <Helmet
-                title={`${data.shop.name && data.shop.name}`}
-                meta={[{ name: "description", content: data.shop && data.shop.description }]}
-              />
+              <Helmet>
+                  <title>{`${data.shop.name && data.shop.name}`}</title>
+                  <link rel="canonical" href={`https://agoraexpo.com/shop/${id}`} />
+                  <meta name="description" content={data.shop && data.shop.description} />
+                  {/* Google / Search Engine Tags */}
+                  <meta itemprop="name" content={`${data.shop.name && data.shop.name}`} />
+                  <meta itemprop="description" content={data.shop && data.shop.description} />
+                  <meta itemprop="image" content="https://res.cloudinary.com/doelo01na/image/upload/v1556859500/static/logos/agoraexpobanner.png" />
+                  {/* Facebook Meta Tags */}
+                  <meta property="og:title" content={`${data.shop.name && data.shop.name}`} />
+                  <meta property="og:description" content={data.shop && data.shop.description} />
+                  <meta property="og:image" content="https://res.cloudinary.com/doelo01na/image/upload/c_scale,h_630,q_auto/v1556859500/static/logos/agoraexpobanner.png" />
+                  <meta property="og:url" content={`https://agoraexpo.com/shop/${id}`} />
+                  <meta property="og:site_name" content="AgoraExpo" />
+                  {/* twitter Meta Tags */}
+                  <meta name="twitter:title" content={`${data.shop.name && data.shop.name}`} />
+                  <meta name="twitter:description" content={data.shop && data.shop.description} />
+                  <meta name="twitter:image" content="https://res.cloudinary.com/doelo01na/image/upload/c_scale,h_630,q_auto/v1556859500/static/logos/agoraexpobanner.png" />
+                  <meta name="twitter:card" content="summary_large_image" />
+                  <meta name="twitter:image:alt" content="AgoraExpo" />
+                </Helmet>
               <div>
               <MeConsumer>
                 {value => {

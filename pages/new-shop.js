@@ -246,10 +246,27 @@ class CreateShopPage extends Component {
     const tagChild = ownerNames.map(this.forMap);
     return (
       <>
-         <Helmet
-          title='create new shop'
-          meta={[{ name: "description", content: "create new agora expo shop" }]}
-        />
+        <Helmet>
+          <title>'create new shop || AgoraExpo</title>
+          <link rel="canonical" href="https://agoraexpo.com/new-shop" />
+          <meta name="description" content="create new agoraexpo shop" />
+          {/* Google / Search Engine Tags */}
+          <meta itemprop="name" content="create new agoraexpo shop" />
+          <meta itemprop="description" content="create new agoraexpo shop" />
+          <meta itemprop="image" content="https://res.cloudinary.com/doelo01na/image/upload/v1556859500/static/logos/agoraexpobanner.png" />
+          {/* Facebook Meta Tags */}
+          <meta property="og:title" content="create new agoraexpo shop" />
+          <meta property="og:description" content="create new agoraexpo shop" />
+          <meta property="og:image" content="https://res.cloudinary.com/doelo01na/image/upload/c_scale,h_630,q_auto/v1556859500/static/logos/agoraexpobanner.png" />
+          <meta property="og:url" content="https://agoraexpo.com/new-shop" />
+          <meta property="og:site_name" content="AgoraExpo" />
+          {/* twitter Meta Tags */}
+          <meta name="twitter:title" content="create new agoraexpo shop" />
+          <meta name="twitter:description" content="create new agoraexpo shop" />
+          <meta name="twitter:image" content="https://res.cloudinary.com/doelo01na/image/upload/c_scale,h_630,q_auto/v1556859500/static/logos/agoraexpobanner.png" />
+          <meta name="twitter:card" content="summary_large_image" />
+          <meta name="twitter:image:alt" content="AgoraExpo" />
+      </Helmet>
         <Mutation mutation={createDraft}>
           {(createShopDraft, { loading, error }) => (
             <div style={{ maxWidth: '600px', margin: '0 auto' }}>

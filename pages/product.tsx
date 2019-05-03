@@ -30,6 +30,27 @@ class Product extends React.Component<queryProps> {
                   title={`${data.product && data.product.title}`}
                   meta={[{ name: "description", content: data.product && data.product.description }]}
                 />
+                <Helmet>
+                  <title>{`${data.product && data.product.title}`}</title>
+                  <link rel="canonical" href={`https://agoraexpo.com/product/${id}`} />
+                  <meta name="description" content={data.product && data.product.description} />
+                  {/* Google / Search Engine Tags */}
+                  <meta itemprop="name" content={data.product && data.product.title} />
+                  <meta itemprop="description" content={data.product && data.product.description} />
+                  <meta itemprop="image" content={data.product && data.product.images[0].imageUrl} />
+                  {/* Facebook Meta Tags */}
+                  <meta property="og:title" content={data.product && data.product.title} />
+                  <meta property="og:description" content={data.product && data.product.description} />
+                  <meta property="og:image" content={data.product && data.product.images[0].imageUrl} />
+                  <meta property="og:url" content={`https://agoraexpo.com/product/${id}`} />
+                  <meta property="og:site_name" content="AgoraExpo" />
+                  {/* twitter Meta Tags */}
+                  <meta name="twitter:title" content={data.product && data.product.title} />
+                  <meta name="twitter:description" content={data.product && data.product.description} />
+                  <meta name="twitter:image" content={data.product && data.product.images[0].imageUrl} />
+                  <meta name="twitter:card" content="summary_large_image" />
+                  <meta name="twitter:image:alt" content="AgoraExpo" />
+                </Helmet>
                 <ProductDetails productId={id} product={data.product} />
               </>
             );

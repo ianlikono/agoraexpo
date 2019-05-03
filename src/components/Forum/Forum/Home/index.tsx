@@ -43,10 +43,27 @@ function ForumHome(props: ForumHomeProps) {
         if (error) return `Error! ${error.message}`;
         return (
           <>
-            <Helmet
-              title={`${forumName} | posts`}
-              meta={[{ name: "description", content:  `${forumName} posts`}]}
-            />
+            <Helmet>
+                <title>{`${forumName} | posts`}</title>
+                <link rel="canonical" href={`https://agoraexpo.com/f/${forumName}`} />
+                <meta name="description" content={`${forumName} posts`} />
+                {/* Google / Search Engine Tags */}
+                <meta itemprop="name" content={`${forumName} posts`} />
+                <meta itemprop="description" content={`${forumName} posts`} />
+                <meta itemprop="image" content="https://res.cloudinary.com/doelo01na/image/upload/v1556859500/static/logos/agoraexpobanner.png" />
+                {/* Facebook Meta Tags */}
+                <meta property="og:title" content={`${forumName} posts`} />
+                <meta property="og:description" content={`${forumName} posts`} />
+                <meta property="og:image" content="https://res.cloudinary.com/doelo01na/image/upload/c_scale,h_630,q_auto/v1556859500/static/logos/agoraexpobanner.png" />
+                <meta property="og:url" content={`https://agoraexpo.com/f/${forumName}`} />
+                <meta property="og:site_name" content="AgoraExpo" />
+                {/* twitter Meta Tags */}
+                <meta name="twitter:title" content={`${forumName} posts`} />
+                <meta name="twitter:description" content={`${forumName} posts`} />
+                <meta name="twitter:image" content="https://res.cloudinary.com/doelo01na/image/upload/c_scale,h_630,q_auto/v1556859500/static/logos/agoraexpobanner.png" />
+                <meta name="twitter:card" content="summary_large_image" />
+                <meta name="twitter:image:alt" content="AgoraExpo" />
+            </Helmet>
             {renderForumPosts(data.forumPosts)}
           </>
         )

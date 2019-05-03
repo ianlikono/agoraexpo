@@ -11,7 +11,6 @@ export const Wrapper = styled.div`
   margin: 20px;
 `;
 
-
 export const ShareIconsWrapper = styled.div`
   color: #f44336;
   width: 100%;
@@ -20,7 +19,7 @@ export const ShareIconsWrapper = styled.div`
 `;
 
 export const ShareIcon = styled.div`
-   cursor: pointer;
+  cursor: pointer;
 `;
 
 export const HeaderTitle = styled.div`
@@ -47,5 +46,11 @@ export const VariantWrapper = styled.div`
 export const ButtonsWrapper = styled.div`
   width: 100%;
   display: flex;
+`;
 
+export const ProductDescription = styled.p`
+  font-family: 'Roboto', 'Helvetica', 'Arial', sans-serif;
+  font-weight: 400;
+  line-height: 1.5;
+  font-size: 1.5rem;
 `;

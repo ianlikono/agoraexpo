@@ -5,10 +5,27 @@ import Helmet from 'react-helmet';
 const IndexPage: React.FunctionComponent = () => {
   return (
     <>
-      <Helmet
-        title='about || AgoraExpo'
-        meta={[{ name: "description", content: "agoraexpo aboutpage" }]}
-      />
+      <Helmet>
+        <title>about || AgoraExpo</title>
+        <link rel="canonical" href="https://agoraexpo.com" />
+        <meta name="description" content="Build your own online business stress free with no initial investment required" />
+        {/* Google / Search Engine Tags */}
+        <meta itemprop="name" content="Build your own online business stress free with no initial investment required" />
+        <meta itemprop="description" content="Get the power of all the big players in your online business. Start for free with no initial investment required😀." />
+        <meta itemprop="image" content="https://res.cloudinary.com/doelo01na/image/upload/v1556859500/static/logos/agoraexpobanner.png" />
+        {/* Facebook Meta Tags */}
+        <meta property="og:title" content="Build your own online business stress free with no initial investment required" />
+        <meta property="og:description" content="Get the power of all the big players in your online business. Start for free with no initial investment required😀." />
+        <meta property="og:image" content="https://res.cloudinary.com/doelo01na/image/upload/c_scale,h_630,q_auto/v1556859500/static/logos/agoraexpobanner.png" />
+        <meta property="og:url" content="https://agoraexpo.com" />
+        <meta property="og:site_name" content="AgoraExpo" />
+        {/* twitter Meta Tags */}
+        <meta name="twitter:title" content="Build your own online business stress free with no initial investment required" />
+        <meta name="twitter:description" content="Get the power of all the big players in your online business. Start for free with no initial investment required😀." />
+        <meta name="twitter:image" content="https://res.cloudinary.com/doelo01na/image/upload/c_scale,h_630,q_auto/v1556859500/static/logos/agoraexpobanner.png" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:image:alt" content="AgoraExpo" />
+      </Helmet>
       <div style={{ height: '100vh', width: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
         <h1>Welcome to agoraexpo hope you will have fun here</h1>
       </div>
