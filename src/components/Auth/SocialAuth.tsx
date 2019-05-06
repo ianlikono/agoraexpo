@@ -56,9 +56,9 @@ const SocialAuth: React.SFC = props => {
                 },
               ],
             });
-            Router.push('/');
+            Router.back();
           })
-          .catch(function(error: any) {
+          .catch(function (error: any) {
             console.log('errior', error);
           });
       } else {
@@ -76,9 +76,9 @@ const SocialAuth: React.SFC = props => {
                 },
               ],
             });
-            Router.push('/');
+            Router.back();
           })
-          .catch(function(error: any) {
+          .catch(function (error: any) {
             console.log('errior', error);
           });
       }
@@ -114,9 +114,9 @@ const SocialAuth: React.SFC = props => {
                 },
               ],
             });
-            Router.push('/');
+            Router.back();
           })
-          .catch(function(error: any) {
+          .catch(function (error: any) {
             console.log('errior', error);
           });
       } else {
@@ -134,9 +134,9 @@ const SocialAuth: React.SFC = props => {
                 },
               ],
             });
-            Router.push('/');
+            Router.back();
           })
-          .catch(function(error: any) {
+          .catch(function (error: any) {
             console.log('errior', error);
           });
       }

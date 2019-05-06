@@ -80,7 +80,7 @@ class ProductCard extends React.PureComponent {
               <a>
                 <div style={{ height: '70%', width: '100%' }}>
                   <img
-                    style={{ height: '25rem', width: '100%', borderRadius: '50px', backgroundSize: 'cover' }}
+                    style={{ height: '25rem', width: '100%', borderRadius: '50px',  objectFit: 'cover' }}
                     src={image.imageUrl}
                   />
                 </div>

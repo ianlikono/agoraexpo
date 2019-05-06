@@ -88,7 +88,7 @@ class LoginForm extends React.Component {
               },
             ],
           });
-          Router.push('/');
+          Router.back();
         })
         .catch(function(error) {
           console.log('errior', error);

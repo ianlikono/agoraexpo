@@ -20,6 +20,7 @@ export const ItemImg = styled.img`
     width: 30%;
     height: 100%;
     border-radius: 20%;
+    object-fit: cover;
 `;
 
 export const ItemsDetails = styled.div`
@@ -41,4 +42,12 @@ export const DeleteItem = styled.div`
   top: 11px;
   color: red;
   cursor: pointer;
+`;
+
+
+export const TotalAmount = styled.h2`
+  color: ${props => props.theme.colorTextDark};
+  font-size: 3rem;
+  font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+  font-weight: bold;
 `;

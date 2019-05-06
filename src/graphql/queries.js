@@ -110,6 +110,11 @@ export const getMeCart = gql`
         quantity
         variants
       }
+      user {
+        username
+        id
+        email
+      }
     }
   }
 `;

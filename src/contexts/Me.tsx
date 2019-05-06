@@ -9,9 +9,10 @@ export interface MeProps {
 const Me = gql`
     query me {
         me {
-            id
-            name
-            username
+          id
+          username
+          name
+          profilePic
         }
     }
 `;
@@ -30,7 +31,7 @@ function MeProvider(props: MeProps) {
           if (loading) return "Loading...";
           if (error) console.log(error);
           function isShopOwner(owners: any) {
-            if(data.me) {
+            if (data.me) {
               return owners.filter((owner: any) => {
                 return owner.id == data.me.id
               }).length > 0;

@@ -35,6 +35,11 @@ app.prepare().then(() => {
     renderAndCache(req, res, '/product', queryParams);
   });
 
+  server.get('/order/:orderId', (req: any, res: any) => {
+    const queryParams = { orderId: req.params.orderId };
+    renderAndCache(req, res, '/order', queryParams);
+  });
+
   server.get('/f/:name', (req: any, res: any) => {
     const queryParams = { name: req.params.name };
     renderAndCache(req, res, '/forum', queryParams);

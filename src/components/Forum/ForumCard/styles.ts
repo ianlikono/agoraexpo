@@ -20,7 +20,7 @@ export const ForumAvatarImage = styled.img`
   vertical-align: middle;
   background-color: rgb(0, 43, 54);
   border-radius: 100%;
-  background-size: cover;
+  object-fit: cover;
 `;
 
 export const HeaderTitles = styled.div`

@@ -1,4 +1,5 @@
 import Badge from '@material-ui/core/Badge';
+import Button from '@material-ui/core/Button';
 import Divider from '@material-ui/core/Divider';
 import Drawer from '@material-ui/core/Drawer';
 import IconButton from '@material-ui/core/IconButton';
@@ -14,9 +15,11 @@ import React from 'react';
 import { Mutation, Query } from 'react-apollo';
 import { IconContext } from 'react-icons';
 import { IoMdRemoveCircle } from 'react-icons/io';
+import formatMoney from '../../../lib/formatMoney';
 import { addItemToCart, deleteCartItem } from '../../graphql/mutations';
 import { getMeCart } from '../../graphql/queries';
-import { CartItem, DeleteItem, ItemControls, ItemImg, ItemsDetails, Wrapper } from './styles';
+import Checkout from '../checkout';
+import { CartItem, DeleteItem, ItemControls, ItemImg, ItemsDetails, TotalAmount, Wrapper } from './styles';
 
 interface CartDrawerProps {
   props: any;
@@ -79,6 +82,9 @@ const styles = theme => ({
   },
   card: {
     display: 'flex',
+  },
+  button: {
+    margin: theme.spacing.unit,
   },
 });
 
@@ -217,7 +223,9 @@ const CartDrawer: React.SFC<CartDrawerProps> = props => {
         <Query query={getMeCart}>
           {({ loading, error, data }) => {
             if (loading) return 'Loading...';
-            if(data.getMeCart) {
+            if (data.getMeCart) {
+              console.log("TCL: data.getMeCart", data.getMeCart)
+              const totalAmount = data.getMeCart[0].items.reduce((acc, val) => acc + val.product.price * val.quantity, 0)
               return (
                 <>
                   <div className={classes.drawerHeader}>
@@ -235,11 +243,17 @@ const CartDrawer: React.SFC<CartDrawerProps> = props => {
                   <Wrapper>
                     {data.getMeCart.length > 0 ? renderCartItems(data.getMeCart[0].items) : null}
                   </Wrapper>
+                  <TotalAmount>total: {formatMoney(totalAmount)}</TotalAmount>
+                  <Checkout totalPrice={parseInt(totalAmount)} numberOfItems={data.getMeCart[0].items.length} userEmail={data.getMeCart[0].user.email}>
+                    <Button fullWidth color="primary" variant="contained" className={classes.button}>
+                      Checkout
+                    </Button>
+                  </Checkout>
                 </>
               );
             } else {
               return (
-                <div style={{display: 'flex', justifyItems: 'center', alignItems: 'center'}}>
+                <div style={{ display: 'flex', justifyItems: 'center', alignItems: 'center' }}>
                   <h4>No Cart Items</h4>
                 </div>
               )
