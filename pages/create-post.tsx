@@ -14,9 +14,9 @@ function CreatePostPage(props: CreatePostProps) {
           <link rel="canonical" href="https://agoraexpo.com/create-post" />
           <meta name="description" content="create new agora expo forum Post" />
           {/* Google / Search Engine Tags */}
-          <meta itemprop="name" content="create new agora expo forum Post" />
-          <meta itemprop="description" content="create new agora expo forum and let get a communication link between you and your clients to offer satisfaction" />
-          <meta itemprop="image" content="https://res.cloudinary.com/doelo01na/image/upload/v1556859500/static/logos/agoraexpobanner.png" />
+          <meta itemProp="name" content="create new agora expo forum Post" />
+          <meta itemProp="description" content="create new agora expo forum and let get a communication link between you and your clients to offer satisfaction" />
+          <meta itemProp="image" content="https://res.cloudinary.com/doelo01na/image/upload/v1556859500/static/logos/agoraexpobanner.png" />
           {/* Facebook Meta Tags */}
           <meta property="og:title" content="create new agora expo forum Post" />
           <meta property="og:description" content="create new agora expo forum and let get a communication link between you and your clients to offer satisfaction" />

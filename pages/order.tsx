@@ -3,12 +3,12 @@ import React from 'react';
 import CheckAuth from '../src/components/CheckAuth';
 import Order from '../src/components/Order';
 
-export interface OrderItemProps {
+export interface OrderitemProps {
   orderId: String;
 }
 
 
-class OrderItemPage extends React.Component<OrderItemProps> {
+class OrderItemPage extends React.Component<OrderitemProps> {
   static getInitialProps({ query: { orderId } }: NextContext) {
     return { orderId };
   }

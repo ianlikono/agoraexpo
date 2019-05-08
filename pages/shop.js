@@ -132,9 +132,9 @@ class Shop extends React.PureComponent {
                   <link rel="canonical" href={`https://agoraexpo.com/shop/${id}`} />
                   <meta name="description" content={data.shop && data.shop.description} />
                   {/* Google / Search Engine Tags */}
-                  <meta itemprop="name" content={`${data.shop.name && data.shop.name}`} />
-                  <meta itemprop="description" content={data.shop && data.shop.description} />
-                  <meta itemprop="image" content="https://res.cloudinary.com/doelo01na/image/upload/v1556859500/static/logos/agoraexpobanner.png" />
+                  <meta itemProp="name" content={`${data.shop.name && data.shop.name}`} />
+                  <meta itemProp="description" content={data.shop && data.shop.description} />
+                  <meta itemProp="image" content="https://res.cloudinary.com/doelo01na/image/upload/v1556859500/static/logos/agoraexpobanner.png" />
                   {/* Facebook Meta Tags */}
                   <meta property="og:title" content={`${data.shop.name && data.shop.name}`} />
                   <meta property="og:description" content={data.shop && data.shop.description} />

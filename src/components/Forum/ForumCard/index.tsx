@@ -23,7 +23,6 @@ const styles = theme => ({
     ...theme.mixins.gutters(),
     paddingTop: theme.spacing.unit * 1,
     paddingBottom: theme.spacing.unit * 2,
-    maxWidth: '60%',
     margin: '2.5rem auto',
     paddingLeft: '0px !important',
     cursor: 'pointer',

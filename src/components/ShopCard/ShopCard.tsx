@@ -22,10 +22,13 @@ const styles = theme => ({
 
 export interface ShopCardProps {
   classes: any;
+  coverPic: string;
+  avatarPic: string;
+  shopName: string;
 }
 
 function ShopCard(props: ShopCardProps) {
-  const { classes } = props;
+  const { classes, coverPic, shopName, avatarPic } = props;
   const [cardElevation, setCardElevation] = useState(2);
 
   const onMouseLeave = () => {
@@ -39,15 +42,15 @@ function ShopCard(props: ShopCardProps) {
       <Wrapper onMouseLeave={onMouseLeave} onMouseEnter={onMouseEnter}>
         <Paper className={classes.root} elevation={cardElevation}>
           <CardWrapper>
-            <ShopCover src="https://images.unsplash.com/photo-1553531889-56cc480ac5cb?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60" />
+            <ShopCover src={coverPic} />
             <ContentWrapper>
               <ShopName>
-                {truncate(`Electronics Today What you see is what you get`, {
+                {truncate(`${shopName}`, {
                   length: 46,
                   separator: ' ',
                 })}
               </ShopName>
-              <ShopAvatar src="https://images.unsplash.com/photo-1497094360950-14687b7e44c2?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60" />
+              <ShopAvatar src={avatarPic} />
             </ContentWrapper>
           </CardWrapper>
         </Paper>

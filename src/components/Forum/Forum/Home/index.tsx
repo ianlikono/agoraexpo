@@ -48,9 +48,9 @@ function ForumHome(props: ForumHomeProps) {
                 <link rel="canonical" href={`https://agoraexpo.com/f/${forumName}`} />
                 <meta name="description" content={`${forumName} posts`} />
                 {/* Google / Search Engine Tags */}
-                <meta itemprop="name" content={`${forumName} posts`} />
-                <meta itemprop="description" content={`${forumName} posts`} />
-                <meta itemprop="image" content="https://res.cloudinary.com/doelo01na/image/upload/v1556859500/static/logos/agoraexpobanner.png" />
+                <meta itemProp="name" content={`${forumName} posts`} />
+                <meta itemProp="description" content={`${forumName} posts`} />
+                <meta itemProp="image" content="https://res.cloudinary.com/doelo01na/image/upload/v1556859500/static/logos/agoraexpobanner.png" />
                 {/* Facebook Meta Tags */}
                 <meta property="og:title" content={`${forumName} posts`} />
                 <meta property="og:description" content={`${forumName} posts`} />

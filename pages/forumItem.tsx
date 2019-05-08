@@ -37,9 +37,9 @@ class ForumItemPage extends React.Component<queryProps> {
                   <link rel="canonical" href={`https://agoraexpo.com/f/${data.forumPost.forum.name}/${id}`} />
                   <meta name="description" content={contentElement} />
                   {/* Google / Search Engine Tags */}
-                  <meta itemprop="name" content={`${data.forumPost && data.forumPost.title} | ${data.forumPost && data.forumPost.forum.name}`} />
-                  <meta itemprop="description" content={contentElement} />
-                  <meta itemprop="image" content="https://res.cloudinary.com/doelo01na/image/upload/v1556859500/static/logos/agoraexpobanner.png" />
+                  <meta itemProp="name" content={`${data.forumPost && data.forumPost.title} | ${data.forumPost && data.forumPost.forum.name}`} />
+                  <meta itemProp="description" content={contentElement} />
+                  <meta itemProp="image" content="https://res.cloudinary.com/doelo01na/image/upload/v1556859500/static/logos/agoraexpobanner.png" />
                   {/* Facebook Meta Tags */}
                   <meta property="og:title" content={`${data.forumPost && data.forumPost.title} | ${data.forumPost && data.forumPost.forum.name}`} />
                   <meta property="og:description" content={contentElement} />

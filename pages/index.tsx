@@ -12,9 +12,9 @@ const HomePage = (props: HomePageProps) => {
           <link rel="canonical" href="https://agoraexpo.com" />
           <meta name="description" content="Build your own online business stress free with no initial investment required" />
           {/* Google / Search Engine Tags */}
-          <meta itemprop="name" content="Build your own online business stress free with no initial investment required" />
-          <meta itemprop="description" content="iGet the power of all the big players in your online business. Start for free with no initial investment required😀." />
-          <meta itemprop="image" content="https://res.cloudinary.com/doelo01na/image/upload/v1556859500/static/logos/agoraexpobanner.png" />
+          <meta itemProp="name" content="Build your own online business stress free with no initial investment required" />
+          <meta itemProp="description" content="iGet the power of all the big players in your online business. Start for free with no initial investment required😀." />
+          <meta itemProp="image" content="https://res.cloudinary.com/doelo01na/image/upload/v1556859500/static/logos/agoraexpobanner.png" />
           {/* Facebook Meta Tags */}
           <meta property="og:title" content="Build your own online business stress free with no initial investment required" />
           <meta property="og:description" content="Get the power of all the big players in your online business. Start for free with no initial investment required😀." />

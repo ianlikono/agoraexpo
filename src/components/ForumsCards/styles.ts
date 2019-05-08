@@ -20,8 +20,8 @@ export const CardContent = styled.div`
   align-items: center;
   height: 200px;
   background-image: ${props => {
-  return `url(${props.groupCover})`
-}};
+    return `url(${props.groupCover})`;
+  }};
   box-shadow: 0 0 1px rgba(0, 0, 0, 0.05);
   background-clip: content-box;
   background-size: cover;
@@ -33,7 +33,11 @@ export const GroupCardGradient = styled.div`
   width: 100%;
   position: absolute;
   background-color: transparent;
-  background-image: linear-gradient(rgba(15,20,31,0) 0,rgba(15,20,31,.1) 25%,rgba(15,20,31,.8) 100%);
+  background-image: linear-gradient(
+    rgba(15, 20, 31, 0) 0,
+    rgba(15, 20, 31, 0.1) 25%,
+    rgba(15, 20, 31, 0.8) 100%
+  );
 `;
 
 export const GroupName = styled.h4`

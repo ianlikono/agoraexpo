@@ -9,8 +9,11 @@ import { NextContext } from 'next';
 import React from 'react';
 import Helmet from 'react-helmet';
 import styled from 'styled-components';
-import User from '../src/components/User';
+import Orders from '../src/components/orders';
+import Forums from '../src/components/User/Forums';
 import OverviewComponent from '../src/components/User/Overview';
+import UserPosts from '../src/components/User/posts';
+import Shops from '../src/components/User/shops';
 import MeProvider, { MeConsumer } from '../src/contexts/Me';
 
 const Wrapper = styled.div`
@@ -23,6 +26,7 @@ const Wrapper = styled.div`
 const Overview = styled.div`
   display: flex;
   width: 30%;
+  height: 100%;
 `;
 
 const TabsWrapper = styled.div`
@@ -70,7 +74,6 @@ class ForumPage extends React.Component<ForumProps> {
   render() {
     const { tabsValue } = this.state;
     const { username, classes } = this.props;
-    console.log('username', username);
     return (
       <>
         <Helmet
@@ -82,7 +85,7 @@ class ForumPage extends React.Component<ForumProps> {
               return (
                 <Wrapper>
                   <Overview>
-                    <OverviewComponent username={username}/>
+                    <OverviewComponent username={username} />
                   </Overview>
                   <TabsWrapper>
                     <div className={classes.root}>
@@ -101,10 +104,10 @@ class ForumPage extends React.Component<ForumProps> {
                           {value.me && value.me.username == username ? <Tab label="Orders" /> : null}
                         </Tabs>
                       </AppBar>
-                      {tabsValue === 0 && <TabContainer><User /></TabContainer>}
-                      {tabsValue === 1 && <TabContainer>Item Two</TabContainer>}
-                      {tabsValue === 2 && <TabContainer>Item Three</TabContainer>}
-                      {tabsValue === 3 && value.me && value.me.username == username && <TabContainer>Item Four</TabContainer>}
+                      {tabsValue === 0 && <TabContainer><Forums username={username} /></TabContainer>}
+                      {tabsValue === 1 && <TabContainer><UserPosts username={username}/></TabContainer>}
+                      {tabsValue === 2 && <TabContainer><Shops username={username}/></TabContainer>}
+                      {tabsValue === 3 && value.me && value.me.username == username && <TabContainer><Orders /></TabContainer>}
                     </div>
                   </TabsWrapper>
                 </Wrapper>

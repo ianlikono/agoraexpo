@@ -263,3 +263,71 @@ export const getShopProducts = gql`
     }
   }
 `;
+
+export const getUserDetails = gql`
+  query getUser($username: String!) {
+    getUser(username: $username) {
+      id
+      name
+      username
+      email
+      profilePic
+      emailVerified
+      shops {
+        id
+        name
+        description
+        images {
+          imageUrl
+          largeImageUrl
+        }
+      }
+    }
+  }
+`;
+export const getUserForums = gql`
+  query getUserForums($username: String!) {
+    getUserForums(username: $username) {
+      id
+      avatarPic
+      coverPic
+      name
+      description
+      createdAt
+      updatedAt
+      members {
+        username
+      }
+    }
+  }
+`;
+
+export const getUserPosts = gql`
+  query getUserPosts($username: String!) {
+    getUserPosts(username: $username) {
+      id
+      title
+      content
+      postedBy {
+        username
+        id
+        profilePic
+      }
+      forum {
+        name
+        avatarPic
+      }
+      createdAt
+      comments {
+        id
+        user {
+          username
+          profilePic
+        }
+        comment
+        createdAt
+      }
+    }
+  }
+`;
+

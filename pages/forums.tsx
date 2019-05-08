@@ -13,9 +13,9 @@ function ForumPage(props: ForumProps) {
         <link rel="canonical" href="https://agoraexpo.com/forums" />
         <meta name="description" content="agoraexpo forums" />
         {/* Google / Search Engine Tags */}
-        <meta itemprop="name" content="agoraexpo forums" />
-        <meta itemprop="description" content="agoraexpo forums" />
-        <meta itemprop="image" content="https://res.cloudinary.com/doelo01na/image/upload/v1556859500/static/logos/agoraexpobanner.png" />
+        <meta itemProp="name" content="agoraexpo forums" />
+        <meta itemProp="description" content="agoraexpo forums" />
+        <meta itemProp="image" content="https://res.cloudinary.com/doelo01na/image/upload/v1556859500/static/logos/agoraexpobanner.png" />
         {/* Facebook Meta Tags */}
         <meta property="og:title" content="agoraexpo forums" />
         <meta property="og:description" content="agoraexpo forums" />

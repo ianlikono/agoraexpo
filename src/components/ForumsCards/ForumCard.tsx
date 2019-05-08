@@ -17,10 +17,12 @@ const styles = theme => ({
 
 export interface GroupCardProps {
   classes: any;
+  avatarPic: String;
+  name: String;
 }
 
 function GroupCard(props: GroupCardProps) {
-  const { classes } = props;
+  const { classes, avatarPic, name } = props;
   const [cardElevation, setCardElevation] = useState(2);
 
   const onMouseLeave = () => {
@@ -33,9 +35,9 @@ function GroupCard(props: GroupCardProps) {
     <>
       <Wrapper onMouseLeave={onMouseLeave} onMouseEnter={onMouseEnter}>
         <Paper className={classes.root} elevation={cardElevation}>
-          <CardContent groupCover="https://images.unsplash.com/photo-1553531889-e6cf4d692b1b?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60">
+          <CardContent groupCover={avatarPic}>
             <GroupCardGradient />
-            <GroupName>Future Commerce</GroupName>
+            <GroupName>{name}</GroupName>
           </CardContent>
         </Paper>
       </Wrapper>

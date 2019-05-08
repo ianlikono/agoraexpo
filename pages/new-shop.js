@@ -251,9 +251,9 @@ class CreateShopPage extends Component {
           <link rel="canonical" href="https://agoraexpo.com/new-shop" />
           <meta name="description" content="create new agoraexpo shop" />
           {/* Google / Search Engine Tags */}
-          <meta itemprop="name" content="create new agoraexpo shop" />
-          <meta itemprop="description" content="create new agoraexpo shop" />
-          <meta itemprop="image" content="https://res.cloudinary.com/doelo01na/image/upload/v1556859500/static/logos/agoraexpobanner.png" />
+          <meta itemProp="name" content="create new agoraexpo shop" />
+          <meta itemProp="description" content="create new agoraexpo shop" />
+          <meta itemProp="image" content="https://res.cloudinary.com/doelo01na/image/upload/v1556859500/static/logos/agoraexpobanner.png" />
           {/* Facebook Meta Tags */}
           <meta property="og:title" content="create new agoraexpo shop" />
           <meta property="og:description" content="create new agoraexpo shop" />

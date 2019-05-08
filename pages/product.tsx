@@ -35,9 +35,9 @@ class Product extends React.Component<queryProps> {
                   <link rel="canonical" href={`https://agoraexpo.com/product/${id}`} />
                   <meta name="description" content={data.product && data.product.description} />
                   {/* Google / Search Engine Tags */}
-                  <meta itemprop="name" content={data.product && data.product.title} />
-                  <meta itemprop="description" content={data.product && data.product.description} />
-                  <meta itemprop="image" content={data.product && data.product.images[0].imageUrl} />
+                  <meta itemProp="name" content={data.product && data.product.title} />
+                  <meta itemProp="description" content={data.product && data.product.description} />
+                  <meta itemProp="image" content={data.product && data.product.images[0].imageUrl} />
                   {/* Facebook Meta Tags */}
                   <meta property="og:title" content={data.product && data.product.title} />
                   <meta property="og:description" content={data.product && data.product.description} />

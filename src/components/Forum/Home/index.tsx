@@ -7,13 +7,6 @@ import { ChildrenWrapper, ItemContent, ItemTitle, Wrapper } from './styles';
 
 export interface ForumHomeProps { }
 
-const ForumItem = {
-  id: 500,
-  title: "Anyone interested in a weekly mailing list / newsletter?",
-  content: "I haven't found any weekly mailing lists outlining the latest / most interesting developments / contributions to the react native community, so I've been contemplating filling that void",
-  forumName: "awesome",
-}
-
 function ForumHome(props: ForumHomeProps) {
   function renderForumPosts(items) {
 
