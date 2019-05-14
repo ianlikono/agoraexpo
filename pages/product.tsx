@@ -26,10 +26,6 @@ class Product extends React.Component<queryProps> {
             if (error) return `Error! ${error.message}`;
             return (
               <>
-                <Helmet
-                  title={`${data.product && data.product.title}`}
-                  meta={[{ name: "description", content: data.product && data.product.description }]}
-                />
                 <Helmet>
                   <title>{`${data.product && data.product.title}`}</title>
                   <link rel="canonical" href={`https://agoraexpo.com/product/${id}`} />

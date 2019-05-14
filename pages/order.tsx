@@ -14,11 +14,10 @@ class OrderItemPage extends React.Component<OrderitemProps> {
   }
   render() {
     const { orderId } = this.props;
-    console.log(orderId);
     return (
       <>
         <CheckAuth>
-          <Order />
+          <Order orderId={orderId} />
         </CheckAuth>
       </>
     )

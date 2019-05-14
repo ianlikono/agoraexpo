@@ -1,10 +1,15 @@
 import { format } from 'date-fns';
+import truncate from 'lodash/truncate';
 import React from 'react';
+import { Query } from 'react-apollo';
 import Helmet from 'react-helmet';
 import formatMoney from '../../../lib/formatMoney';
+import { getOrder } from '../../graphql/queries';
 import OrderStyles from './styles';
 
-export interface OrderProps { }
+export interface OrderProps {
+  orderId: any;
+}
 
 const OrderItem = {
   id: 4004,
@@ -24,48 +29,59 @@ const OrderItem = {
 }
 
 function Order(props: OrderProps) {
+  const { orderId } = props;
   return (
     <>
       <Helmet
         title={`order ${OrderItem.id}`}
         meta={[{ name: "description", content: "orders Page" }]}
       />
-      <OrderStyles data-test="order">
-        <p>
-          <span>Order ID:</span>
-          <span>{OrderItem.id}</span>
-        </p>
-        <p>
-          <span>Charge</span>
-          <span>{OrderItem.charge}</span>
-        </p>
-        <p>
-          <span>Date</span>
-          <span>{format(OrderItem.createdAt, 'MMMM d, YYYY h:mm a', { awareOfUnicodeTokens: true })}</span>
-        </p>
-        <p>
-          <span>Order Total</span>
-          <span>{formatMoney(OrderItem.total)}</span>
-        </p>
-        <p>
-          <span>Item Count</span>
-          <span>{OrderItem.items.length}</span>
-        </p>
-        <div className="items">
-          {OrderItem.items.map(item => (
-            <div className="order-item" key={item.id}>
-              <img src={item.image} alt={item.title} />
-              <div className="item-details">
-                <h2>{item.title}</h2>
-                <p>Qty: {item.quantity}</p>
-                <p>Each: {formatMoney(item.price)}</p>
-                <p>SubTotal: {formatMoney(item.price * item.quantity)}</p>
-                <p>{item.description}</p>
-              </div>
-            </div>
-          ))}
-        </div>
-      </OrderStyles>
+      <Query query={getOrder} variables={{ orderId }}>
+        {({ loading, error, data }) => {
+          if (loading) return 'Loading...';
+          if (error) { console.log(error) };
+          const { id, createdAt, total, items } = data.getOrder[0];
+          return (
+            <>
+              <OrderStyles data-test="order">
+                <p>
+                  <span>Order ID:</span>
+                  <span>{id}</span>
+                </p>
+                <p>
+                  <span>Date</span>
+                  <span>{format(createdAt, 'MMMM d, YYYY h:mm a', { awareOfUnicodeTokens: true })}</span>
+                </p>
+                <p>
+                  <span>Order Total</span>
+                  <span>{formatMoney(total)}</span>
+                </p>
+                <p>
+                  <span>Item Count</span>
+                  <span>{items.length}</span>
+                </p>
+                <div className="items">
+                  {items.map(item => (
+                    <div className="order-item" key={item.id}>
+                      <img src={item.imageUrl} alt={item.title} />
+                      <div className="item-details">
+                        <h2>{item.title}</h2>
+                        <p>Qty: {item.quantity}</p>
+                        <p>Each: {formatMoney(item.price)}</p>
+                        <p>SubTotal: {formatMoney(item.price * item.quantity)}</p>
+                        <p>Description: {truncate(item.description, {
+                          length: 150,
+                          separator: ' ',
+                        })}</p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </OrderStyles>
+            </>
+          );
+        }}
+      </Query>
     </>
   );
 }

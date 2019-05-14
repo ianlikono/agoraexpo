@@ -1,5 +1,4 @@
 import Badge from '@material-ui/core/Badge';
-import Button from '@material-ui/core/Button';
 import Divider from '@material-ui/core/Divider';
 import Drawer from '@material-ui/core/Drawer';
 import IconButton from '@material-ui/core/IconButton';
@@ -18,7 +17,7 @@ import { IoMdRemoveCircle } from 'react-icons/io';
 import formatMoney from '../../../lib/formatMoney';
 import { addItemToCart, deleteCartItem } from '../../graphql/mutations';
 import { getMeCart } from '../../graphql/queries';
-import Checkout from '../checkout';
+import PayPal from '../paypal';
 import { CartItem, DeleteItem, ItemControls, ItemImg, ItemsDetails, TotalAmount, Wrapper } from './styles';
 
 interface CartDrawerProps {
@@ -28,6 +27,15 @@ interface CartDrawerProps {
   theme: any;
   classes: any;
 }
+
+const CLIENT = {
+  sandbox: 'AXG_2eQKPth6LBbf2fIKc2lA8vZTMKQ6JhkOK0oEupEeBfTewdIbTZKbrTjjfvu4dgkKkMHbO9RcmGQ7',
+  production: 'AYo62ySaC0CRtxdEEuL6AgA0k9Ur8HA0XI2-J2R80Dc4kKBAkmUUUT_SoEbxQv-upJINhWJXapwaSKIH',
+};
+
+const ENV = process.env.NODE_ENV === 'production'
+  ? 'production'
+  : 'sandbox';
 
 const drawerWidth = 400;
 
@@ -122,7 +130,6 @@ const CartDrawer: React.SFC<CartDrawerProps> = props => {
   };
 
   const onDeleteItem = async (id, deleteItem) => {
-    console.log('clicked', id);
     await deleteItem({
       variables: {
         itemId: id,
@@ -208,6 +215,18 @@ const CartDrawer: React.SFC<CartDrawerProps> = props => {
     });
   };
 
+  const onSuccess = (payment) => {
+    console.log('Successful payment!', payment);
+  }
+
+  const onError = (error) => {
+    console.log('Erroneous payment OR failed to load script!', error);
+  }
+
+  const onCancel = (data) => {
+    console.log('Cancelled payment!', data);
+  }
+
   const { classes, open, manageDrawer, theme } = props;
   return (
     <div>
@@ -223,8 +242,7 @@ const CartDrawer: React.SFC<CartDrawerProps> = props => {
         <Query query={getMeCart}>
           {({ loading, error, data }) => {
             if (loading) return 'Loading...';
-            if (data.getMeCart) {
-              console.log("TCL: data.getMeCart", data.getMeCart)
+            if (data.getMeCart && data.getMeCart.length) {
               const totalAmount = data.getMeCart[0].items.reduce((acc, val) => acc + val.product.price * val.quantity, 0)
               return (
                 <>
@@ -234,28 +252,42 @@ const CartDrawer: React.SFC<CartDrawerProps> = props => {
                     </IconButton>
                     <Typography variant="h5">Cart Items</Typography>
                     <IconButton color="inherit">
-                      <Badge badgeContent={data.getMeCart ? data.getMeCart[0].items.length : 0} color="primary">
+                      <Badge badgeContent={data.getMeCart && data.getMeCart.length ? data.getMeCart[0].items.length : 0} color="primary">
                         <ShoppingCartIcon />
                       </Badge>
                     </IconButton>
                   </div>
                   <Divider />
                   <Wrapper>
-                    {data.getMeCart.length > 0 ? renderCartItems(data.getMeCart[0].items) : null}
+                    {data.getMeCart && data.getMeCart.length ? renderCartItems(data.getMeCart[0].items) : null}
                   </Wrapper>
                   <TotalAmount>total: {formatMoney(totalAmount)}</TotalAmount>
-                  <Checkout totalPrice={parseInt(totalAmount)} numberOfItems={data.getMeCart[0].items.length} userEmail={data.getMeCart[0].user.email}>
-                    <Button fullWidth color="primary" variant="contained" className={classes.button}>
-                      Checkout
-                    </Button>
-                  </Checkout>
+                  <PayPal
+                    client={CLIENT}
+                    env={ENV}
+                    commit={true}
+                    currency={'USD'}
+                    total={totalAmount}
+                    onSuccess={onSuccess}
+                    onError={onError}
+                    onCancel={onCancel}
+                  />
                 </>
               );
             } else {
               return (
-                <div style={{ display: 'flex', justifyItems: 'center', alignItems: 'center' }}>
-                  <h4>No Cart Items</h4>
-                </div>
+                <>
+                  <div className={classes.drawerHeader}>
+                    <IconButton onClick={manageDrawer}>
+                      {theme.direction === 'rtl' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
+                    </IconButton>
+                    <Typography variant="h5"> No Cart Items</Typography>
+                  </div>
+                  <Divider />
+                  <div style={{ display: 'flex', justifyItems: 'center', alignItems: 'center', width: '100%' }}>
+                    <Typography align="center" variant="h5"> No Cart Items</Typography>
+                  </div>
+                </>
               )
             }
           }}

@@ -331,3 +331,56 @@ export const getUserPosts = gql`
   }
 `;
 
+export const getOrder = gql`
+  query getOrder($orderId: ID!) {
+    getOrder(orderId: $orderId) {
+      id
+      PayerID,
+      paymentId,
+      createdAt
+      updatedAt
+      total
+      imageUrl
+      user {
+        username
+      }
+      items {
+        id
+        title
+        description
+        price
+        variants
+        imageUrl
+        quantity
+      }
+    }
+  }
+`;
+
+export const getMeOrders = gql`
+  query getMeOrders {
+    getMeOrders {
+        id
+        PayerID,
+        paymentId,
+        createdAt
+        updatedAt
+        total
+        imageUrl
+        user {
+          username
+        }
+        items {
+          id
+          title
+          description
+          price
+          variants
+          imageUrl
+          quantity
+          createdAt
+        }
+      }
+  }
+`;
+

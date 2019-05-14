@@ -270,21 +270,21 @@ class Header extends React.Component {
                                   <PlusIcon toolTipTitle="Create Shop" fabSize="small" />
                                 </a>
                               </Link>
-                              <div onClick={this.onCartClicked} role="button">
+                              {meData.me ? (<div onClick={this.onCartClicked} role="button">
                                 <IconButton color="inherit">
-                                  <Badge badgeContent={data.getMeCart && data.getMeCart[0] ? data.getMeCart[0].items.length : 0} color="secondary">
-                                    <ShoppingCartIcon />
-                                  </Badge>
-                                </IconButton>
-                              </div>
+                                  {data.getMeCart && data.getMeCart.length ? (<Badge badgeContent={data.getMeCart.length && data.getMeCart ? data.getMeCart[0].items.length : 0} color="secondary">
+                                      <ShoppingCartIcon />
+                                    </Badge>) : (<ShoppingCartIcon />)}
+                                  </IconButton>
+                              </div>): null}
                               {renderUserAvatar(meData)}
                             </div>
                             <div className={classes.sectionMobile}>
                               <div onClick={() => this.handleMobileMenuClose('cart')} role="button">
                                 <IconButton color="inherit">
-                                  <Badge badgeContent={data.getMeCart && data.getMeCart[0] ? data.getMeCart[0].items.length : 0} color="secondary">
-                                    <ShoppingCartIcon />
-                                  </Badge>
+                                  {data.getMeCart && data.getMeCart.length ? (<Badge badgeContent={data.getMeCart.length && data.getMeCart ? data.getMeCart[0].items.length : 0} color="secondary">
+                                      <ShoppingCartIcon />
+                                    </Badge>) : (<ShoppingCartIcon />)}
                                 </IconButton>
                               </div>
                               <IconButton
