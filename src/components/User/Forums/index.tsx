@@ -27,11 +27,12 @@ function Forums(props: ForumsProps) {
   return (
     <Query query={getUserForums} variables={{ username }}>
       {({ loading, error, data }) => {
+				console.log("TCL: Forums -> data", data)
         if (loading) return "Loading...";
         if (error) console.log(error);
-        if(!data.getUserForums) {
+        if(!data.getUserForums.length) {
           return (
-            <h3>No Forums Available</h3>
+            <h1 style={{display: 'flex', justifyContent: 'center'}}>No Forums Available</h1>
           )
         }
         return (

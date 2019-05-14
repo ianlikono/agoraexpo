@@ -8,7 +8,7 @@ export const Wrapper = styled.div`
 export const CoverImage = styled.div`
   width: 100%;
   height: 100%;
-  background: url('https://res.cloudinary.com/doelo01na/image/upload/v1555589569/static/tom-sodoge-61701-unsplash.jpg')
+  background: url('https://res.cloudinary.com/doelo01na/image/upload/c_scale,q_auto,w_1024/v1555589569/static/tom-sodoge-61701-unsplash.jpg')
     no-repeat center center fixed;
   background-size: cover;
   background-repeat: no-repeat;

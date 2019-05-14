@@ -1,3 +1,5 @@
+import Avatar from '@material-ui/core/Avatar';
+import deepPurple from '@material-ui/core/colors/deepPurple';
 import Fab from '@material-ui/core/Fab';
 import Paper from '@material-ui/core/Paper';
 import { withStyles } from '@material-ui/core/styles';
@@ -26,14 +28,23 @@ const styles = theme => ({
     height: '3rem',
     marginTop: '1rem',
   },
+  purpleAvatar: {
+    height: '8rem',
+    width: '8rem',
+    color: '#fff',
+    backgroundColor: deepPurple[500],
+  },
 });
 
 export interface UserCardProps {
   classes: any;
+  profilePic: any;
+  username: string;
+  shops: Number;
 }
 
 function UserCard(props: UserCardProps) {
-  const { classes } = props;
+  const { classes, profilePic, username, shops } = props;
   const [cardElevation, setCardElevation] = useState(2);
 
   const onMouseLeave = () => {
@@ -47,12 +58,12 @@ function UserCard(props: UserCardProps) {
       <Wrapper onMouseLeave={onMouseLeave} onMouseEnter={onMouseEnter}>
         <Paper className={classes.root} elevation={cardElevation}>
           <CardContent>
-            <UserAvatar src="https://images.unsplash.com/photo-1495307299410-57b5ba03852b?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60" />
-            <UserNameText>Ian Likono</UserNameText>
-            <UserShops>3 Shops</UserShops>
+           {profilePic ? (<UserAvatar src={profilePic} />) : (<Avatar className={classes.purpleAvatar}>{username.charAt(0)}</Avatar>)}
+            <UserNameText>{username}</UserNameText>
+            <UserShops>{shops} Shops</UserShops>
             <div role="button">
               <Fab variant="extended" color="primary" aria-label="Add" className={classes.margin}>
-                Follow
+                Profile
               </Fab>
             </div>
           </CardContent>

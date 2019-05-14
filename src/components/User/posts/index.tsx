@@ -43,9 +43,9 @@ function UserPosts(props: PostsProps) {
         {({ loading, error, data }) => {
           if (loading) return "Loading...";
           if (error) console.log(error);
-          if(!data.getUserPosts) {
+          if(!data.getUserPosts.length) {
             return (
-              <h3>No Posts Available</h3>
+              <h1 style={{display: 'flex', justifyContent: 'center'}}>No Posts Available</h1>
             )
           }
           return (
