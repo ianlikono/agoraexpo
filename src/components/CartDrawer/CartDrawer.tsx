@@ -10,12 +10,14 @@ import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import RemoveIcon from '@material-ui/icons/Remove';
 import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
 import truncate from 'lodash/truncate';
+import router from 'next/router';
+import NProgress from 'nprogress';
 import React from 'react';
-import { Mutation, Query } from 'react-apollo';
+import { ApolloConsumer, Mutation, Query } from 'react-apollo';
 import { IconContext } from 'react-icons';
 import { IoMdRemoveCircle } from 'react-icons/io';
 import formatMoney from '../../../lib/formatMoney';
-import { addItemToCart, deleteCartItem } from '../../graphql/mutations';
+import { addItemToCart, createOrder, deleteCartItem } from '../../graphql/mutations';
 import { getMeCart } from '../../graphql/queries';
 import PayPal from '../paypal';
 import { CartItem, DeleteItem, ItemControls, ItemImg, ItemsDetails, TotalAmount, Wrapper } from './styles';
@@ -215,8 +217,22 @@ const CartDrawer: React.SFC<CartDrawerProps> = props => {
     });
   };
 
-  const onSuccess = (payment) => {
-    console.log('Successful payment!', payment);
+  const onSuccess = async (payment, client, cartItems) => {
+    NProgress.start();
+    const { items } = cartItems;
+    const ids = await items.map((item) => {
+      return item.product.id
+    })
+    const response = await client.mutate({
+      mutation: createOrder,
+      variables: { items: ids, paymentId: payment.paymentID, payerID: payment.payerID, cartId: cartItems.id },
+      refetchQueries: [
+        {
+          query: getMeCart,
+        },
+      ],
+    })
+    router.push(`/order/${response.data.createOrder.id}`);
   }
 
   const onError = (error) => {
@@ -245,34 +261,38 @@ const CartDrawer: React.SFC<CartDrawerProps> = props => {
             if (data.getMeCart && data.getMeCart.length) {
               const totalAmount = data.getMeCart[0].items.reduce((acc, val) => acc + val.product.price * val.quantity, 0)
               return (
-                <>
-                  <div className={classes.drawerHeader}>
-                    <IconButton onClick={manageDrawer}>
-                      {theme.direction === 'rtl' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
-                    </IconButton>
-                    <Typography variant="h5">Cart Items</Typography>
-                    <IconButton color="inherit">
-                      <Badge badgeContent={data.getMeCart && data.getMeCart.length ? data.getMeCart[0].items.length : 0} color="primary">
-                        <ShoppingCartIcon />
-                      </Badge>
-                    </IconButton>
-                  </div>
-                  <Divider />
-                  <Wrapper>
-                    {data.getMeCart && data.getMeCart.length ? renderCartItems(data.getMeCart[0].items) : null}
-                  </Wrapper>
-                  <TotalAmount>total: {formatMoney(totalAmount)}</TotalAmount>
-                  <PayPal
-                    client={CLIENT}
-                    env={ENV}
-                    commit={true}
-                    currency={'USD'}
-                    total={totalAmount}
-                    onSuccess={onSuccess}
-                    onError={onError}
-                    onCancel={onCancel}
-                  />
-                </>
+                <ApolloConsumer>
+                  {apolloClient => (
+                    <>
+                      <div className={classes.drawerHeader}>
+                        <IconButton onClick={manageDrawer}>
+                          {theme.direction === 'rtl' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
+                        </IconButton>
+                        <Typography variant="h5">Cart Items</Typography>
+                        <IconButton color="inherit">
+                          <Badge badgeContent={data.getMeCart && data.getMeCart.length ? data.getMeCart[0].items.length : 0} color="primary">
+                            <ShoppingCartIcon />
+                          </Badge>
+                        </IconButton>
+                      </div>
+                      <Divider />
+                      <Wrapper>
+                        {data.getMeCart && data.getMeCart.length ? renderCartItems(data.getMeCart[0].items) : null}
+                      </Wrapper>
+                      <TotalAmount>total: {formatMoney(totalAmount)}</TotalAmount>
+                      <PayPal
+                        client={CLIENT}
+                        env={ENV}
+                        commit={true}
+                        currency={'USD'}
+                        total={totalAmount}
+                        onSuccess={(payment: any) => onSuccess(payment, apolloClient, data.getMeCart[0])}
+                        onError={onError}
+                        onCancel={onCancel}
+                      />
+                    </>
+                  )}
+                </ApolloConsumer>
               );
             } else {
               return (

@@ -269,3 +269,27 @@ export const deleteShopCoverImage = gql`
     }
   }
 `;
+
+export const createOrder = gql`
+  mutation createOrder($items: [ID!]!, $paymentId: String!, $payerID: String!, $cartId: ID!) {
+  createOrder(items: $items, paymentId: $paymentId, PayerID: $payerID, cartId: $cartId) {
+    id
+    PayerID,
+    paymentId,
+    createdAt
+    updatedAt
+    total
+    imageUrl
+    user {
+      username
+    }
+    items {
+      id
+      title
+      price
+      variants
+      imageUrl
+    }
+  }
+}
+`;
