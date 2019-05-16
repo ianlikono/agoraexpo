@@ -1,0 +1,5 @@
+User-agent: *
+Disallow:
+Disallow: /order/*
+Disallow: /orders/
+Sitemap: https://agoraexpo.com/sitemap.xml

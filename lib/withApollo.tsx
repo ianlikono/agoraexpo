@@ -1,12 +1,12 @@
+import { InMemoryCache } from 'apollo-cache-inmemory';
 import ApolloClient from 'apollo-client';
 import { ApolloLink, split } from 'apollo-link';
-import { HttpLink } from 'apollo-link-http';
-import cookie from 'cookie';
 // import { WebSocketLink } from 'apollo-link-ws'
 import { setContext } from 'apollo-link-context';
 import { onError } from 'apollo-link-error';
-import { InMemoryCache } from 'apollo-cache-inmemory';
+import { HttpLink } from 'apollo-link-http';
 import { getMainDefinition } from 'apollo-utilities';
+import cookie from 'cookie';
 import withApollo from 'next-with-apollo';
 
 function parseCookies(req?: any, options = {}) {
@@ -31,7 +31,7 @@ export default withApollo(({ headers = {} }) => {
   //   }
   // })
 
-  const contextLink = setContext(async (request, previousContext) => {
+  const contextLink = setContext(async (request, _previousContext) => {
     const req = request.context;
     const token = parseCookies(req).qid;
     return {

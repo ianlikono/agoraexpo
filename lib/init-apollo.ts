@@ -4,7 +4,6 @@ import { onError } from 'apollo-link-error';
 import { createHttpLink } from 'apollo-link-http';
 import fetch from 'isomorphic-unfetch';
 import Router from 'next/router';
-import { fire } from '../firebase';
 import { isBrowser } from './isBrowser';
 
 let apolloClient: ApolloClient<NormalizedCacheObject> | null = null;

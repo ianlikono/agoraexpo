@@ -15,8 +15,10 @@ class ForumPage extends React.Component<ForumProps> {
     return { name };
   }
   componentDidMount() {
+    //@ts-ignore
     if (!window.GA_INITIALIZED) {
       initGA();
+      //@ts-ignore
       window.GA_INITIALIZED = true;
     }
     logPageView();

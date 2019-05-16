@@ -18,8 +18,10 @@ class Product extends React.Component<queryProps> {
     return { id, shopName };
   }
   componentDidMount() {
+    //@ts-ignore
     if (!window.GA_INITIALIZED) {
       initGA();
+      //@ts-ignore
       window.GA_INITIALIZED = true;
     }
     logPageView();

@@ -19,6 +19,7 @@ const DropDownItem = styled.div`
   border-left: 10px solid ${props => (props.highlighted ? props.theme.colorTextLight : 'white')};
   img {
     margin-right: 10px;
+    width: 5rem;
   }
 `;
 

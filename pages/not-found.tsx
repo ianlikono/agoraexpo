@@ -5,8 +5,10 @@ import { initGA, logPageView } from "../utils/analytics";
 
 const IndexPage: React.FunctionComponent = () => {
   useEffect(() => {
+    //@ts-ignore
     if (!window.GA_INITIALIZED) {
       initGA();
+      //@ts-ignore
       window.GA_INITIALIZED = true;
     }
     logPageView();

@@ -9,8 +9,10 @@ export interface CreatePostProps { }
 
 function CreatePostPage(props: CreatePostProps) {
   useEffect(() => {
+    //@ts-ignore
     if (!window.GA_INITIALIZED) {
       initGA();
+      //@ts-ignore
       window.GA_INITIALIZED = true;
     }
     logPageView();

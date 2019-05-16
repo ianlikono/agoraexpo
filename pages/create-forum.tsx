@@ -74,8 +74,10 @@ function NewForumPage(props: CreateForumProps) {
   const { classes } = props;
 
   useEffect(() => {
+     //@ts-ignore
     if (!window.GA_INITIALIZED) {
       initGA();
+      //@ts-ignore
       window.GA_INITIALIZED = true;
     }
     logPageView();

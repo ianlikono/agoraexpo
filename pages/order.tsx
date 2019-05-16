@@ -14,8 +14,10 @@ class OrderItemPage extends React.Component<OrderitemProps> {
     return { orderId };
   }
   componentDidMount() {
+    //@ts-ignore
     if (!window.GA_INITIALIZED) {
       initGA();
+      //@ts-ignore
       window.GA_INITIALIZED = true;
     }
     logPageView();

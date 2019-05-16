@@ -2,6 +2,8 @@ import dotenv from 'dotenv';
 import express from 'express';
 import LRUCache from 'lru-cache';
 import next from 'next';
+import path from 'path';
+import { addSitemap } from './sitemap';
 
 dotenv.config();
 
@@ -20,6 +22,12 @@ const ssrCache = new LRUCache({
 
 app.prepare().then(() => {
   const server = express();
+
+  addSitemap({ server });
+  // server.get('/robots.txt', express.static(join(__dirname, '/static/robots.txt')));
+  server.get('/robots.txt', (req, res) => {
+    app.serveStatic(req, res, path.resolve('./static/robots.txt'));
+  });
 
   server.get('/', (req: any, res: any) => {
     renderAndCache(req, res, '/', '_');
