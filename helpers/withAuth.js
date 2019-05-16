@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
 import router from 'next/router';
+import React from 'react';
 import { auth } from '../firebase';
 
 const withAuth = Component => {
@@ -13,7 +13,6 @@ const withAuth = Component => {
 
     componentDidMount() {
       auth.onAuthStateChanged(authUser => {
-        console.log(authUser);
         if (authUser) {
           this.setState({
             status: 'SIGNED_IN',

@@ -1,8 +1,16 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Helmet from 'react-helmet';
+import { initGA, logPageView } from "../utils/analytics";
 
 
 const IndexPage: React.FunctionComponent = () => {
+  useEffect(() => {
+    if (!window.GA_INITIALIZED) {
+      initGA();
+      window.GA_INITIALIZED = true;
+    }
+    logPageView();
+  });
   return (
     <>
       <Helmet

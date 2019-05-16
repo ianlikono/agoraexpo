@@ -7,7 +7,7 @@ import React from 'react';
 import { Mutation } from 'react-apollo';
 import { addItemToCart } from '../../graphql/mutations';
 import { getMeCart } from '../../graphql/queries';
-import { ContentTitle } from './styles';
+import { ContentTitle, DescriptionContent } from './styles';
 
 const styles = theme => ({
   root: {
@@ -100,13 +100,13 @@ class ProductCard extends React.PureComponent {
                     paddingRight: '24px',
                   }}
                 >
-                  <p>
+                  <DescriptionContent>
                   {truncate(description, {
                       length: 100,
                       separator: ' ',
                       'omission': ' [...]'
                     })}
-                  </p>
+                  </DescriptionContent>
                 </div>
               </a>
             </Link>

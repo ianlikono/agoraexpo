@@ -58,7 +58,7 @@ const DialogActions = withStyles(theme => ({
 }))(MuiDialogActions);
 
 const Size: React.SFC<SizeProps> = props => {
-  const { classes, variant, size, onSizeSelect } = props;
+  const { classes, variant, size, onSizeSelect, userIsShopOwner } = props;
   const variantId = variant[0].id;
   const [selectedSize, setSelectedSize] = useState('');
   const [sizes, setSizes] = useState([]);
@@ -77,23 +77,37 @@ const Size: React.SFC<SizeProps> = props => {
         });
         setSizes(filteredSizes);
         const response = await updateVariantMutaion({
-          variables: {values: filteredSizes, variantId }
+          variables: { values: filteredSizes, variantId }
         });
-        console.log(response);
       };
       return (
         <Mutation mutation={updateVariant}>
-          {(updateVariantMutaion) => (
-            <Chip
-              key={size}
-              label={size}
-              clickable
-              onClick={() => onSizeSelect(size)}
-              onDelete={() => onSizeDelete(size, updateVariantMutaion)}
-              className={classes.chip}
-              color="primary"
-            />
-          )}
+          {(updateVariantMutaion) => {
+            if (userIsShopOwner) {
+              return (
+                <Chip
+                  key={size}
+                  label={size}
+                  clickable
+                  onClick={() => onSizeSelect(size)}
+                  onDelete={() => onSizeDelete(size, updateVariantMutaion)}
+                  className={classes.chip}
+                  color="primary"
+                />
+              )
+            } else {
+              return (
+                <Chip
+                  key={size}
+                  label={size}
+                  clickable
+                  onClick={() => onSizeSelect(size)}
+                  className={classes.chip}
+                  color="primary"
+                />
+              )
+            }
+          }}
         </Mutation>
       );
     });
@@ -106,9 +120,8 @@ const Size: React.SFC<SizeProps> = props => {
   const onAddSizeClose = async (size, updateVariantMutaion) => {
     if (size.length > 0) {
       const response = await updateVariantMutaion({
-        variables: {values: [...sizes, size], variantId }
+        variables: { values: [...sizes, size], variantId }
       });
-      console.log(response);
       await setSizes(response.data.updateVariant.values);
     }
     setOpenAddSize(false);
@@ -136,30 +149,30 @@ const Size: React.SFC<SizeProps> = props => {
               {renderSizes(sizes)}
             </div>
             <Mutation mutation={updateVariant}>
-                {(updateVariantMutaion) => (
-                  <>
-                    <div onClick={openSizeDialog}>
-                      <IconButton color="inherit">
-                        <Fab size="small" color="primary" className={classes.fab}>
-                          <AddIcon />
-                        </Fab>
-                      </IconButton>
-                    </div>
-                    <Dialog
-                      onClose={() => onAddSizeClose(sizeToAdd, updateVariantMutaion)}
-                      aria-labelledby="size-dialog"
-                      open={openAddSize}
-                    >
-                      <DialogTitle id="size-dialog">Add Size</DialogTitle>
-                      <Input placeholde="Input Size" value={sizeToAdd} onChange={onAddingSize} />
-                      <DialogActions>
-                        <Button onClick={() => onAddSizeClose(sizeToAdd, updateVariantMutaion)} color="primary">
-                          Save changes
+              {(updateVariantMutaion) => (
+                <>
+                  {userIsShopOwner ? (<div onClick={openSizeDialog}>
+                    <IconButton color="inherit">
+                      <Fab size="small" color="primary" className={classes.fab}>
+                        <AddIcon />
+                      </Fab>
+                    </IconButton>
+                  </div>) : null}
+                  <Dialog
+                    onClose={() => onAddSizeClose(sizeToAdd, updateVariantMutaion)}
+                    aria-labelledby="size-dialog"
+                    open={openAddSize}
+                  >
+                    <DialogTitle id="size-dialog">Add Size</DialogTitle>
+                    <Input placeholde="Input Size" value={sizeToAdd} onChange={onAddingSize} />
+                    <DialogActions>
+                      <Button onClick={() => onAddSizeClose(sizeToAdd, updateVariantMutaion)} color="primary">
+                        Save changes
                         </Button>
-                      </DialogActions>
-                    </Dialog>
+                    </DialogActions>
+                  </Dialog>
                 </>
-                )}
+              )}
             </Mutation>
           </div>
         </ExpansionPanelDetails>

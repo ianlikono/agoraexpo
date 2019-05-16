@@ -236,11 +236,11 @@ const CartDrawer: React.SFC<CartDrawerProps> = props => {
   }
 
   const onError = (error) => {
-    console.log('Erroneous payment OR failed to load script!', error);
+    console.log('Erroneous payment!', error);
   }
 
   const onCancel = (data) => {
-    console.log('Cancelled payment!', data);
+    console.log('Cancelled payment!');
   }
 
   const { classes, open, manageDrawer, theme } = props;

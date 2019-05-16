@@ -106,8 +106,8 @@ class SignUpForm extends React.Component {
           console.log('errior', error);
         });
     } catch (err) {
-      console.log('err', err);
-      error && console.log('mutation', error);
+      console.log(err);
+      error && console.log(error);
     }
   };
 

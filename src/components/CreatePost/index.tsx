@@ -44,7 +44,7 @@ function CreatePost(props: CreatePostProps) {
     setValue(index);
   }
   function onSearchInputChange(state, changes) {
-    console.log('state', state);
+    // console.log('state', state);
   }
   return (
     <>

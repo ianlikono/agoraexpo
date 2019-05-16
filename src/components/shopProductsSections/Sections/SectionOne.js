@@ -1,8 +1,47 @@
 import Typography from '@material-ui/core/Typography';
+import gql from 'graphql-tag';
 import React from 'react';
+import { Query } from 'react-apollo';
 import ItemCaraosel from '../../itemsCaraosel/ItemCaraosel';
-import PlusIcon from '../../PlusIcon/PlusIcon';
 import ProductCard from '../../ProductCard/ProductCard';
+
+export const getShopProducts = gql`
+  query getShopProducts($shopId: ID!, $limit: Int) {
+    getShopProducts(shopId: $shopId, limit: $limit) {
+      shop {
+        owners {
+          id
+          username
+        }
+      }
+      id
+      title
+      description
+      price
+      categories {
+        id
+        name
+      }
+      brand {
+        id
+        name
+      }
+      tags {
+        id
+        name
+      }
+      images {
+        imageUrl
+        largeImageUrl
+      }
+      variants {
+        id
+        name
+        values
+      }
+    }
+  }
+`;
 
 const product = {
   id: 'b07c1424-c262-4cb8-855e-58573a909759',
@@ -16,7 +55,18 @@ const product = {
 class SectionOne extends React.PureComponent {
   state = {};
 
+  renderProducts = (data) => {
+    return data.getShopProducts.map((product) => {
+      const { title, description, price, images, id } = product;
+      return (
+        <ProductCard key={id} id={id} title={title} description={description} price={price} image={images[0]} />
+      )
+    })
+  }
+
+
   render() {
+    const { shopId } = this.props;
     return (
       <>
         <section>
@@ -37,20 +87,31 @@ class SectionOne extends React.PureComponent {
                 </span>
               </Typography>
             </div>
-            <div>
-              <PlusIcon toolTipTitle="Add trending Products" fabSize="small" />
-            </div>
           </div>
         </section>
         <section>
-          <div>
-            <ItemCaraosel>
-            <ProductCard id={product.id} title={product.title} description={product.description} price={product.price} image={product.images[0]} />
-            <ProductCard id={product.id} title={product.title} description={product.description} price={product.price} image={product.images[0]} />
-            <ProductCard id={product.id} title={product.title} description={product.description} price={product.price} image={product.images[0]} />
-            <ProductCard id={product.id} title={product.title} description={product.description} price={product.price} image={product.images[0]} />
-            </ItemCaraosel>
-          </div>
+        <Query query={getShopProducts} variables={{ shopId, limit: 5 }}>
+            {({ loading, error, data }) => {
+              if (loading) return 'Loading...';
+              if(data.getShopProducts.length <= 0) {
+                return (
+                  <>
+                    {this.renderAddProducts(value, owners)}
+                    <NoItems>Sorry no products currently available</NoItems>
+                  </>
+                )
+              }
+                return (
+                  <>
+                    <div>
+                      <ItemCaraosel>
+                      { this.renderProducts(data) }
+                      </ItemCaraosel>
+                    </div>
+                    </>
+                  )
+              }}
+          </Query>
         </section>
       </>
     );

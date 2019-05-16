@@ -1,5 +1,6 @@
 import { withStyles } from '@material-ui/core/styles';
-import React from 'react';
+import React, { useContext } from 'react';
+import { MeContext } from '../../../../contexts/Me';
 import Color from './Color';
 import Size from './Size';
 import { Wrapper } from './styles';
@@ -10,6 +11,9 @@ export interface PanelsProps {
   onColorClicked: any;
   size: any;
   onSizeSelect: any;
+  product: any;
+  variants: any;
+  classes: any;
 }
 
 const styles = theme => ({
@@ -26,7 +30,9 @@ const styles = theme => ({
 });
 
 const Panels: React.SFC<PanelsProps> = props => {
-  const { classes, variants, color, onColorClicked, size, onSizeSelect } = props;
+  const { classes, variants, color, onColorClicked, size, onSizeSelect, product } = props;
+  const {me, isShopOwner} = useContext(MeContext);
+  const userIsShopOwner = isShopOwner(product.shop.owners)
   const colorVariant = variants.filter(variant => {
     return variant.name == 'Color';
   });
@@ -35,8 +41,8 @@ const Panels: React.SFC<PanelsProps> = props => {
   });
   return (
     <Wrapper className={classes.root}>
-      <Color variant={colorVariant} color={color} onColorClicked={onColorClicked} />
-      <Size variant={SizeVariant} size={size} onSizeSelect={onSizeSelect} />
+      <Color userIsShopOwner={userIsShopOwner} product={product} variant={colorVariant} color={color} onColorClicked={onColorClicked} />
+      <Size userIsShopOwner={userIsShopOwner} variant={SizeVariant} size={size} onSizeSelect={onSizeSelect} />
     </Wrapper>
   );
 };

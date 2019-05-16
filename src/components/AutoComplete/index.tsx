@@ -173,7 +173,7 @@ function AutoComplete(props: AutoCompleteProps) {
             <Downshift onChange={(item) => onForumSelected(item, suggestions)} id="downshift-simple">
               {({
                 getInputProps,
-                getitemProps,
+                getItemProps,
                 getMenuProps,
                 highlightedIndex,
                 inputValue,
@@ -199,7 +199,7 @@ function AutoComplete(props: AutoCompleteProps) {
                             renderSuggestion({
                               suggestion,
                               index,
-                              itemProps: getitemProps({ item: suggestion.name }),
+                              itemProps: getItemProps({ item: suggestion.name }),
                               highlightedIndex,
                               selectedItem,
                             }),

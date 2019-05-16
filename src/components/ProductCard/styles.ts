@@ -7,3 +7,11 @@ export const ContentTitle = styled.h4`
   line-height: 1.17;
   letter-spacing: 0.00735em;
 `;
+
+export const DescriptionContent = styled.p`
+  font-size: 1.6rem;
+  font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+  font-weight: 300;
+  line-height: 1.17;
+  letter-spacing: 0.00735em;
+`;

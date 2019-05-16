@@ -38,7 +38,6 @@ function Footer(props: ShopCardProps) {
               },
             ],
           });
-          console.log(response);
         },
         function(error2) {
           console.log(error);

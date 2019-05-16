@@ -101,7 +101,7 @@ class Editor extends React.PureComponent {
           }
         ]
       })
-      console.log(response);
+      this.setState({quillHtml: ''});
     } catch(e) {
       console.log(e);
       console.log(error);

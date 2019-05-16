@@ -53,6 +53,13 @@ export const filterCategories = gql`
 export const productQuery = gql`
   query product($id: ID!) {
     product(id: $id) {
+      shop {
+        owners {
+          name
+          username
+          id
+        }
+      }
       id
       title
       description
@@ -381,6 +388,44 @@ export const getMeOrders = gql`
           createdAt
         }
       }
+  }
+`;
+
+export const similarProducts = gql`
+  query similarProducts($brandName: String, $categories: [String!], $tags: [String!] ) {
+    similarProducts(brandName: $brandName, categories: $categories, tags: $tags) {
+      shop {
+        owners {
+          id
+          username
+        }
+      }
+      id
+      title
+      description
+      price
+      categories {
+        id
+        name
+      }
+      brand {
+        id
+        name
+      }
+      tags {
+        id
+        name
+      }
+      images {
+        imageUrl
+        largeImageUrl
+      }
+      variants {
+        id
+        name
+        values
+      }
+    }
   }
 `;
 

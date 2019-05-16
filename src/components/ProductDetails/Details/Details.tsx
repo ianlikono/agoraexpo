@@ -97,7 +97,7 @@ const ProductDetails: React.SFC<ProductDetailsProps> = (props) => {
         </ProductDescription>
       </DescriptionWrapper>
       <VariantWrapper>
-        <Variants color={selectedColor} onColorClicked={onColorClicked} size={selectedSize} onSizeSelect={onSizeSelect} variants={product.variants} />
+        <Variants product={product} color={selectedColor} onColorClicked={onColorClicked} size={selectedSize} onSizeSelect={onSizeSelect} variants={product.variants} />
       </VariantWrapper>
       <h2 style={{ alignSelf: 'end' }}>
         ${product.price}

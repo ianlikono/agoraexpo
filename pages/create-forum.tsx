@@ -3,13 +3,14 @@ import Paper from '@material-ui/core/Paper';
 import { withStyles } from '@material-ui/core/styles';
 import { DropzoneArea } from 'material-ui-dropzone';
 import Router from 'next/router';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Mutation } from 'react-apollo';
 import Helmet from 'react-helmet';
 import styled from 'styled-components';
 import ForumHeader from '../src/components/Forum/ForumHeader';
 import Input from '../src/components/Input';
 import { createForumMutation } from '../src/graphql/mutations';
+import { initGA, logPageView } from "../utils/analytics";
 
 const defaultAvatarPic = "https://res.cloudinary.com/doelo01na/image/upload/c_scale,h_500,q_auto,w_500/v1556402297/defaults/no-image.webp";
 const defaultCoverPic = "https://res.cloudinary.com/doelo01na/image/upload/c_scale,h_600,q_auto,w_1500/v1556402297/defaults/no-image.webp";
@@ -67,10 +68,19 @@ const styles = theme => ({
 
 export interface CreateForumProps {
   classes: any;
- }
+}
 
 function NewForumPage(props: CreateForumProps) {
   const { classes } = props;
+
+  useEffect(() => {
+    if (!window.GA_INITIALIZED) {
+      initGA();
+      window.GA_INITIALIZED = true;
+    }
+    logPageView();
+  });
+
   const [forumName, setForumName] = useState("")
   const [forumDescription, setForumDescription] = useState("")
   const [coverUrl, setCoverUrl] = useState("")
@@ -121,73 +131,73 @@ function NewForumPage(props: CreateForumProps) {
       Router.push({
         pathname: `/f/${response.data.createForum.name}`,
       });
-    } catch(e) {
+    } catch (e) {
       console.log(e);
       console.log(error);
     }
-   }
+  }
 
   return (
     <>
-     <Helmet>
-          <title>create new forum</title>
-          <link rel="canonical" href="https://agoraexpo.com/create-forum" />
-          <meta name="description" content="create new agora expo forum" />
-          {/* Google / Search Engine Tags */}
-          <meta itemProp="name" content="create new agora expo forum" />
-          <meta itemProp="description" content="create new agora expo forum and let get a communication link between you and your clients to offer satisfaction" />
-          <meta itemProp="image" content="https://res.cloudinary.com/doelo01na/image/upload/v1556859500/static/logos/agoraexpobanner.png" />
-          {/* Facebook Meta Tags */}
-          <meta property="og:title" content="create new agora expo forum" />
-          <meta property="og:description" content="create new agora expo forum and let get a communication link between you and your clients to offer satisfaction" />
-          <meta property="og:image" content="https://res.cloudinary.com/doelo01na/image/upload/c_scale,h_630,q_auto/v1556859500/static/logos/agoraexpobanner.png" />
-          <meta property="og:url" content="https://agoraexpo.com/create-forum" />
-          <meta property="og:site_name" content="AgoraExpo" />
-          {/* twitter Meta Tags */}
-          <meta name="twitter:title" content="create new agora expo forum" />
-          <meta name="twitter:description" content="create new agora expo forum and let get a communication link between you and your clients to offer satisfaction" />
-          <meta name="twitter:image" content="https://res.cloudinary.com/doelo01na/image/upload/c_scale,h_630,q_auto/v1556859500/static/logos/agoraexpobanner.png" />
-          <meta name="twitter:card" content="summary_large_image" />
-          <meta name="twitter:image:alt" content="AgoraExpo" />
+      <Helmet>
+        <title>create new forum</title>
+        <link rel="canonical" href="https://agoraexpo.com/create-forum" />
+        <meta name="description" content="create new agora expo forum" />
+        {/* Google / Search Engine Tags */}
+        <meta itemProp="name" content="create new agora expo forum" />
+        <meta itemProp="description" content="create new agora expo forum and let get a communication link between you and your clients to offer satisfaction" />
+        <meta itemProp="image" content="https://res.cloudinary.com/doelo01na/image/upload/v1556859500/static/logos/agoraexpobanner.png" />
+        {/* Facebook Meta Tags */}
+        <meta property="og:title" content="create new agora expo forum" />
+        <meta property="og:description" content="create new agora expo forum and let get a communication link between you and your clients to offer satisfaction" />
+        <meta property="og:image" content="https://res.cloudinary.com/doelo01na/image/upload/c_scale,h_630,q_auto/v1556859500/static/logos/agoraexpobanner.png" />
+        <meta property="og:url" content="https://agoraexpo.com/create-forum" />
+        <meta property="og:site_name" content="AgoraExpo" />
+        {/* twitter Meta Tags */}
+        <meta name="twitter:title" content="create new agora expo forum" />
+        <meta name="twitter:description" content="create new agora expo forum and let get a communication link between you and your clients to offer satisfaction" />
+        <meta name="twitter:image" content="https://res.cloudinary.com/doelo01na/image/upload/c_scale,h_630,q_auto/v1556859500/static/logos/agoraexpobanner.png" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:image:alt" content="AgoraExpo" />
       </Helmet>
-    <Mutation mutation={createForumMutation}>
-          {(createForum, { loading, error }) => (
-            <>
-              <ForumHeader />
-              <Wrapper>
-                <Header>Create New Forum</Header>
-                <Paper className={classes.root} elevation={1}>
-                  <Input placeholder="Enter Forum Name" label="Forum Name" value={forumName} onChange={onForumNameChange}/>
-                  <Input placeholder="Enter Forum Description" label="Forum Description" value={forumDescription} onChange={onForumDescriptionChange}/>
-                  <Header2>Upload Avatar Image (Optional)</Header2>
-                  <AvatarImageUpload>
-                    <DropzoneArea
-                      acceptedFiles={['image/*']}
-                      filesLimit={1}
-                      onDrop={onAvatarDropped}
-                      dropzoneText="Drag and drop an image file here or click"
-                    />
-                  </AvatarImageUpload>
-                  <Header2>Upload Cover Image (Optional)</Header2>
-                  <CoverImageUpload>
-                    <DropzoneArea
-                      acceptedFiles={['image/*']}
-                      filesLimit={1}
-                      onDrop={onCoverDropped}
-                      dropzoneText="Drag and drop an image file here or click"
-                    />
-                  </CoverImageUpload>
-                  <SubmitWrapper>
-                    <SubmitButton>
-                      <Button disabled={loading || forumName.length <= 0} onClick={() => createForumSubmit(createForum, error)} size="large" variant="contained" color="primary" className={classes.button}>
-                        Post
+      <Mutation mutation={createForumMutation}>
+        {(createForum, { loading, error }) => (
+          <>
+            <ForumHeader />
+            <Wrapper>
+              <Header>Create New Forum</Header>
+              <Paper className={classes.root} elevation={1}>
+                <Input placeholder="Enter Forum Name" label="Forum Name" value={forumName} onChange={onForumNameChange} />
+                <Input placeholder="Enter Forum Description" label="Forum Description" value={forumDescription} onChange={onForumDescriptionChange} />
+                <Header2>Upload Avatar Image (Optional)</Header2>
+                <AvatarImageUpload>
+                  <DropzoneArea
+                    acceptedFiles={['image/*']}
+                    filesLimit={1}
+                    onDrop={onAvatarDropped}
+                    dropzoneText="Drag and drop an image file here or click"
+                  />
+                </AvatarImageUpload>
+                <Header2>Upload Cover Image (Optional)</Header2>
+                <CoverImageUpload>
+                  <DropzoneArea
+                    acceptedFiles={['image/*']}
+                    filesLimit={1}
+                    onDrop={onCoverDropped}
+                    dropzoneText="Drag and drop an image file here or click"
+                  />
+                </CoverImageUpload>
+                <SubmitWrapper>
+                  <SubmitButton>
+                    <Button disabled={loading || forumName.length <= 0} onClick={() => createForumSubmit(createForum, error)} size="large" variant="contained" color="primary" className={classes.button}>
+                      Post
                       </Button>
-                    </SubmitButton>
-                  </SubmitWrapper>
-                </Paper>
-              </Wrapper>
-            </>
-          )}
+                  </SubmitButton>
+                </SubmitWrapper>
+              </Paper>
+            </Wrapper>
+          </>
+        )}
       </Mutation>
     </>
   );

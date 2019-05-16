@@ -11,6 +11,7 @@ import Sections from '../src/components/shopProductsSections';
 import MeProvider, { MeConsumer } from '../src/contexts/Me';
 import { addShopCoverImage, deleteShopCoverImage } from '../src/graphql/mutations';
 import { GetShop } from '../src/graphql/queries';
+import { initGA, logPageView } from "../utils/analytics";
 
 const styles = theme => ({
   fab: {
@@ -24,6 +25,14 @@ class Shop extends React.PureComponent {
 
   static getInitialProps({ query }) {
     return { query };
+  }
+
+  componentDidMount() {
+    if (!window.GA_INITIALIZED) {
+      initGA();
+      window.GA_INITIALIZED = true;
+    }
+    logPageView();
   }
 
   onUploadImageClick = async (imageCreate) => {
@@ -59,7 +68,6 @@ class Shop extends React.PureComponent {
   }
 
   onDeleteImageClicked = async (image, imageDelete) => {
-    console.log('clicked', image);
     const response = await imageDelete({
       variables: {
         imageId: image

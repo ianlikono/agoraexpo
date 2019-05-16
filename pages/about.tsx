@@ -1,11 +1,30 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Helmet from 'react-helmet';
+import { initGA, logPageView } from "../utils/analytics";
 
 
 const IndexPage: React.FunctionComponent = () => {
+  useEffect(() => {
+    if (!window.GA_INITIALIZED) {
+      initGA();
+      window.GA_INITIALIZED = true;
+    }
+    logPageView();
+  });
   return (
     <>
       <Helmet>
+        <script dangerouslySetInnerHTML={{
+          __html: `
+          (function(h,o,t,j,a,r){
+            h.hj=h.hj||function(){(h.hj.q=h.hj.q||[]).push(arguments)};
+            h._hjSettings={hjid:1322666,hjsv:6};
+            a=o.getElementsByTagName('head')[0];
+            r=o.createElement('script');r.async=1;
+            r.src=t+h._hjSettings.hjid+j+h._hjSettings.hjsv;
+            a.appendChild(r);
+        })(window,document,'https://static.hotjar.com/c/hotjar-','.js?sv=');
+        `}} />
         <title>about || AgoraExpo</title>
         <link rel="canonical" href="https://agoraexpo.com" />
         <meta name="description" content="Build your own online business stress free with no initial investment required" />

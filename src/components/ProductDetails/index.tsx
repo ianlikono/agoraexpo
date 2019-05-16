@@ -17,13 +17,13 @@ const ProDuctDetails: React.SFC<ProDuctDetailsProps> = props => {
     <>
       <Wrapper>
         <Gallery>
-          <ImageGallery images={product.images}/>
+          <ImageGallery images={product.images} />
         </Gallery>
         <Details>
           <ProductDetails product={product} />
         </Details>
       </Wrapper>
-      <SimilarProducts />
+      <SimilarProducts product={product} />
       <Reviews productId={productId} />
     </>
   );

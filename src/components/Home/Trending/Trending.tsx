@@ -170,7 +170,6 @@ const Trending: React.FunctionComponent = () => {
       <section>
         <Query query={getForums} variables={{ limit: 10 }}>
           {({ loading, error, data }) => {
-            console.log("TCL: data", data)
             if (loading) return 'Loading...';
             if (error) return `Error! ${error.message}`;
             return (

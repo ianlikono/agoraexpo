@@ -10,7 +10,7 @@ import { Mutation, Query } from 'react-apollo';
 import Moment from 'react-moment';
 import { createProductReview } from '../../../graphql/mutations';
 import { productReviews } from '../../../graphql/queries';
-import { LeftWrapper, ReviewContent, ReviewDetails, ReviewWrapper, Wrapper } from './styles';
+import { LeftWrapper, ReviewContent, ReviewDetails, ReviewParagraph, ReviewWrapper, Wrapper } from './styles';
 
 const styles = theme => ({
   avatar: {
@@ -71,7 +71,6 @@ const ProDuctDetails: React.SFC<ReviewsProps> = props => {
       });
       setReviewInput('');
       setRating();
-      console.log(response);
     }
   };
 
@@ -86,7 +85,7 @@ const ProDuctDetails: React.SFC<ReviewsProps> = props => {
               <ReviewWrapper>
                 <LeftWrapper>
                   {review.user.profilePic ? (
-                    <Avatar alt="Remy Sharp" src={review.user.url} className={classes.avatar} />
+                    <Avatar alt="Remy Sharp" src={review.user.profilePic} className={classes.avatar} />
                   ) : (
                     <Avatar className={classes.purpleAvatar}>
                       {review.user.username.charAt(0)}
@@ -104,7 +103,7 @@ const ProDuctDetails: React.SFC<ReviewsProps> = props => {
                   </ReviewDetails>
                 </LeftWrapper>
                 <ReviewContent>
-                  <Typography component="p">{review.review}</Typography>
+                  <ReviewParagraph>{review.review}</ReviewParagraph>
                 </ReviewContent>
               </ReviewWrapper>
             );

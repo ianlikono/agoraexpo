@@ -41,12 +41,10 @@ function User (props: UserProps) {
   }
 
   function handlePopup(event: any) {
-    console.log('clicked', open)
     // @ts-ignore
     if (anchorEl.current.contains(event.target)) {
       return;
     }
-    console.log(event)
 
      setOpen(false);
   }
@@ -71,7 +69,6 @@ function User (props: UserProps) {
               },
             ],
           });
-          console.log(response);
         },
         function(error2) {
           console.log(error2);

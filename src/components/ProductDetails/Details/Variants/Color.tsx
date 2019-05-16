@@ -21,6 +21,10 @@ import { ColorWrapper, Cover, DeleteColor, Popover, SelectedColor } from './styl
 export interface ColorProps {
   color: any;
   onColorClicked: any;
+  classes: any;
+  variant: any;
+  product: any;
+  userIsShopOwner: any;
 }
 
 const styles = theme => ({
@@ -53,7 +57,7 @@ const styles = theme => ({
 });
 
 const Color: React.SFC<ColorProps> = props => {
-  const { classes, variant, onColorClicked,  color} = props;
+  const { classes, variant, onColorClicked, color, userIsShopOwner } = props;
   const variantId = variant[0].id;
   const [displayColorPicker, setDisplayColorPicker] = useState(false);
   const [colors, setColors] = useState([]);
@@ -69,7 +73,7 @@ const Color: React.SFC<ColorProps> = props => {
     if (color.length > 0) {
       setActiveColor('');
       const response = await updateVariantMutaion({
-        variables: {values: [...colors, color], variantId }
+        variables: { values: [...colors, color], variantId }
       });
       await setColors(response.data.updateVariant.values);
     }
@@ -88,21 +92,20 @@ const Color: React.SFC<ColorProps> = props => {
         setColors(filteredColors);
 
         const response = await updateVariantMutaion({
-          variables: {values: filteredColors, variantId }
+          variables: { values: filteredColors, variantId }
         });
-        console.log('response', response);
       };
       return (
         <Mutation mutation={updateVariant}>
           {(updateVariantMutaion) => (
             <ColorWrapper key={color}>
-              <DeleteColor key={color} onClick={() => onColorDelete(color, updateVariantMutaion)}>
+              {userIsShopOwner ? (<DeleteColor key={color} onClick={() => onColorDelete(color, updateVariantMutaion)}>
                 <IconContext.Provider value={{ style: { color: 'inherit', fontSize: '20px' } }}>
                   <div>
                     <IoMdRemoveCircle />
                   </div>
                 </IconContext.Provider>
-              </DeleteColor>
+              </DeleteColor>): null}
               <SelectedColor onClick={() => onColorClicked(color)} SelectedColor={color} />
             </ColorWrapper>
           )}
@@ -121,43 +124,43 @@ const Color: React.SFC<ColorProps> = props => {
             {!color.length ? (
               'select color'
             ) : (
-              <SelectedColor SelectedColor={color} />
-            )}
+                <SelectedColor SelectedColor={color} />
+              )}
           </div>
         </ExpansionPanelSummary>
         <ExpansionPanelDetails className={classes.details}>
           <Mutation mutation={updateVariant}>
             {(updateVariantMutaion) => (
-            <div>
-              <div style={{ display: 'flex', justifyContent: 'space-evenly', flexWrap: 'wrap' }}>
-                {colors.length ? renderColors(colors) : null}
-              </div>
-              <div onClick={() => colorPickerDisplay(activeColor, updateVariantMutaion)}>
-                <IconButton color="inherit">
-                  <Fab size="small" color="primary" className={classes.fab}>
-                    <AddIcon />
-                  </Fab>
-                </IconButton>
-              </div>
-              <Dialog
-                onClose={() => colorPickerDisplay(activeColor, updateVariantMutaion)}
-                aria-labelledby="color-picker-dialog"
-                open={displayColorPicker}
-              >
-                <DialogTitle id="color-picker-dialog">Select Color</DialogTitle>
+              <div>
+                <div style={{ display: 'flex', justifyContent: 'space-evenly', flexWrap: 'wrap' }}>
+                  {colors.length ? renderColors(colors) : null}
+                </div>
+                {userIsShopOwner ? (<div onClick={() => colorPickerDisplay(activeColor, updateVariantMutaion)}>
+                  <IconButton color="inherit">
+                    <Fab size="small" color="primary" className={classes.fab}>
+                      <AddIcon />
+                    </Fab>
+                  </IconButton>
+                </div>) : null}
+                <Dialog
+                  onClose={() => colorPickerDisplay(activeColor, updateVariantMutaion)}
+                  aria-labelledby="color-picker-dialog"
+                  open={displayColorPicker}
+                >
+                  <DialogTitle id="color-picker-dialog">Select Color</DialogTitle>
 
-                <Popover>
-                  <Cover onClick={() => colorPickerDisplay(activeColor, updateVariantMutaion)} />
-                  <ChromePicker
-                    color={activeColor}
-                    onChangeComplete={handleColorPickerChange}
-                    disableAlpha
-                  />
-                </Popover>
-              </Dialog>
-            </div>
+                  <Popover>
+                    <Cover onClick={() => colorPickerDisplay(activeColor, updateVariantMutaion)} />
+                    <ChromePicker
+                      color={activeColor}
+                      onChangeComplete={handleColorPickerChange}
+                      disableAlpha
+                    />
+                  </Popover>
+                </Dialog>
+              </div>
             )}
-            </Mutation>
+          </Mutation>
         </ExpansionPanelDetails>
       </ExpansionPanel>
     </div>

@@ -64,7 +64,11 @@ function ForumHome(props: ForumHomeProps) {
                 <meta name="twitter:card" content="summary_large_image" />
                 <meta name="twitter:image:alt" content="AgoraExpo" />
             </Helmet>
-            {renderForumPosts(data.forumPosts)}
+            {data.forumPosts.length ? renderForumPosts(data.forumPosts) : (
+              <div style={{ height: '100vh', width: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+              <h1>Sorry No Posts Available 😢. Be the first to publish a post 😍</h1>
+              </div>
+            )}
           </>
         )
       }}

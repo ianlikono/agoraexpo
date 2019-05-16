@@ -1,7 +1,7 @@
-import React from 'react';
 import { withStyles } from '@material-ui/core/styles';
-import { Wrapper } from './styles';
+import React from 'react';
 import Panels from './Panels';
+import { Wrapper } from './styles';
 
 export interface VariantsProps {
     variants: any;
@@ -9,6 +9,7 @@ export interface VariantsProps {
     onColorClicked: any;
     size: any;
     onSizeSelect: any;
+    product: any;
   }
 
   const styles = theme => ({
@@ -19,10 +20,10 @@ export interface VariantsProps {
 
 
   const Variants: React.SFC<VariantsProps> = props => {
-    const { classes, variants, color, onColorClicked, size, onSizeSelect } = props;
+    const { classes, variants, color, onColorClicked, size, onSizeSelect, product } = props;
     return (
         <Wrapper className={classes.root}>
-            <Panels variants={variants} color={color} onColorClicked={onColorClicked} size={size} onSizeSelect={onSizeSelect}/>
+            <Panels product={product} variants={variants} color={color} onColorClicked={onColorClicked} size={size} onSizeSelect={onSizeSelect}/>
         </Wrapper>
     )
 

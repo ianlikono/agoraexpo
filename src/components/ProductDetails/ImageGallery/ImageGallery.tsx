@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from 'react';
 import { unstable_useMediaQuery as useMediaQuery } from '@material-ui/core/useMediaQuery';
-import { Wrapper, ImagesPreview, ActiveImage, DispayImage, PreviewsList, PreviewImage} from './styles';
-import ItemCaraosel from '../../itemsCaraosel/ItemCaraosel';
+import React, { useEffect, useState } from 'react';
 import HorizontalCaraosel from '../../HorizontalCaraosel';
+import ItemCaraosel from '../../itemsCaraosel/ItemCaraosel';
+import { ActiveImage, DispayImage, ImagesPreview, PreviewImage, PreviewsList, Wrapper } from './styles';
 
 export interface ImageGalleryProps {
-  imageUrl: any;
+  images: any;
 }
 
 const ImageGallery: React.SFC<ImageGalleryProps> = props => {

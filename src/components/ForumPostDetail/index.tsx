@@ -34,7 +34,6 @@ function ForumPostDetail(props: PostProps) {
   const htmlToReactParser = new HtmlToReactParser();
   const contentElement = htmlToReactParser.parse(forumPost.content);
 
-  console.log(data);
   return (
     <Wrapper>
       <Paper className={classes.root} elevation={1}>

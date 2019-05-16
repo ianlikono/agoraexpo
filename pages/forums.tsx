@@ -1,11 +1,19 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Helmet from 'react-helmet';
 import Forum from '../src/components/Forum';
 import ForumHeader from '../src/components/Forum/ForumHeader';
+import { initGA, logPageView } from "../utils/analytics";
 
 export interface ForumProps { }
 
 function ForumPage(props: ForumProps) {
+  useEffect(() => {
+    if (!window.GA_INITIALIZED) {
+      initGA();
+      window.GA_INITIALIZED = true;
+    }
+    logPageView();
+  });
   return (
     <>
       <Helmet>

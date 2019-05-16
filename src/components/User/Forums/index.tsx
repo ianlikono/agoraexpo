@@ -27,7 +27,6 @@ function Forums(props: ForumsProps) {
   return (
     <Query query={getUserForums} variables={{ username }}>
       {({ loading, error, data }) => {
-				console.log("TCL: Forums -> data", data)
         if (loading) return "Loading...";
         if (error) console.log(error);
         if(!data.getUserForums.length) {

@@ -5,7 +5,9 @@ import React from 'react';
 import { Query } from 'react-apollo';
 import Helmet from 'react-helmet';
 import ProductDetails from '../src/components/ProductDetails/index';
+import MeProvider from '../src/contexts/Me';
 import { productQuery } from '../src/graphql/queries';
+import { initGA, logPageView } from "../utils/analytics";
 
 export interface queryProps {
   id: String;
@@ -15,11 +17,18 @@ class Product extends React.Component<queryProps> {
   static getInitialProps({ query: { id, shopName } }: NextContext) {
     return { id, shopName };
   }
+  componentDidMount() {
+    if (!window.GA_INITIALIZED) {
+      initGA();
+      window.GA_INITIALIZED = true;
+    }
+    logPageView();
+  }
 
   render() {
     const { id } = this.props;
     return (
-      <>
+      <MeProvider>
         <Query query={productQuery} variables={{ id }}>
           {({ loading, error, data }) => {
             if (loading) return 'Loading...';
@@ -52,7 +61,7 @@ class Product extends React.Component<queryProps> {
             );
           }}
         </Query>
-      </>
+      </MeProvider>
     );
   }
 }

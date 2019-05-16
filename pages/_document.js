@@ -2,11 +2,17 @@
 /* eslint-disable react/forbid-prop-types */
 /* eslint-disable prefer-destructuring */
 
+import autoprefixer from 'autoprefixer';
+import cssnano from 'cssnano';
 import Document, { Head, Main, NextScript } from 'next/document';
+import postcss from 'postcss';
 import PropTypes from 'prop-types';
 import React from 'react';
 import { ServerStyleSheet } from 'styled-components';
 import flush from 'styled-jsx/server';
+
+const prefixer = postcss([autoprefixer]);
+const minifier = postcss([cssnano]);
 
 class MyDocument extends Document {
   static async getInitialProps (ctx) {
@@ -27,6 +33,12 @@ class MyDocument extends Document {
     let css;
     if (pageContext) {
       css = pageContext.sheetsRegistry.toString();
+      if (process.env.NODE_ENV === 'production') {
+        const result1 = await prefixer.process(css);
+        css = result1.css;
+        const result2 = await minifier.process(css);
+        css = result2.css;
+      }
     }
     const sheet = new ServerStyleSheet()
     const originalRenderPage = ctx.renderPage
@@ -61,6 +73,7 @@ class MyDocument extends Document {
     return (
       <html lang="en" dir="ltr">
         <Head>
+          <meta name="google-site-verification" content="EUx-1bg_2vBNtA6F_FwDiznuxz16XWeJl0QRdr1X59c" />
           <meta charSet="utf-8" />
           {/* Use minimum-scale=1 to enable GPU rasterization */}
           <meta

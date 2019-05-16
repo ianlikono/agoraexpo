@@ -22,6 +22,7 @@ export const ReviewWrapper = styled.div`
   justify-content: space-between;
   width: 80%;
   margin-top: 30px;
+  align-items: center;
   @media (max-width: 900px) {
     width: 100%;
   }
@@ -37,5 +38,13 @@ export const ReviewDetails = styled.div`
 
 export const ReviewContent = styled.div`
   width: 100%;
+`;
+
+export const ReviewParagraph = styled.p`
+  font-size: 1.6rem;
+  font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+  font-weight: 300;
+  line-height: 1.17;
+  letter-spacing: 0.00735em;
 `;
 
