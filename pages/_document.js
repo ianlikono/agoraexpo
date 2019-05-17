@@ -73,7 +73,7 @@ class MyDocument extends Document {
     return (
       <html lang="en" dir="ltr">
         <Head>
-          <meta name="google-site-verification" content="EUx-1bg_2vBNtA6F_FwDiznuxz16XWeJl0QRdr1X59c" />
+          <meta name="google-site-verification" content="dAIpZMKStK9FkBkpYLk-says00Lfwmc3-FUmr3onldQ" />
           <meta charSet="utf-8" />
           {/* Use minimum-scale=1 to enable GPU rasterization */}
           <meta
