@@ -17,9 +17,12 @@ interface Options {
   getToken: () => string;
 }
 
+const endpoint =
+  process.env.NODE_ENV == 'production' ? 'http://142.93.121.23:4000/' : 'http://localhost:4000';
+
 function create(initialState: any, { getToken }: Options) {
   const httpLink = createHttpLink({
-    uri: 'http://localhost:4000',
+    uri: endpoint,
     credentials: 'include',
   });
 
