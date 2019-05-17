@@ -133,8 +133,8 @@ function NewForumPage(props: CreateForumProps) {
       Router.push({
         pathname: `/f/${response.data.createForum.name}`,
       });
-    } catch (e) {
-      console.log(e);
+    } catch (err) {
+      console.log(err);
       console.log(error);
     }
   }
