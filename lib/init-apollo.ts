@@ -40,10 +40,12 @@ function create(initialState: any, { getToken }: Options) {
 
   const authLink = setContext(async (_, { headers }) => {
     const token = getToken();
+    const apiToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7InNlcnZpY2UiOiJhZ29yYWV4cG8tcHJvZHVjdGlvbkBwcm9kIiwicm9sZXMiOlsiYWRtaW4iXX0sImlhdCI6MTU1ODQzMDk4NywiZXhwIjoxNTU5MDM1Nzg3fQ.wSW864ipVoUK0B2skwJOiuyPu1ilZ7u3nYf0lcCBIsQ'
     return {
       headers: {
         ...headers,
         cookie: token ? `qid=${token}` : '',
+        authorization: apiToken ? `Bearer ${apiToken}` : "",
       },
     };
   });
