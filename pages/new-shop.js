@@ -17,7 +17,8 @@ import Router from 'next/router';
 import { TweenOneGroup } from 'rc-tween-one';
 import React, { Component } from 'react';
 import { ApolloConsumer, Mutation } from 'react-apollo';
-import Helmet from 'react-helmet';
+import { Helmet } from 'react-helmet';
+import { isAuthenticated } from '../src/components/CheckAuth';
 import { createDraft } from '../src/graphql/mutations';
 import { filterCategories } from '../src/graphql/queries';
 import { initGA, logPageView } from "../utils/analytics";
@@ -211,15 +212,17 @@ class CreateShopPage extends Component {
   };
 
   formSubmit = async (createShopDraft, error) => {
-    const { name, category, description, ownersIds } = this.state;
-
-    const response = await createShopDraft({
-      variables: { name, category, description, ownersIds },
-    });
-    Router.push({
-      pathname: '/shop',
-      query: { id: response.data.createShopDraft.id },
-    });
+    const isLoggedIn = await isAuthenticated();
+    if(isLoggedIn) {
+      const { name, category, description, ownersIds } = this.state;
+      const response = await createShopDraft({
+        variables: { name, category, description, ownersIds },
+      });
+      Router.push(`/shop/${response.data.createShopDraft.id}`);
+    } else {
+      alert('Please Login First')
+      Router.push('/auth');
+    }
   };
 
   handleInputChange = e => {

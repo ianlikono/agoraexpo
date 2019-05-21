@@ -5,12 +5,14 @@ import { DropzoneArea } from 'material-ui-dropzone';
 import Router from 'next/router';
 import React, { useEffect, useState } from 'react';
 import { Mutation } from 'react-apollo';
-import Helmet from 'react-helmet';
+import { Helmet } from 'react-helmet';
 import styled from 'styled-components';
+import { isAuthenticated } from '../src/components/CheckAuth';
 import ForumHeader from '../src/components/Forum/ForumHeader';
 import Input from '../src/components/Input';
 import { createForumMutation } from '../src/graphql/mutations';
 import { initGA, logPageView } from "../utils/analytics";
+
 
 const defaultAvatarPic = "https://res.cloudinary.com/doelo01na/image/upload/c_scale,h_500,q_auto,w_500/v1556402297/defaults/no-image.webp";
 const defaultCoverPic = "https://res.cloudinary.com/doelo01na/image/upload/c_scale,h_600,q_auto,w_1500/v1556402297/defaults/no-image.webp";
@@ -74,7 +76,7 @@ function NewForumPage(props: CreateForumProps) {
   const { classes } = props;
 
   useEffect(() => {
-     //@ts-ignore
+    //@ts-ignore
     if (!window.GA_INITIALIZED) {
       initGA();
       //@ts-ignore
@@ -121,21 +123,27 @@ function NewForumPage(props: CreateForumProps) {
     setAvatarUrl(uploadedFile.secure_url);
   }
   async function createForumSubmit(createForum, error) {
-    try {
-      const response = await createForum({
-        variables: {
-          name: forumName,
-          description: forumDescription,
-          avatarPic: avatarUrl.length > 0 ? avatarUrl : defaultAvatarPic,
-          coverPic: coverUrl.length > 0 ? coverUrl : defaultCoverPic,
-        }
-      })
-      Router.push({
-        pathname: `/f/${response.data.createForum.name}`,
-      });
-    } catch (err) {
-      console.log(err);
-      console.log(error);
+    const isLoggedIn = await isAuthenticated();
+    if (isLoggedIn) {
+      try {
+        const response = await createForum({
+          variables: {
+            name: forumName,
+            description: forumDescription,
+            avatarPic: avatarUrl.length > 0 ? avatarUrl : defaultAvatarPic,
+            coverPic: coverUrl.length > 0 ? coverUrl : defaultCoverPic,
+          }
+        })
+        Router.push({
+          pathname: `/f/${response.data.createForum.name}`,
+        });
+      } catch (err) {
+        console.log(err);
+        console.log(error);
+      }
+    } else {
+      alert('Please Login First')
+      Router.push('/auth');
     }
   }
 
@@ -206,4 +214,3 @@ function NewForumPage(props: CreateForumProps) {
 }
 
 export default withStyles(styles)(NewForumPage);
-

@@ -4,7 +4,7 @@ import { withStyles } from '@material-ui/core/styles';
 import DeleteIcon from '@material-ui/icons/Delete';
 import React from 'react';
 import { Mutation, Query } from 'react-apollo';
-import Helmet from 'react-helmet';
+import { Helmet } from 'react-helmet';
 import { Carousel } from 'react-responsive-carousel';
 import PlusIcon from '../src/components/PlusIcon/PlusIcon';
 import Sections from '../src/components/shopProductsSections';
@@ -100,7 +100,8 @@ class Shop extends React.PureComponent {
     }
   }
 
-  renderCaraoselImages = (images) => {
+  renderCaraoselImages = (value, images, owners) => {
+    const isShopOwner = value.isShopOwner(owners);
     if(images.length > 0) {
       return images.map((image, i) => (
         <div key={i} style={{ height: '50vh', width: '100%' }}>
@@ -110,7 +111,7 @@ class Shop extends React.PureComponent {
             src={image.largeImageUrl}
           />
           <>
-          <Mutation mutation={deleteShopCoverImage}>
+         {isShopOwner ? (<Mutation mutation={deleteShopCoverImage}>
               {(imageDelete, { loading, error }) => (
               <div onClick={() => this.onDeleteImageClicked(image.id, imageDelete)} style={{ position: 'absolute', bottom: 5, right: 10, zIndex: 10 }}>
                 <Fab size="medium" color="primary" aria-label="Delete">
@@ -118,7 +119,7 @@ class Shop extends React.PureComponent {
                 </Fab>
               </div>
               )}
-          </Mutation> */}
+         </Mutation>) : null}
           </>
         </div>
       ))
@@ -164,7 +165,7 @@ class Shop extends React.PureComponent {
                         {this.renderAddImages(value, data.shop.owners)}
                         <div>
                           <Carousel showThumbs={false} infiniteLoop autoPlay>
-                            {this.renderCaraoselImages(data.shop.images)}
+                            {this.renderCaraoselImages(value, data.shop.images, data.shop.owners)}
                           </Carousel>
                         </div>
                       </div>

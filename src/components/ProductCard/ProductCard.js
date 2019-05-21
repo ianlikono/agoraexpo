@@ -3,10 +3,12 @@ import Paper from '@material-ui/core/Paper';
 import { withStyles } from '@material-ui/core/styles';
 import truncate from 'lodash/truncate';
 import Link from 'next/link';
+import Router from 'next/router';
 import React from 'react';
 import { Mutation } from 'react-apollo';
 import { addItemToCart } from '../../graphql/mutations';
 import { getMeCart } from '../../graphql/queries';
+import { isAuthenticated } from '../CheckAuth';
 import { ContentTitle, DescriptionContent } from './styles';
 
 const styles = theme => ({
@@ -44,17 +46,23 @@ class ProductCard extends React.PureComponent {
   };
 
   onAddToCartClick = async (id, addItem) => {
-    await addItem({
-      variables: {
-        productId: id,
-        quantity: 1,
-      },
-      refetchQueries: [
-        {
-          query: getMeCart,
-        }
-      ]
-    })
+    const isLoggedIn = await isAuthenticated();
+    if(isLoggedIn) {
+      await addItem({
+        variables: {
+          productId: id,
+          quantity: 1,
+        },
+        refetchQueries: [
+          {
+            query: getMeCart,
+          }
+        ]
+      })
+    } else {
+      alert('Please Login First')
+      Router.push('/auth');
+    }
   }
 
   render() {

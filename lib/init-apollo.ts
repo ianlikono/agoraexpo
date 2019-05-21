@@ -18,7 +18,7 @@ interface Options {
 }
 
 const endpoint =
-  process.env.NODE_ENV == 'production' ? 'http://142.93.121.23:4000/' : 'http://localhost:4000';
+  process.env.NODE_ENV == 'production' ? 'https://v1.agoraexpo.com' : 'http://localhost:4000';
 
 function create(initialState: any, { getToken }: Options) {
   const httpLink = createHttpLink({

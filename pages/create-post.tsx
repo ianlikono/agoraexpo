@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import Helmet from 'react-helmet';
+import { Helmet } from 'react-helmet';
 import CreatePost from '../src/components/CreatePost';
 import ForumHeader from '../src/components/Forum/ForumHeader';
 import CreatePostProvider from '../src/contexts/CreatePost';

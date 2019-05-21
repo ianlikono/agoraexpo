@@ -50,7 +50,9 @@ function ForumHeader(props: ForumHeaderProps) {
               </a>
             </Link>
             <ToolBarContent>
-              <Search />
+              <div style={{ width: '60%' }}>
+                <Search />
+              </div>
               <CreatePost />
               <Add />
               <UserProfile>

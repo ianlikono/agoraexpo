@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import Helmet from 'react-helmet';
+import { Helmet } from 'react-helmet';
 import Forum from '../src/components/Forum';
 import ForumHeader from '../src/components/Forum/ForumHeader';
 import { initGA, logPageView } from "../utils/analytics";

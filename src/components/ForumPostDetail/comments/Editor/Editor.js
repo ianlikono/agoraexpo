@@ -1,10 +1,12 @@
 import Button from '@material-ui/core/Button';
 import Paper from '@material-ui/core/Paper';
 import { withStyles } from '@material-ui/core/styles';
+import Router from 'next/router';
 import React from 'react';
 import { Mutation } from 'react-apollo';
 import { createPostComment } from '../../../../graphql/mutations';
 import { forumPostComments } from '../../../../graphql/queries';
+import { isAuthenticated } from '../../../CheckAuth';
 import { SubmitButton, SubmitWrapper, Wrapper } from './styles';
 import './styles.css';
 
@@ -88,24 +90,30 @@ class Editor extends React.PureComponent {
 
   onCreateComment = async (commentCreate, error) => {
      const postId = this.props.postId;
-    try {
-      const response = await commentCreate({
-        variables: {
-          postId,
-          comment: this.state.quillHtml
-        },
-        refetchQueries: [
-          {
-            query: forumPostComments,
-            variables: { postId }
-          }
-        ]
-      })
-      this.setState({quillHtml: ''});
-    } catch(e) {
-      console.log(e);
-      console.log(error);
-    }
+     const isLoggedIn = await isAuthenticated();
+     if(isLoggedIn) {
+      try {
+        const response = await commentCreate({
+          variables: {
+            postId,
+            comment: this.state.quillHtml
+          },
+          refetchQueries: [
+            {
+              query: forumPostComments,
+              variables: { postId }
+            }
+          ]
+        })
+        this.setState({quillHtml: ''});
+      } catch(e) {
+        console.log(e);
+        console.log(error);
+      }
+     } else {
+      alert('Please Login First')
+      Router.push('/auth');
+     }
   }
 
   onQuillHtmlChange = (value) => {
@@ -117,7 +125,6 @@ class Editor extends React.PureComponent {
     const { classes } = this.props;
     const ReactQuill = this.ReactQuill;
     const { quillHtml } = this.state;
-    // const {quillHtml, onQuillHtmlChange} = useContext(CreatePostContext);
     if (typeof window !== 'undefined' && ReactQuill) {
       const isValid =  quillHtml.length > 0
       return (

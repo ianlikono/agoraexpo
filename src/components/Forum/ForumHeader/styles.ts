@@ -7,7 +7,7 @@ export const HeaderWrapper = styled.div`
 
 export const ToolBarContent = styled.div`
   display: flex;
-  justify-content: center;
+  justify-content: space-evenly;
   align-items: center;
   width: 100%;
   position: relative;

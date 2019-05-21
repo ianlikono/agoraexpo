@@ -4,6 +4,8 @@ import React from 'react';
 import { Query } from 'react-apollo';
 import ItemCaraosel from '../../itemsCaraosel/ItemCaraosel';
 import ProductCard from '../../ProductCard/ProductCard';
+import { NoItems } from './styles';
+
 
 export const getShopProducts = gql`
   query getShopProducts($shopId: ID!, $limit: Int) {
@@ -43,14 +45,6 @@ export const getShopProducts = gql`
   }
 `;
 
-const product = {
-  id: 'b07c1424-c262-4cb8-855e-58573a909759',
-  title: 'Product One',
-  description: 'Best you will ever get',
-  images:
-    [{imageUrl: 'https://images.unsplash.com/photo-1514560353475-9141afac0f8f?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60'}],
-  price: 30,
-};
 
 class SectionOne extends React.PureComponent {
   state = {};
@@ -96,8 +90,7 @@ class SectionOne extends React.PureComponent {
               if(data.getShopProducts.length <= 0) {
                 return (
                   <>
-                    {this.renderAddProducts(value, owners)}
-                    <NoItems>Sorry no products currently available</NoItems>
+                    <NoItems>Sorry no Trending products currently available</NoItems>
                   </>
                 )
               }

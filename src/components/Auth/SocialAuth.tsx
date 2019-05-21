@@ -4,15 +4,12 @@ import { withStyles } from '@material-ui/core/styles';
 import Router from 'next/router';
 import React, { useState } from 'react';
 import { Mutation } from 'react-apollo';
+import ReactSVG from 'react-svg';
 import { facebookProvider, fire, googleProvider } from '../../../firebase';
-// @ts-ignore
-import facebookIcon from '../../../static/facebook-icon.svg';
-// @ts-ignore
-import googleIcon from '../../../static/google-icon.svg';
 import { login, signUp } from '../../graphql/mutations';
 import { getMeQuery } from '../../graphql/queries';
 import AppSnackBar from '../Snack/AppSnackBar';
-import { ButtonChildren, IconSvg } from './styles';
+import { ButtonChildren } from './styles';
 
 // @ts-ignore
 const styles = theme => ({
@@ -184,7 +181,19 @@ const SocialAuth: React.SFC = props => {
                   disabled={loading || loading2}
                 >
                   <ButtonChildren>
-                    <IconSvg src={googleIcon} />
+                    {/* <IconSvg src={googleIcon} /> */}
+                    <ReactSVG
+                      src="https://res.cloudinary.com/doelo01na/image/upload/w_1000,c_fill,ar_1:1,g_auto,r_max,bo_5px_solid_red,b_rgb:262c35/v1558400354/static/google-icon.svg"
+                      beforeInjection={svg => {
+                        svg.classList.add('svg-class-name')
+                        svg.setAttribute('style', 'height: 3rem')
+                      }}
+                      fallback={() => <span style={{ color: 'white' }}></span>}
+                      loading={() => <span style={{ color: 'white' }}>..</span>}
+                      renumerateIRIElements={false}
+                      wrapper="span"
+                      className="social-icon"
+                    />
                     Continue with google
                   </ButtonChildren>
                 </Button>
@@ -198,7 +207,18 @@ const SocialAuth: React.SFC = props => {
                   disabled={loading || loading2}
                 >
                   <ButtonChildren>
-                    <IconSvg src={facebookIcon} />
+                    <ReactSVG
+                      src="https://res.cloudinary.com/doelo01na/image/upload/w_1000,c_fill,ar_1:1,g_auto,r_max,bo_5px_solid_red,b_rgb:262c35/v1558400614/static/facebook-icon.svg"
+                      beforeInjection={svg => {
+                        svg.classList.add('svg-class-name')
+                        svg.setAttribute('style', 'height: 3rem')
+                      }}
+                      fallback={() => <span style={{ color: 'white' }}></span>}
+                      loading={() => <span style={{ color: 'white' }}>..</span>}
+                      renumerateIRIElements={false}
+                      wrapper="span"
+                      className="social-icon"
+                    />
                     Continue with Facebook
                   </ButtonChildren>
                 </Button>

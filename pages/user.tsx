@@ -8,7 +8,7 @@ import Typography from '@material-ui/core/Typography';
 import { NextContext } from 'next';
 import React from 'react';
 import { Query } from 'react-apollo';
-import Helmet from 'react-helmet';
+import { Helmet } from 'react-helmet';
 import styled from 'styled-components';
 import Orders from '../src/components/orders';
 import Forums from '../src/components/User/Forums';

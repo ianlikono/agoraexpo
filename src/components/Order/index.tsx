@@ -2,7 +2,7 @@ import { format } from 'date-fns';
 import truncate from 'lodash/truncate';
 import React from 'react';
 import { Query } from 'react-apollo';
-import Helmet from 'react-helmet';
+import { Helmet } from 'react-helmet';
 import formatMoney from '../../../lib/formatMoney';
 import { getOrder } from '../../graphql/queries';
 import OrderStyles from './styles';

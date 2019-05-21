@@ -1,7 +1,6 @@
 /* eslint-disable react/destructuring-assignment */
 /* eslint-disable react/forbid-prop-types */
 /* eslint-disable prefer-destructuring */
-
 import autoprefixer from 'autoprefixer';
 import cssnano from 'cssnano';
 import Document, { Head, Main, NextScript } from 'next/document';

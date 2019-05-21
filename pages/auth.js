@@ -5,7 +5,7 @@ import Tab from '@material-ui/core/Tab';
 import Tabs from '@material-ui/core/Tabs';
 import Typography from '@material-ui/core/Typography';
 import React from 'react';
-import Helmet from "react-helmet";
+import { Helmet } from "react-helmet";
 import LoginForm from '../src/components/Auth/LoginForm';
 import SignUpForm from '../src/components/Auth/SignUpForm';
 import { initGA, logPageView } from "../utils/analytics";

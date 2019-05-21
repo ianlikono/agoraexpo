@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import React from 'react';
 import { Query } from 'react-apollo';
-import Helmet from 'react-helmet';
+import { Helmet } from 'react-helmet';
 import { forumPosts } from '../../../../graphql/queries';
 import ForumCard from '../../ForumCard';
 import { ChildrenWrapper, ItemContent, ItemTitle, Wrapper } from './styles';

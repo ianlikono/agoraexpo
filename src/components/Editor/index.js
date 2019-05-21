@@ -5,6 +5,7 @@ import React from 'react';
 import { Mutation } from 'react-apollo';
 import { CreatePostConsumer } from '../../contexts/CreatePost';
 import { createForumPostMutation } from '../../graphql/mutations';
+import { isAuthenticated } from '../CheckAuth';
 import { SubmitButton, SubmitWrapper } from './styles';
 import './styles.css';
 
@@ -81,21 +82,27 @@ class Editor extends React.PureComponent {
   }
 
   onCreatePostClick = async (postCreate, error, value) => {
-    try {
-      const response = await postCreate({
-        variables: {
-          title: value.title,
-          content: value.quillHtml,
-          type: "POST",
-          forumId: value.selectedForum.id,
-        }
-      })
-      Router.push({
-        pathname: `/f/${response.data.createForumPost.forum.name}/${response.data.createForumPost.id}`,
-      });
-    } catch(e) {
-      console.log(e);
-      console.log(error);
+    const isLoggedIn = await isAuthenticated();
+    if(isLoggedIn) {
+      try {
+        const response = await postCreate({
+          variables: {
+            title: value.title,
+            content: value.quillHtml,
+            type: "POST",
+            forumId: value.selectedForum.id,
+          }
+        })
+        Router.push({
+          pathname: `/f/${response.data.createForumPost.forum.name}/${response.data.createForumPost.id}`,
+        });
+      } catch(e) {
+        console.log(e);
+        console.log(error);
+      }
+    } else {
+      alert('Please Login First')
+      Router.push('/auth');
     }
   }
 

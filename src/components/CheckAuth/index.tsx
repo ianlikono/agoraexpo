@@ -32,10 +32,24 @@ function CheckAuth(props: CheckAuthProps) {
         <AuthDialog open={isModalOpen} close={closeModal} />
       </>
     )
+  } else {
+    if (props.children) {
+      return (
+        props.children
+      );
+    }
   }
-  return (
-    props.children
-  );
 }
 
+const isAuthenticated = () => {
+  if (fire.auth().currentUser !== null) {
+    return true
+  } else {
+    return false
+  }
+}
+
+export { isAuthenticated };
 export default CheckAuth;
+
+

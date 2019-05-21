@@ -1,7 +1,7 @@
 import Router from 'next/router';
 import NProgress from 'nprogress';
 import React from 'react';
-import { createGlobalStyle, ThemeProvider } from 'styled-components';
+import styled, { createGlobalStyle, ThemeProvider } from 'styled-components';
 import Footer from '../components/Footer/Footer';
 import Header from '../components/Header/Header';
 import Meta from './Meta';
@@ -44,16 +44,39 @@ const theme = {
   imageGradientDark: "rgba(37, 115, 203, 0.8)"
 };
 
+const BodyWrapper = styled.div`
+  position: relative;
+  min-height: 100vh;
+`;
+
+const ContentWrapper = styled.div`
+  padding-bottom: 20.7rem;
+`;
+
+const FooterWrapper = styled.div`
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  height: 20.7rem;
+`;
+
+
 const Page = props => {
   const { children } = props;
   return (
     <ThemeProvider theme={theme}>
       <React.Fragment>
         <Meta />
-        <Header />
-        <div>{children}</div>
-        <GlobalStyle />
-        <Footer />
+        <BodyWrapper>
+          <Header />
+          <ContentWrapper>
+            <div>{children}</div>
+          </ContentWrapper>
+          <GlobalStyle />
+          <FooterWrapper>
+            <Footer />
+          </FooterWrapper>
+        </BodyWrapper>
       </React.Fragment>
     </ThemeProvider>
   );

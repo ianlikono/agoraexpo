@@ -3,7 +3,7 @@ import { NextContext } from 'next';
 import React from 'react';
 // eslint-disable-next-line import/no-unresolved
 import { Query } from 'react-apollo';
-import Helmet from 'react-helmet';
+import { Helmet } from 'react-helmet';
 import ProductDetails from '../src/components/ProductDetails/index';
 import MeProvider from '../src/contexts/Me';
 import { productQuery } from '../src/graphql/queries';

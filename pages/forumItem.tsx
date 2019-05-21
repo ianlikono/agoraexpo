@@ -1,7 +1,7 @@
 import { NextContext } from 'next';
 import React from 'react';
 import { Query } from 'react-apollo';
-import Helmet from 'react-helmet';
+import { Helmet } from 'react-helmet';
 import ForumHeader from '../src/components/Forum/ForumHeader';
 import ForumPostDetail from '../src/components/ForumPostDetail';
 import { forumPostQuery } from '../src/graphql/queries';
