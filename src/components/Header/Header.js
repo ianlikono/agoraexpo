@@ -203,7 +203,6 @@ class Header extends React.Component {
     };
 
     if(!isAuthenticated) {
-      console.log('here')
       return (
         <Guest />
       )
