@@ -16,11 +16,9 @@ import Link from 'next/link';
 import Router from 'next/router';
 import React from 'react';
 import { Query } from 'react-apollo';
-import { fire } from '../../../firebase';
 import { getMeCart, getMeQuery } from '../../graphql/queries';
 import CartDrawer from '../CartDrawer/CartDrawer';
 import PlusIcon from '../PlusIcon/PlusIcon';
-import Guest from './Guest';
 import Search from './Search';
 
 const styles = theme => ({
@@ -78,18 +76,7 @@ class Header extends React.Component {
     anchorEl: null,
     mobileMoreAnchorEl: null,
     cartOpen: false,
-    isAuthenticated: false,
   };
-
-  componentDidMount() {
-    fire.auth().onAuthStateChanged((user) => {
-      if (user) {
-        this.setState({isAuthenticated: true})
-      } else {
-        this.setState({isAuthenticated: false})
-      }
-    });
-  }
 
   handleProfileMenuOpen = event => {
     this.setState({ anchorEl: event.currentTarget });
@@ -123,7 +110,7 @@ class Header extends React.Component {
   };
 
   render() {
-    const { anchorEl, mobileMoreAnchorEl, isAuthenticated } = this.state;
+    const { anchorEl, mobileMoreAnchorEl } = this.state;
     const { classes } = this.props;
     const isMenuOpen = Boolean(anchorEl);
     const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
@@ -202,11 +189,6 @@ class Header extends React.Component {
       );
     };
 
-    if(!isAuthenticated) {
-      return (
-        <Guest />
-      )
-    } else {
     return (
       <Query query={getMeQuery}>
         {({ loading, error, data }) => {
@@ -277,7 +259,6 @@ class Header extends React.Component {
         }}
       </Query>
     );
-  }
   }
 }
 
