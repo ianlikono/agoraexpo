@@ -21,7 +21,6 @@ import { Helmet } from 'react-helmet';
 import { isAuthenticated } from '../src/components/CheckAuth';
 import { createDraft } from '../src/graphql/mutations';
 import { filterCategories } from '../src/graphql/queries';
-import { initGA, logPageView } from "../utils/analytics";
 
 const { TextArea } = Input;
 const Option = AutoComplete.Option;
@@ -58,13 +57,6 @@ class CreateShopPage extends Component {
     noUserMsg: false,
   };
 
-  componentDidMount() {
-    if (!window.GA_INITIALIZED) {
-      initGA();
-      window.GA_INITIALIZED = true;
-    }
-    logPageView();
-  }
 
   handleCategoryChange = debounce(async (client, value) => {
     const { name, category, description } = this.state;

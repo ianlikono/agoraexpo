@@ -1,20 +1,10 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Helmet } from "react-helmet";
 import Home from '../src/components/Home';
-import { initGA, logPageView } from "../utils/analytics";
 
 export interface HomePageProps { }
 
 const HomePage = (props: HomePageProps) => {
-  useEffect(() => {
-    //@ts-ignore
-    if (!window.GA_INITIALIZED) {
-      initGA();
-      //@ts-ignore
-      window.GA_INITIALIZED = true;
-    }
-    logPageView();
-  });
   return (
     <>
       <Helmet>

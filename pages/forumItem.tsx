@@ -5,7 +5,6 @@ import { Helmet } from 'react-helmet';
 import ForumHeader from '../src/components/Forum/ForumHeader';
 import ForumPostDetail from '../src/components/ForumPostDetail';
 import { forumPostQuery } from '../src/graphql/queries';
-import { initGA, logPageView } from "../utils/analytics";
 
 export interface queryProps {
   id: String;
@@ -16,15 +15,6 @@ class ForumItemPage extends React.Component<queryProps> {
   static getInitialProps({ query: { name, id } }: NextContext) {
     return { id, name };
   }
-
-  componentDidMount() {
-    if (!window.GA_INITIALIZED) {
-      initGA();
-      window.GA_INITIALIZED = true;
-    }
-    logPageView();
-  }
-
 
   render() {
     const { id, name } = this.props;

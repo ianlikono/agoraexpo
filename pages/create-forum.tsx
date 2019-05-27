@@ -3,7 +3,7 @@ import Paper from '@material-ui/core/Paper';
 import { withStyles } from '@material-ui/core/styles';
 import { DropzoneArea } from 'material-ui-dropzone';
 import Router from 'next/router';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Mutation } from 'react-apollo';
 import { Helmet } from 'react-helmet';
 import styled from 'styled-components';
@@ -11,7 +11,6 @@ import { isAuthenticated } from '../src/components/CheckAuth';
 import ForumHeader from '../src/components/Forum/ForumHeader';
 import Input from '../src/components/Input';
 import { createForumMutation } from '../src/graphql/mutations';
-import { initGA, logPageView } from "../utils/analytics";
 
 
 const defaultAvatarPic = "https://res.cloudinary.com/doelo01na/image/upload/c_scale,h_500,q_auto,w_500/v1556402297/defaults/no-image.webp";
@@ -74,16 +73,6 @@ export interface CreateForumProps {
 
 function NewForumPage(props: CreateForumProps) {
   const { classes } = props;
-
-  useEffect(() => {
-    //@ts-ignore
-    if (!window.GA_INITIALIZED) {
-      initGA();
-      //@ts-ignore
-      window.GA_INITIALIZED = true;
-    }
-    logPageView();
-  });
 
   const [forumName, setForumName] = useState("")
   const [forumDescription, setForumDescription] = useState("")

@@ -8,7 +8,6 @@ import React from 'react';
 import { Helmet } from "react-helmet";
 import LoginForm from '../src/components/Auth/LoginForm';
 import SignUpForm from '../src/components/Auth/SignUpForm';
-import { initGA, logPageView } from "../utils/analytics";
 
 function TabContainer(props) {
   const { children } = props;
@@ -32,14 +31,6 @@ class Auth extends React.PureComponent {
   state = {
     value: 0,
   };
-
-  componentDidMount() {
-    if (!window.GA_INITIALIZED) {
-      initGA();
-      window.GA_INITIALIZED = true;
-    }
-    logPageView();
-  }
 
   handleTabsChange = (event, value) => {
     this.setState({ value });

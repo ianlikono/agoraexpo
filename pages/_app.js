@@ -1,17 +1,19 @@
 import CssBaseline from '@material-ui/core/CssBaseline';
 import { MuiThemeProvider } from '@material-ui/core/styles';
+import withFBQ from "next-fbq";
+import withGA from "next-ga";
 import App, { Container } from 'next/app';
 import Head from 'next/head';
-import 'react-responsive-carousel/lib/styles/carousel.min.css';
+import Router from "next/router";
 import React from 'react';
-import JssProvider from 'react-jss/lib/JssProvider';
 import { ApolloProvider } from 'react-apollo';
-import firebase from 'firebase/app';
+import JssProvider from 'react-jss/lib/JssProvider';
+import 'react-responsive-carousel/lib/styles/carousel.min.css';
+import { compose } from 'recompose';
 import withApolloClient from '../lib/with-apollo-client';
 // import withApollo from '../lib/withApollo';
 import Page from '../src/shared/Page';
 import getPageContext from '../utils/getPageContext';
-import credentials from '../credentials/client';
 
 class MyApp extends App {
   constructor() {
@@ -61,4 +63,11 @@ class MyApp extends App {
   }
 }
 
-export default withApolloClient(MyApp);
+export default compose(
+  withApolloClient,
+  withGA("UA-140313556-1", Router),
+  withFBQ("676115902838191", Router)
+)(MyApp)
+
+
+

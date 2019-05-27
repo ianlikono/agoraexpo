@@ -7,8 +7,6 @@ import { Helmet } from 'react-helmet';
 import ProductDetails from '../src/components/ProductDetails/index';
 import MeProvider from '../src/contexts/Me';
 import { productQuery } from '../src/graphql/queries';
-import { initGA, logPageView } from "../utils/analytics";
-
 export interface queryProps {
   id: String;
 }
@@ -16,15 +14,6 @@ export interface queryProps {
 class Product extends React.Component<queryProps> {
   static getInitialProps({ query: { id, shopName } }: NextContext) {
     return { id, shopName };
-  }
-  componentDidMount() {
-    //@ts-ignore
-    if (!window.GA_INITIALIZED) {
-      initGA();
-      //@ts-ignore
-      window.GA_INITIALIZED = true;
-    }
-    logPageView();
   }
 
   render() {

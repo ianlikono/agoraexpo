@@ -16,7 +16,7 @@ function Footer(props: ShopCardProps) {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   useEffect(() => {
-    fire.auth().onAuthStateChanged(function(user) {
+    fire.auth().onAuthStateChanged(function (user) {
       if (user) {
         setIsAuthenticated(true);
       } else {
@@ -30,7 +30,7 @@ function Footer(props: ShopCardProps) {
       .auth()
       .signOut()
       .then(
-        async function() {
+        async function () {
           const response = await logout({
             refetchQueries: [
               {
@@ -39,7 +39,7 @@ function Footer(props: ShopCardProps) {
             ],
           });
         },
-        function(error2) {
+        function (error2) {
           console.log(error);
           console.log(error2);
         }
@@ -63,10 +63,10 @@ function Footer(props: ShopCardProps) {
                   </a>
                 </Link>
               ) : (
-                <div role="button" onClick={() => onLogoutClick(logout, error)}>
-                  <HeaderText disabled={loading}>Logout</HeaderText>
-                </div>
-              )}
+                  <div role="button" onClick={() => onLogoutClick(logout, error)}>
+                    <HeaderText disabled={loading}>Logout</HeaderText>
+                  </div>
+                )}
             </FooderHeader>
             <Divider />
             <LinkSection>
@@ -79,7 +79,7 @@ function Footer(props: ShopCardProps) {
 
             <FollowTitle>Follow Us</FollowTitle>
             <SocialIcons>
-              <a href="https://www.facebook.com/agoraexpo/" target="_blank">
+              <a href="https://www.facebook.com/agoraexpoinc/" target="_blank">
                 <ShareIcon>
                   <IconContext.Provider value={{ style: { color: 'inherit', fontSize: '30px' } }}>
                     <IoLogoFacebook />

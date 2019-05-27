@@ -17,8 +17,6 @@ import UserPosts from '../src/components/User/posts';
 import Shops from '../src/components/User/shops';
 import MeProvider, { MeConsumer } from '../src/contexts/Me';
 import { getUserDetails } from '../src/graphql/queries';
-import { initGA, logPageView } from "../utils/analytics";
-
 const Wrapper = styled.div`
   display: flex;
   width: 90%;
@@ -64,15 +62,6 @@ const styles = theme => ({
 class ForumPage extends React.Component<ForumProps> {
   static getInitialProps({ query: { username } }: NextContext) {
     return { username };
-  }
-  componentDidMount() {
-    //@ts-ignore
-    if (!window.GA_INITIALIZED) {
-      initGA();
-      //@ts-ignore
-      window.GA_INITIALIZED = true;
-    }
-    logPageView();
   }
   state = {
     tabsValue: 0,

@@ -1,22 +1,12 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Helmet } from 'react-helmet';
 import CreatePost from '../src/components/CreatePost';
 import ForumHeader from '../src/components/Forum/ForumHeader';
 import CreatePostProvider from '../src/contexts/CreatePost';
-import { initGA, logPageView } from "../utils/analytics";
 
 export interface CreatePostProps { }
 
 function CreatePostPage(props: CreatePostProps) {
-  useEffect(() => {
-    //@ts-ignore
-    if (!window.GA_INITIALIZED) {
-      initGA();
-      //@ts-ignore
-      window.GA_INITIALIZED = true;
-    }
-    logPageView();
-  });
   return (
     <>
       <Helmet>
