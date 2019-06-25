@@ -2,6 +2,7 @@
 
 # dependencies
 /node_modules
+/credentials
 
 # testing
 /coverage
@@ -23,4 +24,8 @@ yarn-error.log*
 build/
 dist/
 node_modules/
+
+.elasticbeanstalk/*
+!.elasticbeanstalk/*.cfg.yml
+!.elasticbeanstalk/*.global.yml
 
